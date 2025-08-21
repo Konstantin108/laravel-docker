@@ -1,0 +1,22 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\User;
+use Illuminate\Database\Seeder;
+
+class UserSeeder extends Seeder
+{
+    private const int USERS_COUNT = 20;
+
+    public function run(): void
+    {
+        $existingUsersCount = User::query()->count();
+
+        if ($existingUsersCount < self::USERS_COUNT) {
+            User::factory()
+                ->count(self::USERS_COUNT - $existingUsersCount)
+                ->create();
+        }
+    }
+}

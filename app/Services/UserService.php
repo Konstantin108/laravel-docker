@@ -1,0 +1,63 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Services;
+
+use App\Dto\User\IndexDto;
+use App\Dto\User\UserEnrichedDto;
+use App\Models\User;
+use App\Repositories\UserRepository;
+use Illuminate\Pagination\LengthAwarePaginator;
+
+class UserService
+{
+    private const int PER_PAGE = 10;
+
+    public function __construct(
+        private readonly UserRepository $userRepository
+    ) {}
+
+    /**
+     * @return LengthAwarePaginator<int, UserEnrichedDto>
+     */
+    public function getPagination(IndexDto $indexDto): LengthAwarePaginator
+    {
+        $paginator = $this->userRepository->getUsersPagination(
+            $indexDto->perPage ?? self::PER_PAGE,
+            $indexDto->search
+        );
+
+        /** @var LengthAwarePaginator<User> $paginator */
+        $userEnrichedCollection = $paginator
+            ->getCollection()
+            ->map(fn (User $user): UserEnrichedDto => $this->enrich($user));
+
+        return $paginator->setCollection($userEnrichedCollection);
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection<int, UserEnrichedDto>
+     */
+    public function getUsers(?int $count = null): \Illuminate\Support\Collection
+    {
+        return $this->userRepository
+            ->getAllUsers($count)
+            ->map(fn (User $user): UserEnrichedDto => $this->enrich($user));
+    }
+
+    private function enrich(User $user): UserEnrichedDto
+    {
+        return new UserEnrichedDto(
+            id: $user->id,
+            name: $user->name,
+            email: $user->email,
+            reserveEmail: $user->contact->email,
+            phone: $user->contact->phone,
+            telegram: $user->contact->telegram,
+            emailVerifiedAt: $user->email_verified_at,
+            createdAt: $user->created_at,
+            updatedAt: $user->updated_at,
+        );
+    }
+}

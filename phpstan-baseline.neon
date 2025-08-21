@@ -1,0 +1,7 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^PHPDoc tag @var for variable \\$paginator contains generic class Illuminate\\\\Pagination\\\\LengthAwarePaginator but does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: app/Services/UserService.php
+

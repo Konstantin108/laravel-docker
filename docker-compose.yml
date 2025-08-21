@@ -42,6 +42,21 @@ services:
             MYSQL_USER: refactorian
             MYSQL_PASSWORD: refactorian
 
+    db-test:
+        image: mysql:8.1
+        ports:
+            - 3308:3306
+        volumes:
+            - db_test_data:/var/lib/mysql
+            - .docker/logs:/var/log/mysql
+            - .docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
+            - .docker/db/sql:/docker-entrypoint-initdb.d
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: refactorian
+            MYSQL_USER: refactorian
+            MYSQL_PASSWORD: refactorian
+
     ####################################################################################################
     # phpMyAdmin
     ####################################################################################################
@@ -87,6 +102,25 @@ services:
         - .docker/redis/data:/data
         ports:
         - 6379:6379
+
+    elasticsearch:
+        image: elasticsearch:7.17.27
+        environment:
+            - cluster.routing.allocation.disk.threshold_enabled=true
+            - cluster.routing.allocation.disk.watermark.low=512mb
+            - cluster.routing.allocation.disk.watermark.high=256mb
+            - cluster.routing.allocation.disk.watermark.flood_stage=128mb
+            - discovery.type=single-node
+            - ES_JAVA_OPTS=-Xms256m -Xmx256m
+            - xpack.security.enabled=false
+        volumes:
+            - elasticsearch_data:/var/lib/elasticsearch/data
+        ports:
+            - 9220:9200
+
+volumes:
+    db_test_data:
+    elasticsearch_data:
 
     # ####################################################################################################
     # # DATABASE (MariaDB)
