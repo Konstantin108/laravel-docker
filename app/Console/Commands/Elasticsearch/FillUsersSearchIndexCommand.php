@@ -9,7 +9,7 @@ use Illuminate\Console\Command;
 
 class FillUsersSearchIndexCommand extends Command
 {
-    private const int LIMIT = 1000;
+    private const LIMIT = 1000;
 
     protected $signature = 'search:fill-users-search-index-command {limit?}';
 
