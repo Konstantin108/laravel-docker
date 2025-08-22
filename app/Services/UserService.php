@@ -9,10 +9,11 @@ use App\Dto\User\UserEnrichedDto;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class UserService
 {
-    private const int PER_PAGE = 10;
+    private const PER_PAGE = 10;
 
     public function __construct(
         private readonly UserRepository $userRepository
@@ -37,9 +38,9 @@ class UserService
     }
 
     /**
-     * @return \Illuminate\Support\Collection<int, UserEnrichedDto>
+     * @return Collection<int, UserEnrichedDto>
      */
-    public function getUsers(?int $count = null): \Illuminate\Support\Collection
+    public function getUsers(?int $count = null): Collection
     {
         return $this->userRepository
             ->getAllUsers($count)
@@ -52,9 +53,9 @@ class UserService
             id: $user->id,
             name: $user->name,
             email: $user->email,
-            reserveEmail: $user->contact->email,
-            phone: $user->contact->phone,
-            telegram: $user->contact->telegram,
+            reserveEmail: $user->contact?->email,
+            phone: $user->contact?->phone,
+            telegram: $user->contact?->telegram,
             emailVerifiedAt: $user->email_verified_at,
             createdAt: $user->created_at,
             updatedAt: $user->updated_at,

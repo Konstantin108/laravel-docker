@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Clients;
+namespace App\Clients\Elasticsearch;
 
+use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Ship\Exceptions\ElasticsearchApiException;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Utils;
@@ -11,7 +12,7 @@ use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
-class ElasticsearchClient
+class ElasticsearchClient implements ElasticsearchClientContract
 {
     private readonly string $url;
 
@@ -21,8 +22,8 @@ class ElasticsearchClient
     }
 
     /**
-     * @param  array<mixed>  $body
-     * @return array<mixed>
+     * @param  array<string, mixed>  $body
+     * @return array<string, mixed>
      *
      * @throws ElasticsearchApiException
      * @throws ConnectionException

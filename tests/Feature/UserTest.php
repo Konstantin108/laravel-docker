@@ -15,43 +15,48 @@ class UserTest extends TestCase
         $count = 3;
         User::factory()->count($count)->create();
 
-        $response = $this->get('api/user/')->assertOk();
-
-        $this->assertCount($count, $response->json('data'));
-        $response->assertJsonPath('meta.total', $count);
-        $response->assertJsonStructure([
-            'data' => [
-                '*' => [
-                    'id',
-                    'name',
-                    'email',
-                    'email_verified_at',
-                    'created_at',
-                    'updated_at',
-                ],
-            ],
-            'links' => [
-                'first',
-                'last',
-                'next',
-                'prev',
-            ],
-            'meta' => [
-                'current_page',
-                'from',
-                'last_page',
-                'links' => [
+        $response = $this
+            ->get('api/v1/user/')
+            ->assertOk()
+            ->assertJsonPath('meta.total', $count)
+            ->assertJsonStructure([
+                'data' => [
                     '*' => [
-                        'active',
-                        'label',
-                        'url',
+                        'id',
+                        'name',
+                        'email',
+                        'reserve_email',
+                        'phone',
+                        'telegram',
+                        'email_verified_at',
+                        'created_at',
+                        'updated_at',
                     ],
                 ],
-                'path',
-                'per_page',
-                'to',
-                'total',
-            ],
-        ]);
+                'links' => [
+                    'first',
+                    'last',
+                    'next',
+                    'prev',
+                ],
+                'meta' => [
+                    'current_page',
+                    'from',
+                    'last_page',
+                    'links' => [
+                        '*' => [
+                            'active',
+                            'label',
+                            'url',
+                        ],
+                    ],
+                    'path',
+                    'per_page',
+                    'to',
+                    'total',
+                ],
+            ]);
+
+        $this->assertCount($count, $response->json('data'));
     }
 }

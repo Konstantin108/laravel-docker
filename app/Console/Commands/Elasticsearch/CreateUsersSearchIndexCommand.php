@@ -2,12 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Elasticsearch;
 
 use App\Services\ElasticsearchService;
-use App\Ship\Exceptions\ElasticsearchApiException;
 use Illuminate\Console\Command;
-use Illuminate\Http\Client\ConnectionException;
 
 class CreateUsersSearchIndexCommand extends Command
 {
@@ -15,13 +13,10 @@ class CreateUsersSearchIndexCommand extends Command
 
     protected $description = 'Создать индекс users в Elasticsearch';
 
-    /**
-     * @throws ElasticsearchApiException
-     * @throws ConnectionException
-     */
     public function handle(ElasticsearchService $service): int
     {
-        $service->createUsersSearchIndex();
+        $result = $service->createUsersSearchIndex();
+        $this->info(json_encode($result));
 
         return self::SUCCESS;
     }
