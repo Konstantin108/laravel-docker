@@ -10,7 +10,7 @@ use App\Entities\Elasticsearch\UserDocElement;
 
 class ElasticsearchService
 {
-    private const string USERS_INDEX = 'users';
+    private const USERS_INDEX = 'users';
 
     public function __construct(
         private readonly ElasticsearchClientContract $client,

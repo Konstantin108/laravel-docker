@@ -8,7 +8,7 @@ use Illuminate\Database\Seeder;
 
 class ContactSeeder extends Seeder
 {
-    private const int CONTACTS_COUNT = 30;
+    private const CONTACTS_COUNT = 30;
 
     public function run(): void
     {

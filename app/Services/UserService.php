@@ -13,7 +13,7 @@ use Illuminate\Support\Collection;
 
 class UserService
 {
-    private const int PER_PAGE = 10;
+    private const PER_PAGE = 10;
 
     public function __construct(
         private readonly UserRepository $userRepository
