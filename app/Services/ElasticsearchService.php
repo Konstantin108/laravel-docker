@@ -4,26 +4,23 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Clients\ElasticsearchClient;
+use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Dto\User\UserEnrichedDto;
 use App\Entities\Elasticsearch\UserDocElement;
-use App\Ship\Exceptions\ElasticsearchApiException;
-use Illuminate\Http\Client\ConnectionException;
 
 class ElasticsearchService
 {
     private const string USERS_INDEX = 'users';
 
     public function __construct(
-        private readonly ElasticsearchClient $client,
+        private readonly ElasticsearchClientContract $client,
         private readonly UserService $userService
     ) {}
 
     /**
-     * @throws ElasticsearchApiException
-     * @throws ConnectionException
+     * @return array<string, mixed>
      */
-    public function createUsersSearchIndex(): void
+    public function createUsersSearchIndex(): array
     {
         $body = [
             'settings' => [
@@ -84,23 +81,23 @@ class ElasticsearchService
             ],
         ];
 
-        $this->client->createSearchIndex($body, self::USERS_INDEX);
+        return $this->client->createSearchIndex($body, self::USERS_INDEX);
     }
 
-    /**
-     * @throws ConnectionException
-     * @throws ElasticsearchApiException
-     */
-    public function fillUsersSearchIndex(?int $count = null): void
+    public function fillUsersSearchIndex(?int $count = null): mixed
     {
-        $body = $this->userService
-            ->getUsers($count)
+        $users = $this->userService->getUsers($count);
+        if ($users->isEmpty()) {
+            return null;
+        }
+
+        $body = $users
             ->map(fn (UserEnrichedDto $user): string => $this->makeDocElement(
                 (new UserDocElement(
                     id: $user->id,
                     name: $user->name,
                     email: $user->email,
-                    reserveEmail: $user->email,
+                    reserveEmail: $user->reserveEmail,
                     phone: $user->phone,
                     telegram: $user->telegram
                 ))->toArray(),
@@ -108,7 +105,7 @@ class ElasticsearchService
             ))
             ->implode('');
 
-        $this->client->bulkIndex($body, self::USERS_INDEX);
+        return $this->client->bulkIndex($body, self::USERS_INDEX);
     }
 
     /**

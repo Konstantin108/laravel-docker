@@ -2,7 +2,8 @@
 
 namespace App\Providers;
 
-use App\Clients\ElasticsearchClient;
+use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
+use App\Clients\Elasticsearch\ElasticsearchClient;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -12,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(ElasticsearchClient::class, static function () {
+        $this->app->bind(ElasticsearchClientContract::class, static function () {
             return new ElasticsearchClient(config('elasticsearch.url'));
         });
     }
