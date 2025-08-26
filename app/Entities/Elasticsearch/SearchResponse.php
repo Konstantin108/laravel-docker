@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Entities\Elasticsearch;
 
+use App\Dto\Contracts\HitDtoContract;
 use App\Dto\Elasticsearch\SearchIndexHitsDto;
 use App\Dto\Elasticsearch\SearchIndexShardsDto;
 use App\Dto\User\UserEnrichedDto;
-use Illuminate\Support\Carbon;
+use App\Services\HitDtoCollectionService;
 use Illuminate\Support\Collection;
 
 final class SearchResponse
@@ -58,23 +59,19 @@ final class SearchResponse
         );
     }
 
+    // TODO kpstya предусмотреть, если ответ пустой
+
     /**
      * @param  array<string, mixed>  $hits
-     * @return Collection<string, UserEnrichedDto>
+     * @return Collection<string, HitDtoContract>
      */
     private static function hits(array $hits): Collection
     {
-        return collect($hits)
-            ->map(fn (array $hit) => new UserEnrichedDto(
-                id: $hit['_source']['id'],
-                name: $hit['_source']['name'],
-                email: $hit['_source']['email'],
-                reserveEmail: $hit['_source']['reserve_email'],
-                phone: $hit['_source']['phone'],
-                telegram: $hit['_source']['telegram'],
-                emailVerifiedAt: Carbon::make($hit['_source']['email_verified_at']),
-                createdAt: Carbon::make($hit['_source']['created_at']),
-                updatedAt: Carbon::make($hit['_source']['updated_at'])
-            ));
+        // TODO kpstya возможно заменить на DI
+
+        /** @var HitDtoCollectionService $collectionService */
+        $collectionService = app(HitDtoCollectionService::class);
+
+        return collect($collectionService->create($hits));
     }
 }

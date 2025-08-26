@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Dto\User;
 
+use App\Dto\Contracts\HitDtoContract;
 use Illuminate\Support\Carbon;
 use Spatie\LaravelData\Data;
 
-final class UserEnrichedDto extends Data
+final class UserEnrichedDto extends Data implements HitDtoContract
 {
     public function __construct(
         public int $id,
