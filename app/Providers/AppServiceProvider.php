@@ -19,10 +19,6 @@ class AppServiceProvider extends ServiceProvider
             return new ElasticsearchClient(config('elasticsearch.url'));
         });
 
-        // TODO kpstya предусмотреть если на entity нет фабрики или фабрик нет вовсе
-
-        // TODO kpstya добавить вторую фабрику для dto
-
         $this->app->bind(SourceDtoCollectionService::class, static function (Application $app) {
             return new SourceDtoCollectionService(...array_map(
                 static fn (string $className) => $app->make($className),
