@@ -61,4 +61,25 @@ class ElasticsearchClient implements ElasticsearchClientContract
             })
             ->json();
     }
+
+    /**
+     * @param  array<string, mixed>  $body
+     * @return array<string, mixed>
+     *
+     * @throws ConnectionException
+     * @throws ElasticsearchApiException
+     */
+    public function search(array $body, string $indexName): array
+    {
+        return Http::asJson()
+            ->withUrlParameters([
+                'url' => $this->url,
+            ])
+            ->retry(3, 100)
+            ->post('{+url}/'.$indexName.'/_search', $body)
+            ->onError(static function (PromiseInterface|Response $response) {
+                throw ElasticsearchApiException::buildMessage($response->body(), $response->status());
+            })
+            ->json();
+    }
 }

@@ -10,6 +10,8 @@ class UserTest extends TestCase
 {
     use RefreshDatabase;
 
+    // TODO kpstya добавить различные тесты (empty response, per_page...)
+
     public function test_index()
     {
         $count = 3;
