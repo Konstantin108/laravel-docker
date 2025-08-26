@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v2;
 
 use App\Dto\User\IndexDto;
+use App\Entities\Elasticsearch\SearchResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\IndexRequest;
 use App\Services\ElasticsearchService;
@@ -25,6 +26,8 @@ class UserController extends Controller
             );
 
         $res = $this->searchService->findUsersInSearchIndex($paginationRequestDto);
+        //        dd($res);
+        $res = SearchResponse::fromArray($res);
         dd($res);
     }
 }
