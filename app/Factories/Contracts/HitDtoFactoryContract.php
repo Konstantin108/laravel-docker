@@ -9,7 +9,7 @@ use App\Dto\Contracts\HitDtoContract;
 interface HitDtoFactoryContract
 {
     /**
-     * @param  array<string, mixed>  $hit
+     * @param  array<string, mixed>  $source
      */
-    public function createFromArray(array $hit): HitDtoContract;
+    public function createFromArray(array $source): HitDtoContract;
 }

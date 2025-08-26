@@ -12,20 +12,20 @@ use Illuminate\Support\Carbon;
 class UserHitDtoFactory implements HitDtoFactoryContract
 {
     /**
-     * @param  array<string, mixed>  $hit
+     * @param  array<string, mixed>  $source
      */
-    public function createFromArray(array $hit): HitDtoContract
+    public function createFromArray(array $source): HitDtoContract
     {
         return new UserEnrichedDto(
-            id: $hit['_source']['id'],
-            name: $hit['_source']['name'],
-            email: $hit['_source']['email'],
-            reserveEmail: $hit['_source']['reserve_email'],
-            phone: $hit['_source']['phone'],
-            telegram: $hit['_source']['telegram'],
-            emailVerifiedAt: Carbon::make($hit['_source']['email_verified_at']),
-            createdAt: Carbon::make($hit['_source']['created_at']),
-            updatedAt: Carbon::make($hit['_source']['updated_at'])
+            id: $source['id'],
+            name: $source['name'],
+            email: $source['email'],
+            reserveEmail: $source['reserve_email'],
+            phone: $source['phone'],
+            telegram: $source['telegram'],
+            emailVerifiedAt: Carbon::make($source['email_verified_at']),
+            createdAt: Carbon::make($source['created_at']),
+            updatedAt: Carbon::make($source['updated_at'])
         );
     }
 }

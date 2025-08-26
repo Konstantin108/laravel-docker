@@ -21,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
 
         // TODO kpstya предусмотреть если на entity нет фабрики или фабрик нет вовсе
 
-        // TODO kpstya надо добавить static для стрелок, добавить вторую фабрику для dto
+        // TODO kpstya добавить вторую фабрику для dto
 
         $this->app->bind(HitDtoCollectionService::class, static function (Application $app) {
             return new HitDtoCollectionService(...array_map(
