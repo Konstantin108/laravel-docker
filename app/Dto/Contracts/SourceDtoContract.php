@@ -4,4 +4,4 @@ declare(strict_types=1);
 
 namespace App\Dto\Contracts;
 
-interface HitDtoContract {}
+interface SourceDtoContract {}

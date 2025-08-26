@@ -8,7 +8,7 @@ use App\Dto\Elasticsearch\SearchIndexHitsDto;
 use App\Dto\Elasticsearch\SearchIndexShardsDto;
 use App\Dto\User\UserEnrichedDto;
 use App\Exceptions\SearchIndexDoesNotExist;
-use App\Services\HitDtoCollectionService;
+use App\Services\SourceDtoCollectionService;
 use Illuminate\Support\Collection;
 
 final class SearchResponse
@@ -48,7 +48,7 @@ final class SearchResponse
      *
      * @throws SearchIndexDoesNotExist
      */
-    public static function fromArray(array $data, HitDtoCollectionService $collectionService): SearchResponse
+    public static function fromArray(array $data, SourceDtoCollectionService $collectionService): SearchResponse
     {
         return new self(
             took: $data['took'],

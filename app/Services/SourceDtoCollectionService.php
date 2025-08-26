@@ -4,26 +4,26 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Dto\Contracts\HitDtoContract;
+use App\Dto\Contracts\SourceDtoContract;
 use App\Exceptions\SearchIndexDoesNotExist;
-use App\Factories\Contracts\HitDtoFactoryContract;
+use App\Factories\Contracts\SourceDtoFactoryContract;
 use Illuminate\Support\Collection;
 
-class HitDtoCollectionService
+class SourceDtoCollectionService
 {
     /**
-     * @var List<HitDtoFactoryContract>
+     * @var List<SourceDtoFactoryContract>
      */
     private array $factories;
 
-    public function __construct(HitDtoFactoryContract ...$factories)
+    public function __construct(SourceDtoFactoryContract ...$factories)
     {
         $this->factories = $factories;
     }
 
     /**
      * @param  array<string, mixed>  $hits
-     * @return Collection<string, HitDtoContract>
+     * @return Collection<string, SourceDtoContract>
      *
      * @throws SearchIndexDoesNotExist
      */
@@ -31,7 +31,7 @@ class HitDtoCollectionService
     {
         // TODO проверить, если в массиве разные entity или фабрики для entity не существует
 
-        return collect(array_map(function (array $hit): HitDtoContract {
+        return collect(array_map(function (array $hit): SourceDtoContract {
             $index = $hit['_index'];
             if (! isset($this->factories[$index])) {
                 throw SearchIndexDoesNotExist::buildMessage($index);

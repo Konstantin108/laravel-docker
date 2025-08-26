@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\User\IndexRequest;
 use App\Http\Resources\User\IndexResource;
 use App\Services\ElasticsearchService;
-use App\Services\HitDtoCollectionService;
+use App\Services\SourceDtoCollectionService;
 use App\Services\UserService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -27,7 +27,7 @@ class UserController extends Controller
      */
     public function index(
         IndexRequest $request,
-        HitDtoCollectionService $collectionService
+        SourceDtoCollectionService $collectionService
     ): AnonymousResourceCollection {
         $paginationRequestDto = $this
             ->userService

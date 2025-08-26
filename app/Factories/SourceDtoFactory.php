@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace App\Factories;
 
-use App\Dto\Contracts\HitDtoContract;
+use App\Dto\Contracts\SourceDtoContract;
 use App\Dto\User\UserEnrichedDto;
-use App\Factories\Contracts\HitDtoFactoryContract;
+use App\Factories\Contracts\SourceDtoFactoryContract;
 use Illuminate\Support\Carbon;
 
-class UserHitDtoFactory implements HitDtoFactoryContract
+class SourceDtoFactory implements SourceDtoFactoryContract
 {
     /**
      * @param  array<string, mixed>  $source
      */
-    public function createFromArray(array $source): HitDtoContract
+    public function createFromArray(array $source): SourceDtoContract
     {
         return new UserEnrichedDto(
             id: $source['id'],
