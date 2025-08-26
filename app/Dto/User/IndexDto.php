@@ -14,5 +14,6 @@ final class IndexDto extends Data
     public function __construct(
         public ?string $search = null,
         public ?int $perPage = null,
+        public ?int $page = null,
     ) {}
 }

@@ -18,7 +18,8 @@ class IndexRequest extends FormRequest
     {
         return [
             'search' => ['sometimes', 'string', 'nullable'],
-            'per_page' => ['sometimes', 'integer', 'min:1'],
+            'per_page' => ['sometimes', 'integer', 'min:1', 'nullable'],
+            'page' => ['sometimes', 'integer', 'min:1', 'nullable'],
         ];
     }
 }

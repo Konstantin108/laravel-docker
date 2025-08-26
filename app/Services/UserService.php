@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Dto\Elasticsearch\PaginationRequestDto;
 use App\Dto\User\IndexDto;
 use App\Dto\User\UserEnrichedDto;
 use App\Models\User;
@@ -16,7 +17,8 @@ class UserService
     private const PER_PAGE = 10;
 
     public function __construct(
-        private readonly UserRepository $userRepository
+        private readonly UserRepository $userRepository,
+        private readonly ElasticsearchPaginationService $elasticsearchPaginationService
     ) {}
 
     /**
@@ -45,6 +47,13 @@ class UserService
         return $this->userRepository
             ->getAllUsers($count)
             ->map(fn (User $user): UserEnrichedDto => $this->enrich($user));
+    }
+
+    public function getPaginationDataForSearchIndex(IndexDto $indexDto): PaginationRequestDto
+    {
+        return $this
+            ->elasticsearchPaginationService
+            ->getPaginationRequestData($indexDto->toArray(), self::PER_PAGE);
     }
 
     private function enrich(User $user): UserEnrichedDto

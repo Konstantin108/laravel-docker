@@ -58,4 +58,15 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
             'items' => $items,
         ];
     }
+
+    // TODO kpstya реализовать мок этого метода и тест к нему
+
+    /**
+     * @param  array<string, mixed>  $body
+     * @return array<string, mixed>
+     */
+    public function search(array $body, string $indexName): array
+    {
+        return [];
+    }
 }
