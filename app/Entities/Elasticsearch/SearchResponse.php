@@ -10,8 +10,9 @@ use App\Dto\User\UserEnrichedDto;
 use App\Exceptions\SearchIndexDoesNotExist;
 use App\Services\SourceDtoCollectionService;
 use Illuminate\Support\Collection;
+use Spatie\LaravelData\Data;
 
-final class SearchResponse
+final class SearchResponse extends Data
 {
     public function __construct(
         public int $took,
@@ -21,8 +22,6 @@ final class SearchResponse
         /** @var Collection<string, UserEnrichedDto> */
         public Collection $hits
     ) {}
-
-    // TODO kpstya добавить toArray
 
     /**
      * @param array{
