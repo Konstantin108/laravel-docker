@@ -9,7 +9,7 @@ use App\Dto\User\UserEnrichedDto;
 use App\Factories\Contracts\SourceDtoFactoryContract;
 use Illuminate\Support\Carbon;
 
-class SourceDtoFactory implements SourceDtoFactoryContract
+class UserSourceDtoFactory implements SourceDtoFactoryContract
 {
     /**
      * @param  array<string, mixed>  $source
