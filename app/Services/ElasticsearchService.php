@@ -19,6 +19,8 @@ class ElasticsearchService
         private readonly UserService $userService
     ) {}
 
+    // TODO kpstya добавить команду для удаления индекса и тест для нее
+
     /**
      * @return array<string, mixed>
      */
@@ -107,7 +109,7 @@ class ElasticsearchService
      */
     public function findUsersInSearchIndex(PaginationRequestDto $requestDto): array
     {
-        $body = $requestDto->search !== null
+        $body = $requestDto->search !== null && mb_strlen($requestDto->search) > 2
             ? $this->searchMultiMatch($requestDto)
             : $this->searchMatchAll($requestDto);
 
