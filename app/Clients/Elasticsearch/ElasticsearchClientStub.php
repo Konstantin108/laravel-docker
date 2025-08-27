@@ -12,7 +12,7 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
      * @param  array<string, mixed>  $body
      * @return array<string, mixed>
      */
-    public function createSearchIndex(array $body, string $indexName): array
+    public function createIndex(array $body, string $indexName): array
     {
         return [
             'acknowledged' => true,

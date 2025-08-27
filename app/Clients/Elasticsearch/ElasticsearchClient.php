@@ -28,7 +28,7 @@ class ElasticsearchClient implements ElasticsearchClientContract
      * @throws ElasticsearchApiException
      * @throws ConnectionException
      */
-    public function createSearchIndex(array $body, string $indexName): array
+    public function createIndex(array $body, string $indexName): array
     {
         return Http::asJson()
             ->withUrlParameters([

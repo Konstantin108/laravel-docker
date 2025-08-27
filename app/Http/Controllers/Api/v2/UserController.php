@@ -8,15 +8,15 @@ use App\Exceptions\SearchIndexDoesNotExist;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\IndexRequest;
 use App\Http\Resources\User\IndexResource;
-use App\Services\ElasticsearchService;
 use App\Services\SourceDtoCollectionService;
 use App\Services\UserService;
+use App\Services\UsersIndexElasticsearchService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class UserController extends Controller
 {
     public function __construct(
-        private readonly ElasticsearchService $searchService,
+        private readonly UsersIndexElasticsearchService $searchService,
         private readonly UserService $userService,
     ) {}
 
@@ -37,7 +37,7 @@ class UserController extends Controller
 
         return IndexResource::collection(
             SearchResponse::fromArray(
-                $this->searchService->findUsersInSearchIndex($paginationRequestDto),
+                $this->searchService->findInSearchIndex($paginationRequestDto),
                 $collectionService
             )->hits
         );

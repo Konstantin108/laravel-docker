@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Elasticsearch;
 
-use App\Services\ElasticsearchService;
+use App\Services\UsersIndexElasticsearchService;
 use Illuminate\Console\Command;
 
 class FillUsersSearchIndexCommand extends Command
@@ -15,13 +15,13 @@ class FillUsersSearchIndexCommand extends Command
 
     protected $description = 'Заполнить документами индекс users в Elasticsearch';
 
-    public function handle(ElasticsearchService $service): int
+    public function handle(UsersIndexElasticsearchService $service): int
     {
         $limit = $this->argument('limit') !== null
             ? (int) $this->argument('limit')
             : self::LIMIT;
 
-        $result = $service->fillUsersSearchIndex($limit);
+        $result = $service->fillSearchIndex($limit);
         $this->info(json_encode($result));
 
         return self::SUCCESS;

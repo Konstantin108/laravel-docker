@@ -6,120 +6,57 @@ namespace App\Services;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Dto\Elasticsearch\PaginationRequestDto;
-use App\Dto\User\UserEnrichedDto;
-use App\Entities\Elasticsearch\UserDocElement;
 use stdClass;
 
-class ElasticsearchService
+abstract class ElasticsearchService
 {
-    private const USERS_INDEX = 'users';
-
     public function __construct(
-        private readonly ElasticsearchClientContract $client,
-        private readonly UserService $userService
+        protected readonly ElasticsearchClientContract $client,
+        protected readonly UserService $userService
     ) {}
+
+    abstract protected function indexName(): string;
+
+    /**
+     * @return array<string, mixed>
+     */
+    abstract protected function bodyIndexCreate(): array;
+
+    /**
+     * @return string[]
+     */
+    abstract protected function multiMatchFieldsSettings(): array;
 
     // TODO kpstya добавить команду для удаления индекса и тест для нее
 
+    // TODO после добавления абстракции мне нужно будет переписать тесты
+
+    abstract public function fillSearchIndex(): mixed;
+
     /**
      * @return array<string, mixed>
      */
-    public function createUsersSearchIndex(): array
+    public function createSearchIndex(): array
     {
-        $body = [
-            'settings' => [
-                'analysis' => [
-                    'filter' => [
-                        'my_ngram_filter' => [
-                            'type' => 'ngram',
-                            'min_gram' => 3,
-                            'max_gram' => 4,
-                        ],
-                    ],
-                    'analyzer' => [
-                        'my_ngram_analyzer' => [
-                            'type' => 'custom',
-                            'tokenizer' => 'standard',
-                            'filter' => [
-                                'lowercase',
-                                'my_ngram_filter',
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-            'mappings' => [
-                'properties' => [
-                    'name' => [
-                        'type' => 'text',
-                        'analyzer' => 'my_ngram_analyzer',
-                    ],
-                    'email' => [
-                        'type' => 'text',
-                        'analyzer' => 'my_ngram_analyzer',
-                    ],
-                    'reserve_email' => [
-                        'type' => 'text',
-                        'analyzer' => 'my_ngram_analyzer',
-                    ],
-                    'phone' => [
-                        'type' => 'text',
-                        'analyzer' => 'my_ngram_analyzer',
-                    ],
-                    'telegram' => [
-                        'type' => 'text',
-                        'analyzer' => 'my_ngram_analyzer',
-                    ],
-                ],
-            ],
-        ];
-
-        return $this->client->createSearchIndex($body, self::USERS_INDEX);
-    }
-
-    public function fillUsersSearchIndex(?int $count = null): mixed
-    {
-        $users = $this->userService->getUsers($count);
-        if ($users->isEmpty()) {
-            return null;
-        }
-
-        $body = $users
-            ->map(fn (UserEnrichedDto $user): string => $this->makeDocElement(
-                (new UserDocElement(
-                    id: $user->id,
-                    name: $user->name,
-                    email: $user->email,
-                    emailVerifiedAt: $user->emailVerifiedAt,
-                    reserveEmail: $user->reserveEmail,
-                    phone: $user->phone,
-                    telegram: $user->telegram,
-                    createdAt: $user->createdAt,
-                    updatedAt: $user->updatedAt,
-                ))->toArray(),
-                self::USERS_INDEX
-            ))
-            ->implode('');
-
-        return $this->client->bulkIndex($body, self::USERS_INDEX);
+        return $this->client->createIndex($this->bodyIndexCreate(), $this->indexName());
     }
 
     /**
      * @return array<string, mixed>
      */
-    public function findUsersInSearchIndex(PaginationRequestDto $requestDto): array
+    public function findInSearchIndex(PaginationRequestDto $requestDto): array
     {
         $body = $requestDto->search !== null && mb_strlen($requestDto->search) > 2
             ? $this->searchMultiMatch($requestDto)
             : $this->searchMatchAll($requestDto);
 
-        return $this->client->search($body, self::USERS_INDEX);
+        return $this->client->search($body, $this->indexName());
     }
 
     /**
      * @param  array<string, int|string>  $data
      */
-    private function makeDocElement(array $data, string $indexName): string
+    protected function makeDocElement(array $data, string $indexName): string
     {
         return sprintf(
             "%s\n%s\n",
@@ -144,13 +81,7 @@ class ElasticsearchService
             'query' => [
                 'multi_match' => [
                     'query' => $requestDto->search,
-                    'fields' => [
-                        'name^5',
-                        'email^4',
-                        'reserve_email^3',
-                        'telegram^2',
-                        'phone^1',
-                    ],
+                    'fields' => $this->multiMatchFieldsSettings(),
                 ],
             ],
         ];
