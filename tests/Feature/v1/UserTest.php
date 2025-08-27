@@ -10,9 +10,6 @@ class UserTest extends TestCase
 {
     use RefreshDatabase;
 
-    // TODO kpstya добавить различные тесты (empty response, per_page...)
-    // возможно и в тестах для v2
-
     public function test_index()
     {
         $count = 3;
@@ -59,6 +56,47 @@ class UserTest extends TestCase
                     'total',
                 ],
             ]);
+
+        $this->assertCount($count, $response->json('data'));
+    }
+
+    public function test_index_page_param(): void
+    {
+        User::factory()->count(3)->withContact()->create();
+        $page = 2;
+
+        $this
+            ->get('api/v1/user?page='.$page)
+            ->assertOk()
+            ->assertJsonPath('meta.current_page', $page);
+    }
+
+    public function test_index_per_page_param(): void
+    {
+        User::factory()->count(3)->withContact()->create();
+        $perPage = 1;
+
+        $response = $this
+            ->get('api/v1/user?per_page='.$perPage)
+            ->assertOk()
+            ->assertJsonPath('meta.per_page', $perPage);
+
+        $this->assertCount($perPage, $response->json('data'));
+    }
+
+    public function test_index_search_param(): void
+    {
+        User::factory()->withContact()->create(['email' => 'user.first@mail.ru']);
+        User::factory()->withContact()->create(['name' => 'find abc']);
+        User::factory()->withContact()->create(['email' => 'thirdfind@mail.ru']);
+
+        $search = 'find';
+        $count = 2;
+
+        $response = $this
+            ->get('api/v1/user?search='.$search)
+            ->assertOk()
+            ->assertJsonPath('meta.total', $count);
 
         $this->assertCount($count, $response->json('data'));
     }
