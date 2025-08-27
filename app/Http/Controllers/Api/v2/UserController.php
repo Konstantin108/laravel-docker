@@ -20,8 +20,6 @@ class UserController extends Controller
         private readonly UserService $userService,
     ) {}
 
-    // TODO kpstya написать тесты на этот метод
-
     /**
      * @throws SearchIndexDoesNotExist
      */
