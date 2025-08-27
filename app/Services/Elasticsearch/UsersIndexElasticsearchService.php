@@ -92,8 +92,6 @@ class UsersIndexElasticsearchService extends ElasticsearchService
             return null;
         }
 
-        // TODO kpstya возможно переработать команды для работы с кластером
-
         $body = $users
             ->map(fn (UserEnrichedDto $user): string => $this->makeDocElement(
                 (new UserDocElement(

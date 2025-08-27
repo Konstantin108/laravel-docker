@@ -6,8 +6,11 @@ namespace App\Dto\User;
 
 use App\Dto\Contracts\SourceDtoContract;
 use Illuminate\Support\Carbon;
+use Spatie\LaravelData\Attributes\MapOutputName;
 use Spatie\LaravelData\Data;
+use Spatie\LaravelData\Mappers\SnakeCaseMapper;
 
+#[MapOutputName(SnakeCaseMapper::class)]
 final class UserEnrichedDto extends Data implements SourceDtoContract
 {
     public function __construct(

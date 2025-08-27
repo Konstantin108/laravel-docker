@@ -57,7 +57,7 @@ class UserService
             ->getPaginationRequestData($indexDto->toArray(), self::PER_PAGE);
     }
 
-    private function enrich(User $user): UserEnrichedDto
+    public function enrich(User $user): UserEnrichedDto
     {
         return new UserEnrichedDto(
             id: $user->id,

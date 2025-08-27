@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Clients\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
+use App\Exceptions\SearchIndexDoesNotExist;
+use Faker\Factory as FakerFactory;
 
 class ElasticsearchClientStub implements ElasticsearchClientContract
 {
@@ -59,14 +61,52 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
         ];
     }
 
-    // TODO kpstya реализовать мок этого метода и тест к нему
-
     /**
      * @param  array<string, mixed>  $body
      * @return array<string, mixed>
+     *
+     * @throws SearchIndexDoesNotExist
      */
     public function search(array $body, string $indexName): array
     {
-        return [];
+        $modelName = config('elasticsearch.search_index_models.'.$indexName);
+        $service = config('elasticsearch.model_services.'.$indexName);
+
+        if ($modelName === null || $service === null) {
+            throw SearchIndexDoesNotExist::buildMessage($indexName);
+        }
+
+        $elements = $modelName::query()->get();
+        $elements = $elements->map(fn ($element) => app($service)->enrich($element));
+
+        $maxScore = FakerFactory::create()
+            ->randomFloat(6, 20, 70);
+
+        return [
+            'took' => rand(1, 30),
+            'timed_out' => false,
+            '_shards' => [
+                'total' => 1,
+                'successful' => 1,
+                'skipped' => 0,
+                'failed' => 0,
+            ],
+            'hits' => [
+                'total' => [
+                    'value' => count($elements),
+                    'relation' => 'eq',
+                ],
+                'max_score' => $maxScore,
+                'hits' => $elements->map(function ($element, $key) use ($maxScore, $indexName): array {
+                    return [
+                        '_index' => $indexName,
+                        '_type' => '_doc',
+                        '_id' => (string) $element->id,
+                        '_score' => $maxScore - $key * rand(1, 9),
+                        '_source' => $element->toArray(),
+                    ];
+                })->toArray(),
+            ],
+        ];
     }
 }

@@ -6,7 +6,7 @@ use Exception;
 
 class ElasticsearchApiException extends Exception
 {
-    // TODO kpstya добавить тест на выброс исключения
+    // TODO kpstya добавить тест на выброс исключения, добавить ElasticsearchErrorStub
     public static function buildMessage(string $errorText, int $status = 500): ElasticsearchApiException
     {
         return new self($errorText, $status);

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\v1;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -11,11 +11,12 @@ class UserTest extends TestCase
     use RefreshDatabase;
 
     // TODO kpstya добавить различные тесты (empty response, per_page...)
+    // возможно и в тестах для v2
 
     public function test_index()
     {
         $count = 3;
-        User::factory()->count($count)->create();
+        User::factory()->count($count)->withContact()->create();
 
         $response = $this
             ->get('api/v1/user/')

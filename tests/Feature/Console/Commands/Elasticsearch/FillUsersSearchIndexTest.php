@@ -25,7 +25,7 @@ class FillUsersSearchIndexTest extends TestCase
 
     public function test_fill_users_search_index(): void
     {
-        $users = User::factory()->count(2)->create();
+        $users = User::factory()->count(2)->withContact()->create();
 
         $this
             ->artisan('search:fill-users-search-index-command')

@@ -30,12 +30,12 @@ class SourceDtoCollectionService
     public function create(array $hits): Collection
     {
         return collect(array_map(function (array $hit): SourceDtoContract {
-            $index = $hit['_index'];
-            if (! isset($this->factories[$index])) {
-                throw SearchIndexDoesNotExist::buildMessage($index);
+            $indexName = $hit['_index'];
+            if (! isset($this->factories[$indexName])) {
+                throw SearchIndexDoesNotExist::buildMessage($indexName);
             }
 
-            return $this->factories[$index]->createFromArray($hit['_source']);
+            return $this->factories[$indexName]->createFromArray($hit['_source']);
         }, $hits));
     }
 }
