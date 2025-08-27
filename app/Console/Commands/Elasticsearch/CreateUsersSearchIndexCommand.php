@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Console\Commands\Elasticsearch;
 
-use App\Services\UsersIndexElasticsearchService;
+use App\Services\Elasticsearch\UsersIndexElasticsearchService;
 use Illuminate\Console\Command;
 
 class CreateUsersSearchIndexCommand extends Command

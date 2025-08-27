@@ -29,8 +29,6 @@ class SourceDtoCollectionService
      */
     public function create(array $hits): Collection
     {
-        // TODO проверить, если в массиве разные entity или фабрики для entity не существует
-
         return collect(array_map(function (array $hit): SourceDtoContract {
             $index = $hit['_index'];
             if (! isset($this->factories[$index])) {

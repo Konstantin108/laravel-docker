@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Services;
+namespace App\Services\Elasticsearch;
 
 use App\Dto\User\UserEnrichedDto;
 use App\Entities\Elasticsearch\UserDocElement;
+use App\Services\Elasticsearch\Abstract\ElasticsearchService;
 
 class UsersIndexElasticsearchService extends ElasticsearchService
 {
@@ -91,7 +92,7 @@ class UsersIndexElasticsearchService extends ElasticsearchService
             return null;
         }
 
-        // TODO kpstya организовать папки для Elasticsearch и возможно переработать команды
+        // TODO kpstya возможно переработать команды для работы с кластером
 
         $body = $users
             ->map(fn (UserEnrichedDto $user): string => $this->makeDocElement(

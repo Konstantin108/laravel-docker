@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Services;
+namespace App\Services\Elasticsearch\Abstract;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Dto\Elasticsearch\PaginationRequestDto;
+use App\Services\UserService;
 use stdClass;
 
 abstract class ElasticsearchService
 {
     public function __construct(
-        protected readonly ElasticsearchClientContract $client,
-        protected readonly UserService $userService
+        protected ElasticsearchClientContract $client,
+        protected UserService $userService
     ) {}
 
     abstract protected function indexName(): string;
@@ -28,8 +29,6 @@ abstract class ElasticsearchService
     abstract protected function multiMatchFieldsSettings(): array;
 
     // TODO kpstya добавить команду для удаления индекса и тест для нее
-
-    // TODO после добавления абстракции мне нужно будет переписать тесты
 
     abstract public function fillSearchIndex(): mixed;
 
