@@ -1,0 +1,49 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Tests\Feature\Console\Commands\Elasticsearch;
+
+use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
+use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
+use App\Clients\Elasticsearch\ElasticsearchClientStub;
+use App\Exceptions\ElasticsearchApiException;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+class DeleteUsersSearchIndexTest extends TestCase
+{
+    use RefreshDatabase;
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function test_delete_users_search_index(): void
+    {
+        $this->app->bind(ElasticsearchClientContract::class, static function () {
+            return new ElasticsearchClientStub;
+        });
+
+        $this
+            ->artisan('search:delete-users-search-index-command')
+            ->assertSuccessful()
+            ->expectsOutput(json_encode([
+                'acknowledged' => true,
+            ]));
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function test_delete_users_search_index_failed(): void
+    {
+        $this->app->bind(ElasticsearchClientContract::class, static function () {
+            return new ElasticsearchClientErrorStub;
+        });
+
+        $this->expectException(ElasticsearchApiException::class);
+        $this->expectExceptionMessage('Index deleting error');
+
+        $this->artisan('search:delete-users-search-index-command');
+    }
+}

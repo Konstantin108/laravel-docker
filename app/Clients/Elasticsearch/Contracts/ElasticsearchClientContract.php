@@ -15,6 +15,11 @@ interface ElasticsearchClientContract
     public function bulkIndex(string $body, string $indexName): mixed;
 
     /**
+     * @return array<string, bool>
+     */
+    public function deleteIndex(string $indexName): array;
+
+    /**
      * @param  array<string, mixed>  $body
      * @return array<string, mixed>
      */

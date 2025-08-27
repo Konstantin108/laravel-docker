@@ -63,6 +63,26 @@ class ElasticsearchClient implements ElasticsearchClientContract
     }
 
     /**
+     * @return array<string, bool>
+     *
+     * @throws ConnectionException
+     * @throws ElasticsearchApiException
+     */
+    public function deleteIndex(string $indexName): array
+    {
+        return Http::asJson()
+            ->withUrlParameters([
+                'url' => $this->url,
+            ])
+            ->retry(3, 100)
+            ->delete('{+url}/'.$indexName)
+            ->onError(static function (PromiseInterface|Response $response) {
+                throw ElasticsearchApiException::buildMessage($response->body(), $response->status());
+            })
+            ->json();
+    }
+
+    /**
      * @param  array<string, mixed>  $body
      * @return array<string, mixed>
      *

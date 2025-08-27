@@ -62,6 +62,14 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
     }
 
     /**
+     * @return array<string, bool>
+     */
+    public function deleteIndex(string $indexName): array
+    {
+        return ['acknowledged' => true];
+    }
+
+    /**
      * @param  array<string, mixed>  $body
      * @return array<string, mixed>
      *
