@@ -9,6 +9,7 @@ use App\Dto\User\IndexDto;
 use App\Dto\User\UserEnrichedDto;
 use App\Models\User;
 use App\Repositories\UserRepository;
+use App\Services\Elasticsearch\PaginationService;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
@@ -18,7 +19,7 @@ class UserService
 
     public function __construct(
         private readonly UserRepository $userRepository,
-        private readonly ElasticsearchPaginationService $elasticsearchPaginationService
+        private readonly PaginationService $elasticsearchPaginationService
     ) {}
 
     /**

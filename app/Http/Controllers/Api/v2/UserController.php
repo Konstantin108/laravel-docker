@@ -4,30 +4,42 @@ namespace App\Http\Controllers\Api\v2;
 
 use App\Dto\User\IndexDto;
 use App\Entities\Elasticsearch\SearchResponse;
+use App\Exceptions\SearchIndexDoesNotExist;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\IndexRequest;
-use App\Services\ElasticsearchService;
+use App\Http\Resources\User\IndexResource;
+use App\Services\Elasticsearch\UsersIndexElasticsearchService;
+use App\Services\SourceDtoCollectionService;
 use App\Services\UserService;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class UserController extends Controller
 {
     public function __construct(
-        private readonly ElasticsearchService $searchService,
+        private readonly UsersIndexElasticsearchService $searchService,
         private readonly UserService $userService,
     ) {}
 
-    // TODO kpstya написать тесты на этот метод, добавить вводимые и возврщаемые типы
-    public function index(IndexRequest $request): void
-    {
+    // TODO kpstya написать тесты на этот метод
+
+    /**
+     * @throws SearchIndexDoesNotExist
+     */
+    public function index(
+        IndexRequest $request,
+        SourceDtoCollectionService $collectionService
+    ): AnonymousResourceCollection {
         $paginationRequestDto = $this
             ->userService
             ->getPaginationDataForSearchIndex(
                 IndexDto::from($request->validated())
             );
 
-        $res = $this->searchService->findUsersInSearchIndex($paginationRequestDto);
-        //        dd($res);
-        $res = SearchResponse::fromArray($res);
-        dd($res);
+        return IndexResource::collection(
+            SearchResponse::fromArray(
+                $this->searchService->findInSearchIndex($paginationRequestDto),
+                $collectionService
+            )->hits
+        );
     }
 }

@@ -2,29 +2,27 @@
 
 declare(strict_types=1);
 
-namespace App\Services;
+namespace App\Services\Elasticsearch;
 
-use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
-use App\Dto\Elasticsearch\PaginationRequestDto;
 use App\Dto\User\UserEnrichedDto;
 use App\Entities\Elasticsearch\UserDocElement;
-use stdClass;
+use App\Services\Elasticsearch\Abstract\ElasticsearchService;
 
-class ElasticsearchService
+class UsersIndexElasticsearchService extends ElasticsearchService
 {
-    private const USERS_INDEX = 'users';
+    protected const INDEX_NAME = 'users';
 
-    public function __construct(
-        private readonly ElasticsearchClientContract $client,
-        private readonly UserService $userService
-    ) {}
+    protected function indexName(): string
+    {
+        return static::INDEX_NAME;
+    }
 
     /**
      * @return array<string, mixed>
      */
-    public function createUsersSearchIndex(): array
+    protected function bodyIndexCreate(): array
     {
-        $body = [
+        return [
             'settings' => [
                 'analysis' => [
                     'filter' => [
@@ -71,16 +69,30 @@ class ElasticsearchService
                 ],
             ],
         ];
-
-        return $this->client->createSearchIndex($body, self::USERS_INDEX);
     }
 
-    public function fillUsersSearchIndex(?int $count = null): mixed
+    /**
+     * @return string[]
+     */
+    protected function multiMatchFieldsSettings(): array
+    {
+        return [
+            'name^5',
+            'email^4',
+            'reserve_email^3',
+            'telegram^2',
+            'phone^1',
+        ];
+    }
+
+    public function fillSearchIndex(?int $count = null): mixed
     {
         $users = $this->userService->getUsers($count);
         if ($users->isEmpty()) {
             return null;
         }
+
+        // TODO kpstya возможно переработать команды для работы с кластером
 
         $body = $users
             ->map(fn (UserEnrichedDto $user): string => $this->makeDocElement(
@@ -95,76 +107,10 @@ class ElasticsearchService
                     createdAt: $user->createdAt,
                     updatedAt: $user->updatedAt,
                 ))->toArray(),
-                self::USERS_INDEX
+                static::INDEX_NAME
             ))
             ->implode('');
 
-        return $this->client->bulkIndex($body, self::USERS_INDEX);
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function findUsersInSearchIndex(PaginationRequestDto $requestDto): array
-    {
-        $body = $requestDto->search !== null
-            ? $this->searchMultiMatch($requestDto)
-            : $this->searchMatchAll($requestDto);
-
-        return $this->client->search($body, self::USERS_INDEX);
-    }
-
-    /**
-     * @param  array<string, int|string>  $data
-     */
-    private function makeDocElement(array $data, string $indexName): string
-    {
-        return sprintf(
-            "%s\n%s\n",
-            json_encode([
-                'index' => [
-                    '_index' => $indexName,
-                    '_id' => $data['id'],
-                ],
-            ]),
-            json_encode($data),
-        );
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    private function searchMultiMatch(PaginationRequestDto $requestDto): array
-    {
-        return [
-            'size' => $requestDto->size,
-            'from' => $requestDto->from,
-            'query' => [
-                'multi_match' => [
-                    'query' => $requestDto->search,
-                    'fields' => [
-                        'name^5',
-                        'email^4',
-                        'reserve_email^3',
-                        'telegram^2',
-                        'phone^1',
-                    ],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    private function searchMatchAll(PaginationRequestDto $requestDto): array
-    {
-        return [
-            'size' => $requestDto->size,
-            'from' => $requestDto->from,
-            'query' => [
-                'match_all' => new stdClass,
-            ],
-        ];
+        return $this->client->bulkIndex($body, static::INDEX_NAME);
     }
 }

@@ -13,7 +13,7 @@ class SearchScope
 
     public function __construct(?string $search = null)
     {
-        $this->search = ($search !== null && mb_strlen($search) > 2)
+        $this->search = $search !== null && mb_strlen($search) > 2
             ? '%'.$search.'%'
             : null;
 

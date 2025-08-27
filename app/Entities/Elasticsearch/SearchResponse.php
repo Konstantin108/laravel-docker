@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace App\Entities\Elasticsearch;
 
-use App\Dto\Contracts\HitDtoContract;
 use App\Dto\Elasticsearch\SearchIndexHitsDto;
 use App\Dto\Elasticsearch\SearchIndexShardsDto;
 use App\Dto\User\UserEnrichedDto;
-use App\Services\HitDtoCollectionService;
+use App\Exceptions\SearchIndexDoesNotExist;
+use App\Services\SourceDtoCollectionService;
 use Illuminate\Support\Collection;
+use Spatie\LaravelData\Data;
 
-final class SearchResponse
+final class SearchResponse extends Data
 {
     public function __construct(
         public int $took,
@@ -43,8 +44,10 @@ final class SearchResponse
      *         }
      *     }
      * } $data
+     *
+     * @throws SearchIndexDoesNotExist
      */
-    public static function fromArray(array $data): SearchResponse
+    public static function fromArray(array $data, SourceDtoCollectionService $collectionService): SearchResponse
     {
         return new self(
             took: $data['took'],
@@ -55,23 +58,7 @@ final class SearchResponse
                 relation: $data['hits']['total']['relation'],
                 maxScore: $data['hits']['max_score'],
             ),
-            hits: self::hits($data['hits']['hits'])
+            hits: $collectionService->create($data['hits']['hits'])
         );
-    }
-
-    // TODO kpstya предусмотреть, если ответ пустой
-
-    /**
-     * @param  array<string, mixed>  $hits
-     * @return Collection<string, HitDtoContract>
-     */
-    private static function hits(array $hits): Collection
-    {
-        // TODO kpstya возможно заменить на DI
-
-        /** @var HitDtoCollectionService $collectionService */
-        $collectionService = app(HitDtoCollectionService::class);
-
-        return collect($collectionService->create($hits));
     }
 }
