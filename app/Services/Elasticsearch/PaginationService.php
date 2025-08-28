@@ -15,7 +15,7 @@ class PaginationService
      *     page: int|null
      * } $params
      */
-    public function getPaginationRequestData(array $params, int $defaultPerPage): PaginationRequestDto
+    public function makePaginationData(array $params, int $defaultPerPage): PaginationRequestDto
     {
         $page = $params['page'] ?? 1;
         $size = $params['perPage'] ?? $defaultPerPage;
