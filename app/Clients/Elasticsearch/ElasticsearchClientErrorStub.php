@@ -31,6 +31,16 @@ class ElasticsearchClientErrorStub implements ElasticsearchClientContract
     }
 
     /**
+     * @return array<string, bool>
+     *
+     * @throws ElasticsearchApiException
+     */
+    public function deleteIndex(string $indexName): array
+    {
+        throw ElasticsearchApiException::buildMessage('Index deleting error');
+    }
+
+    /**
      * @param  array<string, mixed>  $body
      * @return array<string, mixed>
      *

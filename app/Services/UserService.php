@@ -54,7 +54,7 @@ class UserService
     {
         return $this
             ->elasticsearchPaginationService
-            ->getPaginationRequestData($indexDto->toArray(), self::PER_PAGE);
+            ->makePaginationData($indexDto->toArray(), self::PER_PAGE);
     }
 
     public function enrich(User $user): UserEnrichedDto

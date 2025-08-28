@@ -28,8 +28,6 @@ abstract class ElasticsearchService
      */
     abstract protected function multiMatchFieldsSettings(): array;
 
-    // TODO kpstya добавить команду для удаления индекса и тест для нее
-
     abstract public function fillSearchIndex(): mixed;
 
     /**
@@ -38,6 +36,14 @@ abstract class ElasticsearchService
     public function createSearchIndex(): array
     {
         return $this->client->createIndex($this->bodyIndexCreate(), $this->indexName());
+    }
+
+    /**
+     * @return array<string, bool>
+     */
+    public function deleteSearchIndex(): array
+    {
+        return $this->client->deleteIndex($this->indexName());
     }
 
     /**

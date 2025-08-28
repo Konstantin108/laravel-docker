@@ -7,8 +7,6 @@ namespace App\Entities\Elasticsearch;
 use App\Dto\Elasticsearch\SearchIndexHitsDto;
 use App\Dto\Elasticsearch\SearchIndexShardsDto;
 use App\Dto\User\UserEnrichedDto;
-use App\Exceptions\SearchIndexDoesNotExist;
-use App\Services\SourceDtoCollectionService;
 use Illuminate\Support\Collection;
 use Spatie\LaravelData\Data;
 
@@ -22,43 +20,4 @@ final class SearchResponse extends Data
         /** @var Collection<string, UserEnrichedDto> */
         public Collection $hits
     ) {}
-
-    /**
-     * @param array{
-     *     took: int,
-     *     timed_out: bool,
-     *     _shards: array{
-     *         total: int,
-     *         successful: int,
-     *         skipped: int,
-     *         failed: int
-     *     },
-     *     hits: array{
-     *         total: array{
-     *             value: int,
-     *             relation: string
-     *         },
-     *         max_score: null|float,
-     *         hits: array{
-     *             _source: mixed
-     *         }
-     *     }
-     * } $data
-     *
-     * @throws SearchIndexDoesNotExist
-     */
-    public static function fromArray(array $data, SourceDtoCollectionService $collectionService): SearchResponse
-    {
-        return new self(
-            took: $data['took'],
-            timedOut: $data['timed_out'],
-            shardsDto: SearchIndexShardsDto::from($data['_shards']),
-            hitsDto: new SearchIndexHitsDto(
-                total: $data['hits']['total']['value'],
-                relation: $data['hits']['total']['relation'],
-                maxScore: $data['hits']['max_score'],
-            ),
-            hits: $collectionService->create($data['hits']['hits'])
-        );
-    }
 }
