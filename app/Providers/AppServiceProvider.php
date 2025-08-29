@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\ElasticsearchClient;
+use App\Factories\Contracts\SourceDtoFactoryContract;
 use App\Services\SourceDtoCollectionService;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
@@ -21,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(SourceDtoCollectionService::class, static function (Application $app) {
             return new SourceDtoCollectionService(...array_map(
-                static fn (string $className) => $app->make($className),
+                static fn (string $className): SourceDtoFactoryContract => $app->make($className),
                 config('elasticsearch.source_dto_factories')
             ));
         });
