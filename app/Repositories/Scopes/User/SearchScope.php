@@ -16,7 +16,6 @@ class SearchScope
         $this->search = $search !== null && mb_strlen($search) > 2
             ? '%'.$search.'%'
             : null;
-
     }
 
     /**
