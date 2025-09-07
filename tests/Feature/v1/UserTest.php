@@ -16,7 +16,7 @@ class UserTest extends TestCase
         User::factory()->count($count)->withContact()->create();
 
         $response = $this
-            ->get('api/v1/user/')
+            ->getJson(route('api.v1.user.index'))
             ->assertOk()
             ->assertJsonPath('meta.total', $count)
             ->assertJsonStructure([
@@ -66,7 +66,9 @@ class UserTest extends TestCase
         $page = 2;
 
         $this
-            ->get('api/v1/user?page='.$page)
+            ->getJson(route('api.v1.user.index', [
+                'page' => $page,
+            ]))
             ->assertOk()
             ->assertJsonPath('meta.current_page', $page);
     }
@@ -77,7 +79,9 @@ class UserTest extends TestCase
         $perPage = 1;
 
         $response = $this
-            ->get('api/v1/user?per_page='.$perPage)
+            ->getJson(route('api.v1.user.index', [
+                'per_page' => $perPage,
+            ]))
             ->assertOk()
             ->assertJsonPath('meta.per_page', $perPage);
 
@@ -94,7 +98,9 @@ class UserTest extends TestCase
         $count = 2;
 
         $response = $this
-            ->get('api/v1/user?search='.$search)
+            ->getJson(route('api.v1.user.index', [
+                'search' => $search,
+            ]))
             ->assertOk()
             ->assertJsonPath('meta.total', $count);
 

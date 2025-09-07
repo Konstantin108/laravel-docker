@@ -8,6 +8,7 @@ use App\Clients\Elasticsearch\ElasticsearchClientStub;
 use App\Exceptions\ElasticsearchApiException;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Client\RequestException;
 use Tests\TestCase;
 
 class UserTest extends TestCase
@@ -27,7 +28,7 @@ class UserTest extends TestCase
         User::factory()->count($count)->withContact()->create();
 
         $response = $this
-            ->get('api/v2/user/')
+            ->getJson(route('api.v2.user.index'))
             ->assertOk()
             ->assertJsonStructure([
                 'data' => [
@@ -64,7 +65,9 @@ class UserTest extends TestCase
 
         $this
             ->withoutExceptionHandling()
-            ->get('api/v2/user/')
+            ->getJson(route('api.v2.user.index'))
             ->assertInternalServerError();
+
+        $this->expectException(RequestException::class);
     }
 }
