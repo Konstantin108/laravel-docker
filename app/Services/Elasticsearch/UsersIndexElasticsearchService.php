@@ -87,7 +87,10 @@ class UsersIndexElasticsearchService extends ElasticsearchService
         ];
     }
 
-    public function fillSearchIndex(?int $count = null): ?HigherOrderTapProxy
+    /**
+     * @return HigherOrderTapProxy|array<string, mixed>|null
+     */
+    public function fillSearchIndex(?int $count = null): HigherOrderTapProxy|array|null
     {
         $users = $this->userService->getUsers($count);
         if ($users->isEmpty()) {
