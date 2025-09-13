@@ -45,8 +45,6 @@ class FillUsersSearchIndexTest extends TestCase
             return new ElasticsearchClientStub;
         });
 
-        // TODO kpstya надо написать unit тест на отправку письма
-
         $indexName = 'users';
         $users = User::factory()->count(2)->withContact()->create();
 
@@ -65,8 +63,9 @@ class FillUsersSearchIndexTest extends TestCase
 
         Event::assertDispatched(
             $event::class,
-            static function (UsersSearchIndexFilledEvent $event) use ($indexName, $users) {
-                return $event->indexName === $indexName && $event->users->count() === $users->count();
+            static function (UsersSearchIndexFilledEvent $event) use ($users, $indexName) {
+                return $event->users->count() === $users->count()
+                    && $event->indexName === $indexName;
             }
         );
 
@@ -74,8 +73,9 @@ class FillUsersSearchIndexTest extends TestCase
 
         Queue::assertPushed(
             SendUsersSearchIndexDataJob::class,
-            static function (SendUsersSearchIndexDataJob $job) use ($indexName, $users) {
-                return $job->indexName === $indexName && $job->users->count() === $users->count();
+            static function (SendUsersSearchIndexDataJob $job) use ($users, $indexName) {
+                return $job->users->count() === $users->count()
+                    && $job->indexName === $indexName;
             }
         );
     }
