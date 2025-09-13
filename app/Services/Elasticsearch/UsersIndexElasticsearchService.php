@@ -8,6 +8,7 @@ use App\Dto\User\UserEnrichedDto;
 use App\Entities\Elasticsearch\UserDocElement;
 use App\Events\Search\UsersSearchIndexFilledEvent;
 use App\Services\Elasticsearch\Abstract\ElasticsearchService;
+use Illuminate\Support\HigherOrderTapProxy;
 
 class UsersIndexElasticsearchService extends ElasticsearchService
 {
@@ -86,7 +87,7 @@ class UsersIndexElasticsearchService extends ElasticsearchService
         ];
     }
 
-    public function fillSearchIndex(?int $count = null): mixed
+    public function fillSearchIndex(?int $count = null): ?HigherOrderTapProxy
     {
         $users = $this->userService->getUsers($count);
         if ($users->isEmpty()) {
