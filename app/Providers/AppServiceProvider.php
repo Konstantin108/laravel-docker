@@ -16,16 +16,22 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(ElasticsearchClientContract::class, static function () {
-            return new ElasticsearchClient(config('elasticsearch.url'));
-        });
+        $this->app->bind(
+            ElasticsearchClientContract::class,
+            static function (): ElasticsearchClient {
+                return new ElasticsearchClient(config('elasticsearch.url'));
+            }
+        );
 
-        $this->app->bind(SourceDtoCollectionService::class, static function (Application $app) {
-            return new SourceDtoCollectionService(...array_map(
-                static fn (string $className): SourceDtoFactoryContract => $app->make($className),
-                config('elasticsearch.source_dto_factories')
-            ));
-        });
+        $this->app->bind(
+            SourceDtoCollectionService::class,
+            static function (Application $app): SourceDtoCollectionService {
+                return new SourceDtoCollectionService(...array_map(
+                    static fn (string $className): SourceDtoFactoryContract => $app->make($className),
+                    config('elasticsearch.source_dto_factories')
+                ));
+            }
+        );
     }
 
     /**
