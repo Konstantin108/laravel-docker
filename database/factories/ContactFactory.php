@@ -21,7 +21,7 @@ class ContactFactory extends Factory
             'user_id' => User::factory(),
             'email' => fake()->unique()->safeEmail(),
             'phone' => fake()->unique()->phoneNumber(),
-            'telegram' => fake()->name(),
+            'telegram' => '@'.fake()->userName(),
         ];
     }
 

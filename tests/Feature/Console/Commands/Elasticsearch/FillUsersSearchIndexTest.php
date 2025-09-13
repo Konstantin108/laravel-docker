@@ -5,30 +5,79 @@ namespace Tests\Feature\Console\Commands\Elasticsearch;
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
 use App\Clients\Elasticsearch\ElasticsearchClientStub;
+use App\Events\Search\UsersSearchIndexFilledEvent;
 use App\Exceptions\ElasticsearchApiException;
+use App\Jobs\SendUsersSearchIndexDataJob;
+use App\Listeners\UsersSearchIndexFilledListener;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Queue;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Tests\TestCase;
 
 class FillUsersSearchIndexTest extends TestCase
 {
     use RefreshDatabase;
 
+    private UsersSearchIndexFilledListener $listener;
+
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Event::fake();
+        Queue::fake();
+        $this->listener = $this->app->get(UsersSearchIndexFilledListener::class);
+    }
+
     /**
      * @throws \ReflectionException
      */
-    public function test_fill_users_search_index(): void
+    public function test_fill_users_search_index_success(): void
     {
         $this->app->bind(ElasticsearchClientContract::class, static function () {
             return new ElasticsearchClientStub;
         });
 
+        // TODO kpstya надо написать unit тест на отправку письма
+
+        $indexName = 'users';
         $users = User::factory()->count(2)->withContact()->create();
 
         $this
             ->artisan('search:fill-users-search-index-command')
             ->assertSuccessful()
-            ->expectsOutputToContain(sprintf('"_id":"%d"', $users->first()->id));
+            ->expectsOutputToContain(sprintf(
+                '"_id":"%d"',
+                $users->first()->id
+            ));
+
+        $dispatchedEvents = Event::dispatched(UsersSearchIndexFilledEvent::class);
+        $event = $dispatchedEvents->first()[0];
+
+        $this->assertNotNull($event);
+
+        Event::assertDispatched(
+            $event::class,
+            static function (UsersSearchIndexFilledEvent $event) use ($indexName, $users) {
+                return $event->indexName === $indexName && $event->users->count() === $users->count();
+            }
+        );
+
+        $this->listener->handle($event);
+
+        Queue::assertPushed(
+            SendUsersSearchIndexDataJob::class,
+            static function (SendUsersSearchIndexDataJob $job) use ($indexName, $users) {
+                return $job->indexName === $indexName && $job->users->count() === $users->count();
+            }
+        );
     }
 
     /**
@@ -44,6 +93,8 @@ class FillUsersSearchIndexTest extends TestCase
             ->artisan('search:fill-users-search-index-command')
             ->assertSuccessful()
             ->expectsOutputToContain('null');
+
+        Event::assertNotDispatched(UsersSearchIndexFilledEvent::class);
     }
 
     /**

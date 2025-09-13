@@ -18,7 +18,7 @@ class UserTest extends TestCase
     /**
      * @throws \ReflectionException
      */
-    public function test_index(): void
+    public function test_index_v2_no_param(): void
     {
         $this->app->bind(ElasticsearchClientContract::class, static function () {
             return new ElasticsearchClientStub;
@@ -52,7 +52,7 @@ class UserTest extends TestCase
     /**
      * @throws \ReflectionException
      */
-    public function test_index_failed(): void
+    public function test_index_v2_failed(): void
     {
         $this->app->bind(ElasticsearchClientContract::class, static function () {
             return new ElasticsearchClientErrorStub;
@@ -69,5 +69,7 @@ class UserTest extends TestCase
             ->assertInternalServerError();
 
         $this->expectException(RequestException::class);
+
+        // TODO kpstya добавить тесты с параметрами
     }
 }

@@ -10,7 +10,7 @@ class UserTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_index()
+    public function test_index_v1_no_param()
     {
         $count = 3;
         User::factory()->count($count)->withContact()->create();
@@ -60,7 +60,7 @@ class UserTest extends TestCase
         $this->assertCount($count, $response->json('data'));
     }
 
-    public function test_index_page_param(): void
+    public function test_index_v1_page_param(): void
     {
         User::factory()->count(3)->withContact()->create();
         $page = 2;
@@ -73,7 +73,7 @@ class UserTest extends TestCase
             ->assertJsonPath('meta.current_page', $page);
     }
 
-    public function test_index_per_page_param(): void
+    public function test_index_v1_per_page_param(): void
     {
         User::factory()->count(3)->withContact()->create();
         $perPage = 1;
@@ -88,7 +88,7 @@ class UserTest extends TestCase
         $this->assertCount($perPage, $response->json('data'));
     }
 
-    public function test_index_search_param(): void
+    public function test_index_v1_search_param(): void
     {
         User::factory()->withContact()->create(['email' => 'user.first@mail.ru']);
         User::factory()->withContact()->create(['name' => 'find abc']);

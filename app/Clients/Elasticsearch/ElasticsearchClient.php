@@ -31,11 +31,9 @@ class ElasticsearchClient implements ElasticsearchClientContract
     public function createIndex(array $body, string $indexName): array
     {
         return Http::asJson()
-            ->withUrlParameters([
-                'url' => $this->url,
-            ])
+            ->baseUrl($this->url)
             ->retry(3, 100)
-            ->put('{+url}/'.$indexName, $body)
+            ->put($indexName, $body)
             ->onError(static function (PromiseInterface|Response $response) {
                 throw ElasticsearchApiException::buildMessage($response->body(), $response->status());
             })
@@ -49,17 +47,17 @@ class ElasticsearchClient implements ElasticsearchClientContract
     public function bulkIndex(string $body, string $indexName): mixed
     {
         return Http::asJson()
-            ->withUrlParameters([
-                'url' => $this->url,
-            ])
+            ->baseUrl($this->url)
             ->retry(3, 100)
-            ->send('POST', '{+url}/'.$indexName.'/_bulk', [
+            ->send('POST', $indexName.'/_bulk', [
                 'body' => Utils::streamFor($body),
             ])
             ->onError(static function (PromiseInterface|Response $response) {
                 throw ElasticsearchApiException::buildMessage($response->body(), $response->status());
             })
             ->json();
+
+        // TODO kpstya добавить в конфиг надо ли отправлять письмо на почту
     }
 
     /**
@@ -71,11 +69,9 @@ class ElasticsearchClient implements ElasticsearchClientContract
     public function deleteIndex(string $indexName): array
     {
         return Http::asJson()
-            ->withUrlParameters([
-                'url' => $this->url,
-            ])
+            ->baseUrl($this->url)
             ->retry(3, 100)
-            ->delete('{+url}/'.$indexName)
+            ->delete($indexName)
             ->onError(static function (PromiseInterface|Response $response) {
                 throw ElasticsearchApiException::buildMessage($response->body(), $response->status());
             })
@@ -92,11 +88,9 @@ class ElasticsearchClient implements ElasticsearchClientContract
     public function search(array $body, string $indexName): array
     {
         return Http::asJson()
-            ->withUrlParameters([
-                'url' => $this->url,
-            ])
+            ->baseUrl($this->url)
             ->retry(3, 100)
-            ->post('{+url}/'.$indexName.'/_search', $body)
+            ->post($indexName.'/_search', $body)
             ->onError(static function (PromiseInterface|Response $response) {
                 throw ElasticsearchApiException::buildMessage($response->body(), $response->status());
             })
