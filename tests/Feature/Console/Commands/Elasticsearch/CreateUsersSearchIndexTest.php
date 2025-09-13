@@ -18,7 +18,7 @@ class CreateUsersSearchIndexTest extends TestCase
     /**
      * @throws \ReflectionException
      */
-    public function test_create_users_search_index(): void
+    public function test_create_users_search_index_success(): void
     {
         $this->app->bind(ElasticsearchClientContract::class, static function () {
             return new ElasticsearchClientStub;

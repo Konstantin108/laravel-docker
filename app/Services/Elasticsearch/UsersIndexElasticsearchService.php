@@ -6,6 +6,7 @@ namespace App\Services\Elasticsearch;
 
 use App\Dto\User\UserEnrichedDto;
 use App\Entities\Elasticsearch\UserDocElement;
+use App\Events\Search\UsersSearchIndexFilledEvent;
 use App\Services\Elasticsearch\Abstract\ElasticsearchService;
 
 class UsersIndexElasticsearchService extends ElasticsearchService
@@ -108,6 +109,8 @@ class UsersIndexElasticsearchService extends ElasticsearchService
                 static::INDEX_NAME
             ))
             ->implode('');
+
+        UsersSearchIndexFilledEvent::dispatch($users, static::INDEX_NAME);
 
         return $this->client->bulkIndex($body, static::INDEX_NAME);
     }
