@@ -56,8 +56,6 @@ class ElasticsearchClient implements ElasticsearchClientContract
                 throw ElasticsearchApiException::buildMessage($response->body(), $response->status());
             })
             ->json();
-
-        // TODO kpstya добавить в конфиг надо ли отправлять письмо на почту
     }
 
     /**
