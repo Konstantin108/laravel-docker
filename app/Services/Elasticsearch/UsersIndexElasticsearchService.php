@@ -110,8 +110,9 @@ class UsersIndexElasticsearchService extends ElasticsearchService
             ))
             ->implode('');
 
-        UsersSearchIndexFilledEvent::dispatch($users, static::INDEX_NAME);
-
-        return $this->client->bulkIndex($body, static::INDEX_NAME);
+        return tap(
+            $this->client->bulkIndex($body, static::INDEX_NAME),
+            static fn () => UsersSearchIndexFilledEvent::dispatch($users, static::INDEX_NAME)
+        );
     }
 }
