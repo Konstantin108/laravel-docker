@@ -52,6 +52,58 @@ class UserTest extends TestCase
     /**
      * @throws \ReflectionException
      */
+    public function test_index_v2_page_param(): void
+    {
+        $this->app->bind(ElasticsearchClientContract::class, static function () {
+            return new ElasticsearchClientStub;
+        });
+
+        $count = 13;
+        User::factory()->count($count)->withContact()->create();
+
+        $page = 2;
+        $perPage = 9;
+
+        $response = $this
+            ->getJson(route('api.v2.user.index', [
+                'page' => $page,
+                'per_page' => $perPage,
+            ]))
+            ->assertOk();
+
+        $data = $response->json('data');
+
+        foreach ($data as $elem) {
+            $this->assertGreaterThan($count - $perPage, $elem['id']);
+        }
+
+        $this->assertCount($count - $perPage, $data);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function test_index_v2_per_page_param(): void
+    {
+        $this->app->bind(ElasticsearchClientContract::class, static function () {
+            return new ElasticsearchClientStub;
+        });
+
+        User::factory()->count(3)->withContact()->create();
+        $perPage = 1;
+
+        $response = $this
+            ->getJson(route('api.v2.user.index', [
+                'per_page' => $perPage,
+            ]))
+            ->assertOk();
+
+        $this->assertCount($perPage, $response->json('data'));
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
     public function test_index_v2_failed(): void
     {
         $this->app->bind(ElasticsearchClientContract::class, static function () {
@@ -69,7 +121,5 @@ class UserTest extends TestCase
             ->assertInternalServerError();
 
         $this->expectException(RequestException::class);
-
-        // TODO kpstya добавить тесты с параметрами
     }
 }

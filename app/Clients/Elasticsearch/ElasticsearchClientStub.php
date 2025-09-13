@@ -84,8 +84,11 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
             throw SearchIndexDoesNotExist::buildMessage($indexName);
         }
 
-        $elements = $modelName::query()->get();
-        $elements = $elements->map(fn ($element) => app($service)->enrich($element));
+        $elements = $modelName::query()
+            ->where('id', '>', $body['from'])
+            ->limit($body['size'])
+            ->get()
+            ->map(fn ($element) => app($service)->enrich($element));
 
         $maxScore = FakerFactory::create()
             ->randomFloat(6, 20, 70);
