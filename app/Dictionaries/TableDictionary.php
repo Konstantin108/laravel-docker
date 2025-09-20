@@ -6,6 +6,16 @@ namespace App\Dictionaries;
 
 class TableDictionary
 {
+    public const CACHE = 'cache';
+
+    public const CACHE_LOCKS = 'cache_locks';
+
+    public const JOBS = 'jobs';
+
+    public const JOB_BATHES = 'job_batches';
+
+    public const FAILED_JOBS = 'failed_jobs';
+
     public const USERS = 'users';
 
     public const CONTACTS = 'contacts';
