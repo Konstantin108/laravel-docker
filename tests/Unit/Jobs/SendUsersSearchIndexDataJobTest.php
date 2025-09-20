@@ -7,6 +7,7 @@ use App\Jobs\SendUsersSearchIndexDataJob;
 use App\Mail\UsersSearchIndexDataMail;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Mockery;
 use Tests\TestCase;
 
@@ -16,17 +17,19 @@ class SendUsersSearchIndexDataJobTest extends TestCase
     {
         $indexName = 'users';
 
-        $users = collect(new UserEnrichedDto(
-            id: 1,
-            name: 'Ivan',
-            email: 'ivan@example.com',
-            reserveEmail: 'ivan2@example.com',
-            phone: '79091234567',
-            telegram: '@ivan',
-            emailVerifiedAt: Carbon::now(),
-            createdAt: Carbon::now(),
-            updatedAt: Carbon::now(),
-        ));
+        $users = new Collection(
+            new UserEnrichedDto(
+                id: 1,
+                name: 'Ivan',
+                email: 'ivan@example.com',
+                reserveEmail: 'ivan2@example.com',
+                phone: '79091234567',
+                telegram: '@ivan',
+                emailVerifiedAt: Carbon::now(),
+                createdAt: Carbon::now(),
+                updatedAt: Carbon::now(),
+            )
+        );
 
         $mailerMock = Mockery::mock(Mailer::class);
         $mailerMock->shouldReceive('to')
