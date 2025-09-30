@@ -6,6 +6,8 @@ namespace App\Dto\Elasticsearch;
 
 use Spatie\LaravelData\Data;
 
+// TODO kpstya возможно сделать слой для создания Dto? что-то типо DtoFactories
+
 final class SearchIndexShardsDto extends Data
 {
     public function __construct(
