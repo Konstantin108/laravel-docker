@@ -16,6 +16,8 @@ class SourceDtoCollectionService
      */
     private array $factories;
 
+    // TODO kpstya тут возможно нужно заменить array на collection
+
     public function __construct(SourceDtoFactoryContract ...$factories)
     {
         $this->factories = $factories;
@@ -29,7 +31,7 @@ class SourceDtoCollectionService
      */
     public function create(array $hits): Collection
     {
-        return collect(array_map(function (array $hit): SourceDtoContract {
+        return new Collection(array_map(function (array $hit): SourceDtoContract {
             $indexName = $hit['_index'];
             if (! isset($this->factories[$indexName])) {
                 throw SearchIndexDoesNotExist::buildMessage($indexName);
