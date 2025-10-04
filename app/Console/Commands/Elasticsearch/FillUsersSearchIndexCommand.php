@@ -38,8 +38,11 @@ class FillUsersSearchIndexCommand extends Command
         $columnNames = ['_id', '_seq_no', '_type', '_version', 'result', '_primary_term', 'status'];
 
         $rows = array_map(
-            static function (array $elem) use ($columnNames): array {
-                return array_map(static fn (string $column): int|string => $elem['index'][$column], $columnNames);
+            static function (array $item) use ($columnNames): array {
+                return array_map(
+                    static fn (string $columnName): int|string => $item['index'][$columnName],
+                    $columnNames
+                );
             },
             (array) $result['items']
         );
