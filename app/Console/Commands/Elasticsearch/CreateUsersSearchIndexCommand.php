@@ -9,7 +9,7 @@ use Illuminate\Console\Command;
 
 class CreateUsersSearchIndexCommand extends Command
 {
-    protected $signature = 'search:create-users-search-index-command';
+    protected $signature = 'app:search:create-users-search-index';
 
     protected $description = 'Создать индекс users в Elasticsearch';
 

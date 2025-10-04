@@ -15,6 +15,8 @@ class DeleteUsersSearchIndexTest extends TestCase
 {
     use RefreshDatabase;
 
+    private string $command = 'app:search:delete-users-search-index';
+
     /**
      * @throws \ReflectionException
      */
@@ -25,7 +27,7 @@ class DeleteUsersSearchIndexTest extends TestCase
         });
 
         $this
-            ->artisan('search:delete-users-search-index-command')
+            ->artisan($this->command)
             ->assertSuccessful()
             ->expectsOutput(json_encode([
                 'acknowledged' => true,
@@ -44,6 +46,6 @@ class DeleteUsersSearchIndexTest extends TestCase
         $this->expectException(ElasticsearchApiException::class);
         $this->expectExceptionMessage('Index deleting error');
 
-        $this->artisan('search:delete-users-search-index-command');
+        $this->artisan($this->command);
     }
 }
