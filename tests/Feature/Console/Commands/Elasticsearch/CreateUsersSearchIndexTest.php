@@ -8,13 +8,10 @@ use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
 use App\Clients\Elasticsearch\ElasticsearchClientStub;
 use App\Exceptions\ElasticsearchApiException;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class CreateUsersSearchIndexTest extends TestCase
 {
-    use RefreshDatabase;
-
     private string $command = 'app:search:create-users-search-index';
 
     /**
@@ -48,6 +45,9 @@ class CreateUsersSearchIndexTest extends TestCase
         $this->expectException(ElasticsearchApiException::class);
         $this->expectExceptionMessage('An error occurred while creating the index');
 
-        $this->artisan($this->command);
+        $this
+            ->artisan($this->command)
+            ->assertFailed()
+            ->expectsOutput('');
     }
 }

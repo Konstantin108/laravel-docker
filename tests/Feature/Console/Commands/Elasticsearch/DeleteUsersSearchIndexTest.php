@@ -8,13 +8,10 @@ use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
 use App\Clients\Elasticsearch\ElasticsearchClientStub;
 use App\Exceptions\ElasticsearchApiException;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class DeleteUsersSearchIndexTest extends TestCase
 {
-    use RefreshDatabase;
-
     private string $command = 'app:search:delete-users-search-index';
 
     /**
@@ -46,6 +43,9 @@ class DeleteUsersSearchIndexTest extends TestCase
         $this->expectException(ElasticsearchApiException::class);
         $this->expectExceptionMessage('Index deleting error');
 
-        $this->artisan($this->command);
+        $this
+            ->artisan($this->command)
+            ->assertFailed()
+            ->expectsOutput('');
     }
 }

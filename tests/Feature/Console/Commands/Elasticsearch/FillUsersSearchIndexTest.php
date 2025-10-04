@@ -113,6 +113,9 @@ class FillUsersSearchIndexTest extends TestCase
         $this->expectException(ElasticsearchApiException::class);
         $this->expectExceptionMessage('Index filling error');
 
-        $this->artisan($this->command);
+        $this
+            ->artisan($this->command)
+            ->assertFailed()
+            ->expectsOutput('');
     }
 }
