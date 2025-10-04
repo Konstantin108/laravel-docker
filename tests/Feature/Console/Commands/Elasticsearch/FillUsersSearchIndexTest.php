@@ -48,15 +48,36 @@ class FillUsersSearchIndexTest extends TestCase
         });
 
         $indexName = 'users';
-        $users = User::factory()->count(2)->withContact()->create();
+        $count = 2;
+        $users = User::factory()->count($count)->withContact()->create();
+
+        $expectedRows = $users->map(function (User $user) {
+            return [
+                $user->id,
+                --$user->id,
+                '_doc',
+                1,
+                'created',
+                1,
+                201,
+            ];
+        });
 
         $this
             ->artisan($this->command)
             ->assertSuccessful()
-            ->expectsOutputToContain(sprintf(
-                '"_id":"%d"',
-                $users->first()->id
-            ));
+            ->expectsOutputToContain(strtoupper('raw json result'))
+            ->expectsOutputToContain(strtoupper('formatted result'))
+            ->expectsOutputToContain('took')
+            ->expectsOutputToContain('errors: false')
+            ->expectsOutputToContain(sprintf('total: %d', $count))
+            ->expectsOutputToContain(sprintf('index: %s', $indexName))
+            ->doesntExpectOutputToContain('errors: true')
+            ->doesntExpectOutputToContain('index: contacts')
+            ->expectsTable(
+                ['_id', '_seq_no', '_type', '_version', 'result', '_primary_term', 'status'],
+                $expectedRows
+            );
 
         $dispatchedEvents = Event::dispatched(UsersSearchIndexFilledEvent::class);
         $event = $dispatchedEvents->first()[0];
@@ -94,7 +115,7 @@ class FillUsersSearchIndexTest extends TestCase
         $this
             ->artisan($this->command)
             ->assertSuccessful()
-            ->expectsOutputToContain('null');
+            ->expectsOutput('null');
 
         Event::assertNotDispatched(UsersSearchIndexFilledEvent::class);
     }

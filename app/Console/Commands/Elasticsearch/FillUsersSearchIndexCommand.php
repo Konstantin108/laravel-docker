@@ -22,8 +22,39 @@ class FillUsersSearchIndexCommand extends Command
             : self::LIMIT;
 
         $result = $service->fillSearchIndex($limit);
-        $this->info(json_encode($result));
+
+        $result !== null
+            ? $this->formattedOutput($result)
+            : $this->info(json_encode($result));
 
         return self::SUCCESS;
+    }
+
+    /**
+     * @param  array<string, int|string>  $result
+     */
+    private function formattedOutput(array $result): void
+    {
+        $columnNames = ['_id', '_seq_no', '_type', '_version', 'result', '_primary_term', 'status'];
+
+        $rows = array_map(
+            static function (array $item) use ($columnNames): array {
+                return array_map(
+                    static fn (string $columnName): int|string => $item['index'][$columnName],
+                    $columnNames
+                );
+            },
+            (array) $result['items']
+        );
+
+        $this->alert(strtoupper('raw json result'));
+        $this->info(json_encode($result));
+        $this->newLine();
+        $this->alert(strtoupper('formatted result'));
+        $this->info(sprintf('took: %d', $result['took']));
+        $this->info(sprintf('errors: %s', json_encode($result['errors'])));
+        $this->info(sprintf('total: %d', count((array) $result['items'])));
+        $this->info('index: users');
+        $this->table($columnNames, $rows);
     }
 }

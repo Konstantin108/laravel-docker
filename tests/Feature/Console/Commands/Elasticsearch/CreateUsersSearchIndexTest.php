@@ -8,13 +8,10 @@ use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
 use App\Clients\Elasticsearch\ElasticsearchClientStub;
 use App\Exceptions\ElasticsearchApiException;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class CreateUsersSearchIndexTest extends TestCase
 {
-    use RefreshDatabase;
-
     private string $command = 'app:search:create-users-search-index';
 
     /**
