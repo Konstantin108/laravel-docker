@@ -15,6 +15,8 @@ class CreateUsersSearchIndexTest extends TestCase
 {
     use RefreshDatabase;
 
+    private string $command = 'app:search:create-users-search-index';
+
     /**
      * @throws \ReflectionException
      */
@@ -25,7 +27,7 @@ class CreateUsersSearchIndexTest extends TestCase
         });
 
         $this
-            ->artisan('search:create-users-search-index-command')
+            ->artisan($this->command)
             ->assertSuccessful()
             ->expectsOutput(json_encode([
                 'acknowledged' => true,
@@ -46,6 +48,6 @@ class CreateUsersSearchIndexTest extends TestCase
         $this->expectException(ElasticsearchApiException::class);
         $this->expectExceptionMessage('An error occurred while creating the index');
 
-        $this->artisan('search:create-users-search-index-command');
+        $this->artisan($this->command);
     }
 }

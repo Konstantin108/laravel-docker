@@ -15,6 +15,8 @@ class UserTest extends TestCase
 {
     use RefreshDatabase;
 
+    private string $indexRoute = 'api.v2.user.index';
+
     /**
      * @throws \ReflectionException
      */
@@ -28,7 +30,7 @@ class UserTest extends TestCase
         User::factory()->count($count)->withContact()->create();
 
         $response = $this
-            ->getJson(route('api.v2.user.index'))
+            ->getJson(route($this->indexRoute))
             ->assertOk()
             ->assertJsonStructure([
                 'data' => [
@@ -65,7 +67,7 @@ class UserTest extends TestCase
         $perPage = 9;
 
         $response = $this
-            ->getJson(route('api.v2.user.index', [
+            ->getJson(route($this->indexRoute, [
                 'page' => $page,
                 'per_page' => $perPage,
             ]))
@@ -93,7 +95,7 @@ class UserTest extends TestCase
         $perPage = 1;
 
         $response = $this
-            ->getJson(route('api.v2.user.index', [
+            ->getJson(route($this->indexRoute, [
                 'per_page' => $perPage,
             ]))
             ->assertOk();
@@ -117,7 +119,7 @@ class UserTest extends TestCase
 
         $this
             ->withoutExceptionHandling()
-            ->getJson(route('api.v2.user.index'))
+            ->getJson(route($this->indexRoute))
             ->assertInternalServerError();
 
         $this->expectException(RequestException::class);

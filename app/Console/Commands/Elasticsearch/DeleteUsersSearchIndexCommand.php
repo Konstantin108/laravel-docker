@@ -9,7 +9,7 @@ use Illuminate\Console\Command;
 
 class DeleteUsersSearchIndexCommand extends Command
 {
-    protected $signature = 'search:delete-users-search-index-command';
+    protected $signature = 'app:search:delete-users-search-index';
 
     protected $description = 'Удалить индекс users в Elasticsearch';
 
