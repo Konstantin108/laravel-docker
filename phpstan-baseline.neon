@@ -5,3 +5,7 @@ parameters:
 			count: 1
 			path: app/Services/UserService.php
 
+		-
+			message: "#^Parameter \\#1 \\$callback of function array_map expects \\(callable\\(int|string\\): mixed\\)|null, Closure\\(array\\): array{int|string, int|string, int|string, int|string, int|string, int|string, int|string} given.$#"
+			count: 1
+			path: app/Console/Commands/Elasticsearch/FillUsersSearchIndexCommand.php
