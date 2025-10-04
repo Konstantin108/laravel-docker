@@ -11,7 +11,7 @@ class ReverseStringTest extends TestCase
 {
     private string $command = 'app:reverse-string';
 
-    public function test_reverse_string(): void
+    public function test_reverse_string_with_passed_argument(): void
     {
         $string = 'привет';
         $reversedString = 'тевирп';
@@ -24,13 +24,10 @@ class ReverseStringTest extends TestCase
             ->expectsOutput($reversedString);
     }
 
-    public function test_reverse_string_failed(): void
+    public function test_reverse_string_without_passed_argument(): void
     {
         $this->expectException(RuntimeException::class);
 
-        $this
-            ->artisan($this->command)
-            ->assertFailed()
-            ->expectsOutput('');
+        $this->artisan($this->command);
     }
 }

@@ -45,9 +45,6 @@ class CreateUsersSearchIndexTest extends TestCase
         $this->expectException(ElasticsearchApiException::class);
         $this->expectExceptionMessage('An error occurred while creating the index');
 
-        $this
-            ->artisan($this->command)
-            ->assertFailed()
-            ->expectsOutput('');
+        $this->artisan($this->command);
     }
 }

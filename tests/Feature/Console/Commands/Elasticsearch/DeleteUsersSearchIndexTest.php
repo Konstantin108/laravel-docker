@@ -43,9 +43,6 @@ class DeleteUsersSearchIndexTest extends TestCase
         $this->expectException(ElasticsearchApiException::class);
         $this->expectExceptionMessage('Index deleting error');
 
-        $this
-            ->artisan($this->command)
-            ->assertFailed()
-            ->expectsOutput('');
+        $this->artisan($this->command);
     }
 }
