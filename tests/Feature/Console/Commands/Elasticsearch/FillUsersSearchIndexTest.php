@@ -66,8 +66,6 @@ class FillUsersSearchIndexTest extends TestCase
         $this
             ->artisan($this->command)
             ->assertSuccessful()
-            ->expectsOutputToContain(strtoupper('raw json result'))
-            ->expectsOutputToContain(strtoupper('formatted result'))
             ->expectsOutputToContain('took')
             ->expectsOutputToContain('errors: false')
             ->expectsOutputToContain(sprintf('total: %d', $count))

@@ -12,8 +12,8 @@ use Spatie\LaravelData\Mappers\SnakeCaseMapper;
 final class SearchIndexHitsDto extends Data
 {
     public function __construct(
-        public int $total,
-        public string $relation,
-        public ?float $maxScore,
+        public readonly int $total,
+        public readonly string $relation,
+        public readonly ?float $maxScore,
     ) {}
 }

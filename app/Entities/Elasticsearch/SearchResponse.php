@@ -13,11 +13,11 @@ use Spatie\LaravelData\Data;
 final class SearchResponse extends Data
 {
     public function __construct(
-        public int $took,
-        public bool $timedOut,
-        public SearchIndexShardsDto $shardsDto,
-        public SearchIndexHitsDto $hitsDto,
+        public readonly int $took,
+        public readonly bool $timedOut,
+        public readonly SearchIndexShardsDto $shardsDto,
+        public readonly SearchIndexHitsDto $hitsDto,
         /** @var Collection<string, UserEnrichedDto> */
-        public Collection $hits
+        public readonly Collection $hits
     ) {}
 }

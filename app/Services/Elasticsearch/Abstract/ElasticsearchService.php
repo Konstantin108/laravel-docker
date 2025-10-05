@@ -12,8 +12,8 @@ use stdClass;
 abstract class ElasticsearchService
 {
     public function __construct(
-        protected ElasticsearchClientContract $client,
-        protected UserService $userService
+        protected readonly ElasticsearchClientContract $client,
+        protected readonly UserService $userService
     ) {}
 
     abstract protected function indexName(): string;

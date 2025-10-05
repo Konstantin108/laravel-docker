@@ -11,9 +11,9 @@ use Spatie\LaravelData\Data;
 final class SearchIndexShardsDto extends Data
 {
     public function __construct(
-        public int $total,
-        public int $successful,
-        public int $skipped,
-        public int $failed,
+        public readonly int $total,
+        public readonly int $successful,
+        public readonly int $skipped,
+        public readonly int $failed,
     ) {}
 }

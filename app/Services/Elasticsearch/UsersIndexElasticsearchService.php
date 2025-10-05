@@ -12,6 +12,8 @@ use Illuminate\Support\HigherOrderTapProxy;
 
 class UsersIndexElasticsearchService extends ElasticsearchService
 {
+    // TODO kpstya возможно заменить на интерфейс и трейт
+
     protected const INDEX_NAME = 'users';
 
     protected function indexName(): string

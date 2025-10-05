@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Dto\Elasticsearch;
 
-final class PaginationRequestDto
+final readonly class PaginationRequestDto
 {
     public function __construct(
         public int $size,

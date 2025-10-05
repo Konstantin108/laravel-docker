@@ -6,6 +6,7 @@ namespace App\Console\Commands\Elasticsearch;
 
 use App\Services\Elasticsearch\UsersIndexElasticsearchService;
 use Illuminate\Console\Command;
+use Psr\Log\LoggerInterface;
 
 class FillUsersSearchIndexCommand extends Command
 {
@@ -15,7 +16,7 @@ class FillUsersSearchIndexCommand extends Command
 
     protected $description = 'Заполнить документами индекс users в Elasticsearch';
 
-    public function handle(UsersIndexElasticsearchService $service): int
+    public function handle(UsersIndexElasticsearchService $service, LoggerInterface $logger): int
     {
         $limit = $this->argument('limit:int') !== null
             ? (int) $this->argument('limit:int')
@@ -26,6 +27,8 @@ class FillUsersSearchIndexCommand extends Command
         $result !== null
             ? $this->formattedOutput($result)
             : $this->info(json_encode($result));
+
+        $logger->info(json_encode($result));
 
         return self::SUCCESS;
     }
@@ -47,10 +50,6 @@ class FillUsersSearchIndexCommand extends Command
             (array) $result['items']
         );
 
-        $this->alert(strtoupper('raw json result'));
-        $this->info(json_encode($result));
-        $this->newLine();
-        $this->alert(strtoupper('formatted result'));
         $this->info(sprintf('took: %d', $result['took']));
         $this->info(sprintf('errors: %s', json_encode($result['errors'])));
         $this->info(sprintf('total: %d', count((array) $result['items'])));
