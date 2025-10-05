@@ -4,17 +4,25 @@ declare(strict_types=1);
 
 namespace App\Services\Elasticsearch;
 
+use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Dto\User\UserEnrichedDto;
-use App\Entities\Elasticsearch\UserDocElement;
+use App\EntityFactories\Elasticsearch\UserDocElementFactory;
 use App\Events\Search\UsersSearchIndexFilledEvent;
 use App\Services\Elasticsearch\Abstract\ElasticsearchService;
+use App\Services\UserService;
 use Illuminate\Support\HigherOrderTapProxy;
 
 class UsersIndexElasticsearchService extends ElasticsearchService
 {
-    // TODO kpstya возможно заменить на интерфейс и трейт
-
     protected const INDEX_NAME = 'users';
+
+    public function __construct(
+        protected ElasticsearchClientContract $client,
+        protected UserService $userService,
+        private readonly UserDocElementFactory $userDocElementFactory
+    ) {
+        parent::__construct($client, $userService);
+    }
 
     protected function indexName(): string
     {
@@ -101,17 +109,7 @@ class UsersIndexElasticsearchService extends ElasticsearchService
 
         $body = $users
             ->map(fn (UserEnrichedDto $user): string => $this->makeDocElement(
-                (new UserDocElement(
-                    id: $user->id,
-                    name: $user->name,
-                    email: $user->email,
-                    emailVerifiedAt: $user->emailVerifiedAt,
-                    reserveEmail: $user->reserveEmail,
-                    phone: $user->phone,
-                    telegram: $user->telegram,
-                    createdAt: $user->createdAt,
-                    updatedAt: $user->updatedAt,
-                ))->toArray(),
+                $this->userDocElementFactory->make($user)->toArray(),
                 static::INDEX_NAME
             ))
             ->implode('');

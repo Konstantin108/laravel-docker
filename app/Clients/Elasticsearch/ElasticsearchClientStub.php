@@ -93,9 +93,6 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
         $maxScore = FakerFactory::create()
             ->randomFloat(6, 20, 70);
 
-        // TODO kpstya возможно добавить метод для удаления всех документов в индексе
-        // продумать как не обновлять каждый раз все документы
-
         return [
             'took' => rand(1, 30),
             'timed_out' => false,
