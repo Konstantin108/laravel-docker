@@ -51,8 +51,8 @@ class FillUsersSearchIndexTest extends TestCase
         $count = 2;
         $users = User::factory()->count($count)->withContact()->create();
 
-        $expectedRows = $users->map(function (User $user) {
-            return [
+        $expectedRows = $users
+            ->map(static fn (User $user) => [
                 $user->id,
                 --$user->id,
                 '_doc',
@@ -60,8 +60,10 @@ class FillUsersSearchIndexTest extends TestCase
                 'created',
                 1,
                 201,
-            ];
-        });
+            ]);
+
+        // TODO kpstya добавить took - ожидается число
+        // errors - ожидается bool
 
         $this
             ->artisan($this->command)

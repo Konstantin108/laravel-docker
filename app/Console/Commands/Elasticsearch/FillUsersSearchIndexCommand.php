@@ -50,10 +50,14 @@ class FillUsersSearchIndexCommand extends Command
             (array) $result['items']
         );
 
+        $this->table($columnNames, $rows);
         $this->info(sprintf('took: %d', $result['took']));
         $this->info(sprintf('errors: %s', json_encode($result['errors'])));
         $this->info(sprintf('total: %d', count((array) $result['items'])));
         $this->info('index: users');
-        $this->table($columnNames, $rows);
+
+        // TODO kpstya возможно надо сделать вывод в строку
+        // надо так же выводить количество 200 и 201
+        // дополнить это в тесте
     }
 }

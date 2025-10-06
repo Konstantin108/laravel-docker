@@ -7,7 +7,7 @@ use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
-    private const int USERS_COUNT = 20;
+    private const USERS_COUNT = 20;
 
     public function run(): void
     {

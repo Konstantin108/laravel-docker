@@ -88,7 +88,7 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
             ->where('id', '>', $body['from'])
             ->limit($body['size'])
             ->get()
-            ->map(fn ($element) => app($service)->enrich($element));
+            ->map(static fn ($element) => app($service)->enrich($element));
 
         $maxScore = FakerFactory::create()
             ->randomFloat(6, 20, 70);
@@ -108,15 +108,13 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
                     'relation' => 'eq',
                 ],
                 'max_score' => $maxScore,
-                'hits' => $elements->map(function ($element, $key) use ($maxScore, $indexName): array {
-                    return [
-                        '_index' => $indexName,
-                        '_type' => '_doc',
-                        '_id' => (string) $element->id,
-                        '_score' => $maxScore - $key * rand(1, 9),
-                        '_source' => $element->toArray(),
-                    ];
-                })->toArray(),
+                'hits' => $elements->map(static fn ($element, $key): array => [
+                    '_index' => $indexName,
+                    '_type' => '_doc',
+                    '_id' => (string) $element->id,
+                    '_score' => $maxScore - $key * rand(1, 9),
+                    '_source' => $element->toArray(),
+                ])->toArray(),
             ],
         ];
     }
