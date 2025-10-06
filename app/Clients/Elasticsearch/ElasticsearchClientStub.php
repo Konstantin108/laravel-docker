@@ -30,7 +30,6 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
     {
         $lines = array_filter(explode("\n", $body));
 
-        $items = [];
         $seqNumber = 0;
         for ($i = 0; $i < count($lines); $i += 2) {
             $operation = json_decode($lines[$i], true);
@@ -57,7 +56,7 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
         return [
             'took' => count($lines) * rand(1, 2),
             'errors' => false,
-            'items' => $items,
+            'items' => $items ?? [],
         ];
     }
 
@@ -88,13 +87,10 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
             ->where('id', '>', $body['from'])
             ->limit($body['size'])
             ->get()
-            ->map(fn ($element) => app($service)->enrich($element));
+            ->map(static fn ($element) => app($service)->enrich($element));
 
         $maxScore = FakerFactory::create()
             ->randomFloat(6, 20, 70);
-
-        // TODO kpstya возможно добавить метод для удаления всех документов в индексе
-        // продумать как не обновлять каждый раз все документы
 
         return [
             'took' => rand(1, 30),
@@ -111,15 +107,13 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
                     'relation' => 'eq',
                 ],
                 'max_score' => $maxScore,
-                'hits' => $elements->map(function ($element, $key) use ($maxScore, $indexName): array {
-                    return [
-                        '_index' => $indexName,
-                        '_type' => '_doc',
-                        '_id' => (string) $element->id,
-                        '_score' => $maxScore - $key * rand(1, 9),
-                        '_source' => $element->toArray(),
-                    ];
-                })->toArray(),
+                'hits' => $elements->map(static fn ($element, $key): array => [
+                    '_index' => $indexName,
+                    '_type' => '_doc',
+                    '_id' => (string) $element->id,
+                    '_score' => $maxScore - $key * rand(1, 9),
+                    '_source' => $element->toArray(),
+                ])->toArray(),
             ],
         ];
     }

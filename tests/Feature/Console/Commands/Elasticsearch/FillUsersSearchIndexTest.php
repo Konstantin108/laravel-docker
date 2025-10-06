@@ -51,8 +51,8 @@ class FillUsersSearchIndexTest extends TestCase
         $count = 2;
         $users = User::factory()->count($count)->withContact()->create();
 
-        $expectedRows = $users->map(function (User $user) {
-            return [
+        $expectedRows = $users
+            ->map(static fn (User $user) => [
                 $user->id,
                 --$user->id,
                 '_doc',
@@ -60,24 +60,26 @@ class FillUsersSearchIndexTest extends TestCase
                 'created',
                 1,
                 201,
-            ];
-        });
+            ]);
 
         $this
             ->artisan($this->command)
             ->assertSuccessful()
-            ->expectsOutputToContain(strtoupper('raw json result'))
-            ->expectsOutputToContain(strtoupper('formatted result'))
-            ->expectsOutputToContain('took')
-            ->expectsOutputToContain('errors: false')
-            ->expectsOutputToContain(sprintf('total: %d', $count))
-            ->expectsOutputToContain(sprintf('index: %s', $indexName))
-            ->doesntExpectOutputToContain('errors: true')
-            ->doesntExpectOutputToContain('index: contacts')
             ->expectsTable(
                 ['_id', '_seq_no', '_type', '_version', 'result', '_primary_term', 'status'],
                 $expectedRows
-            );
+            )
+            ->expectsOutputToContain(sprintf('index: %s', $indexName))
+            ->doesntExpectOutputToContain('index: contacts')
+            ->expectsOutputToContain('took')
+            ->expectsOutputToContain('errors: false')
+            ->doesntExpectOutputToContain('errors: true')
+            ->expectsOutputToContain(sprintf('created: %d', $count))
+            ->doesntExpectOutputToContain(sprintf('created: %d', 0))
+            ->expectsOutputToContain(sprintf('updated: %d', 0))
+            ->doesntExpectOutputToContain(sprintf('updated: %d', $count))
+            ->expectsOutputToContain(sprintf('total: %d', $count))
+            ->doesntExpectOutputToContain(sprintf('total: %d', 0));
 
         $dispatchedEvents = Event::dispatched(UsersSearchIndexFilledEvent::class);
         $event = $dispatchedEvents->first()[0];

@@ -12,8 +12,8 @@ use Spatie\LaravelData\Mappers\SnakeCaseMapper;
 final class IndexDto extends Data
 {
     public function __construct(
-        public ?string $search = null,
-        public ?int $perPage = null,
-        public ?int $page = null,
+        public readonly ?string $search = null,
+        public readonly ?int $perPage = null,
+        public readonly ?int $page = null,
     ) {}
 }

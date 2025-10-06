@@ -14,9 +14,7 @@ class SourceDtoCollectionService
     /**
      * @var List<SourceDtoFactoryContract>
      */
-    private array $factories;
-
-    // TODO kpstya тут возможно нужно заменить array на collection
+    private readonly array $factories;
 
     public function __construct(SourceDtoFactoryContract ...$factories)
     {

@@ -13,14 +13,14 @@ use Spatie\LaravelData\Mappers\SnakeCaseMapper;
 final class UserDocElement extends Data
 {
     public function __construct(
-        public int $id,
-        public string $name,
-        public string $email,
-        public ?Carbon $emailVerifiedAt = null,
-        public ?string $reserveEmail = null,
-        public ?string $phone = null,
-        public ?string $telegram = null,
-        public ?Carbon $createdAt = null,
-        public ?Carbon $updatedAt = null,
+        public readonly int $id,
+        public readonly string $name,
+        public readonly string $email,
+        public readonly ?Carbon $emailVerifiedAt = null,
+        public readonly ?string $reserveEmail = null,
+        public readonly ?string $phone = null,
+        public readonly ?string $telegram = null,
+        public readonly ?Carbon $createdAt = null,
+        public readonly ?Carbon $updatedAt = null,
     ) {}
 }
