@@ -38,26 +38,35 @@ class FillUsersSearchIndexCommand extends Command
      */
     private function formattedOutput(array $result): void
     {
+        /**
+         * @var array<int, array<string, array<string, string|int|array<string, string|int>>>> $items
+         */
+        $items = $result['items'];
         $columnNames = ['_id', '_seq_no', '_type', '_version', 'result', '_primary_term', 'status'];
 
-        $rows = array_map(
-            static function (array $item) use ($columnNames): array {
-                return array_map(
-                    static fn (string $columnName): int|string => $item['index'][$columnName],
-                    $columnNames
-                );
-            },
-            (array) $result['items']
-        );
+        $rows = array_map(static function (array $item) use ($columnNames): array {
+            return array_map(
+                static fn (string $columnName): int|string => $item['index'][$columnName],
+                $columnNames
+            );
+        }, $items);
+
+        $createdDocsCount = $updatedDocsCount = 0;
+        foreach ($items as $item) {
+            if ($item['index']['status'] === 201) {
+                $createdDocsCount++;
+            }
+            if ($item['index']['status'] === 200) {
+                $updatedDocsCount++;
+            }
+        }
 
         $this->table($columnNames, $rows);
+        $this->info('index: users');
         $this->info(sprintf('took: %d', $result['took']));
         $this->info(sprintf('errors: %s', json_encode($result['errors'])));
-        $this->info(sprintf('total: %d', count((array) $result['items'])));
-        $this->info('index: users');
-
-        // TODO kpstya возможно надо сделать вывод в строку
-        // надо так же выводить количество 200 и 201
-        // дополнить это в тесте
+        $this->info(sprintf('created: %d', $createdDocsCount));
+        $this->info(sprintf('updated: %d', $updatedDocsCount));
+        $this->info(sprintf('total: %d', count($items)));
     }
 }

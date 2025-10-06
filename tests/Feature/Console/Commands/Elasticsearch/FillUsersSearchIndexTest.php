@@ -62,22 +62,24 @@ class FillUsersSearchIndexTest extends TestCase
                 201,
             ]);
 
-        // TODO kpstya добавить took - ожидается число
-        // errors - ожидается bool
-
         $this
             ->artisan($this->command)
             ->assertSuccessful()
-            ->expectsOutputToContain('took')
-            ->expectsOutputToContain('errors: false')
-            ->expectsOutputToContain(sprintf('total: %d', $count))
-            ->expectsOutputToContain(sprintf('index: %s', $indexName))
-            ->doesntExpectOutputToContain('errors: true')
-            ->doesntExpectOutputToContain('index: contacts')
             ->expectsTable(
                 ['_id', '_seq_no', '_type', '_version', 'result', '_primary_term', 'status'],
                 $expectedRows
-            );
+            )
+            ->expectsOutputToContain(sprintf('index: %s', $indexName))
+            ->doesntExpectOutputToContain('index: contacts')
+            ->expectsOutputToContain('took')
+            ->expectsOutputToContain('errors: false')
+            ->doesntExpectOutputToContain('errors: true')
+            ->expectsOutputToContain(sprintf('created: %d', $count))
+            ->doesntExpectOutputToContain(sprintf('created: %d', 0))
+            ->expectsOutputToContain(sprintf('updated: %d', 0))
+            ->doesntExpectOutputToContain(sprintf('updated: %d', $count))
+            ->expectsOutputToContain(sprintf('total: %d', $count))
+            ->doesntExpectOutputToContain(sprintf('total: %d', 0));
 
         $dispatchedEvents = Event::dispatched(UsersSearchIndexFilledEvent::class);
         $event = $dispatchedEvents->first()[0];

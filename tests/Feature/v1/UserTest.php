@@ -60,6 +60,7 @@ class UserTest extends TestCase
             ]);
 
         $this->assertCount($count, $response->json('data'));
+        $this->assertIsInt($response->json('meta.total'));
     }
 
     public function test_index_v1_page_param(): void
