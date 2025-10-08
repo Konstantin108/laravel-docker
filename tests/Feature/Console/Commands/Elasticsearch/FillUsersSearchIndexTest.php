@@ -69,17 +69,17 @@ class FillUsersSearchIndexTest extends TestCase
                 ['_id', '_seq_no', '_type', '_version', 'result', '_primary_term', 'status'],
                 $expectedRows
             )
-            ->expectsOutputToContain(sprintf('index: %s', $indexName))
-            ->doesntExpectOutputToContain('index: contacts')
             ->expectsOutputToContain('took')
-            ->expectsOutputToContain('errors: false')
-            ->doesntExpectOutputToContain('errors: true')
-            ->expectsOutputToContain(sprintf('created: %d', $count))
-            ->doesntExpectOutputToContain(sprintf('created: %d', 0))
-            ->expectsOutputToContain(sprintf('updated: %d', 0))
-            ->doesntExpectOutputToContain(sprintf('updated: %d', $count))
-            ->expectsOutputToContain(sprintf('total: %d', $count))
-            ->doesntExpectOutputToContain(sprintf('total: %d', 0));
+            ->expectsOutput(sprintf('index: %s', $indexName))
+            ->expectsOutput('errors: false')
+            ->expectsOutput(sprintf('created: %d', $count))
+            ->expectsOutput(sprintf('updated: %d', 0))
+            ->expectsOutput(sprintf('total: %d', $count))
+            ->doesntExpectOutput('index: contacts')
+            ->doesntExpectOutput('errors: true')
+            ->doesntExpectOutput(sprintf('created: %d', 0))
+            ->doesntExpectOutput(sprintf('updated: %d', $count))
+            ->doesntExpectOutput(sprintf('total: %d', 0));
 
         $dispatchedEvents = Event::dispatched(UsersSearchIndexFilledEvent::class);
         $event = $dispatchedEvents->first()[0];

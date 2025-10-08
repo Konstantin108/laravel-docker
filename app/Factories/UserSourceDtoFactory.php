@@ -23,9 +23,9 @@ class UserSourceDtoFactory implements SourceDtoFactoryContract
             reserveEmail: $source['reserve_email'],
             phone: $source['phone'],
             telegram: $source['telegram'],
-            emailVerifiedAt: Carbon::make($source['email_verified_at']),
-            createdAt: Carbon::make($source['created_at']),
-            updatedAt: Carbon::make($source['updated_at'])
+            emailVerifiedAt: Carbon::parse($source['email_verified_at']),
+            createdAt: Carbon::parse($source['created_at']),
+            updatedAt: Carbon::parse($source['updated_at'])
         );
     }
 }
