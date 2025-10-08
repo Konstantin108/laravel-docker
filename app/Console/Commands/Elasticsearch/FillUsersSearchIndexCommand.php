@@ -12,6 +12,8 @@ class FillUsersSearchIndexCommand extends Command
 {
     private const LIMIT = 1000;
 
+    // TODO kpstya возможно стоит заменить аргумент на опции
+
     protected $signature = 'app:search:fill-users-search-index {limit:int?}';
 
     protected $description = 'Заполнить документами индекс users в Elasticsearch';

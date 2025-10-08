@@ -21,7 +21,7 @@ class FillUsersSearchIndexTest extends TestCase
 {
     use RefreshDatabase;
 
-    private string $command = 'app:search:fill-users-search-index';
+    private const COMMAND = 'app:search:fill-users-search-index';
 
     private UsersSearchIndexFilledListener $listener;
 
@@ -63,7 +63,7 @@ class FillUsersSearchIndexTest extends TestCase
             ]);
 
         $this
-            ->artisan($this->command)
+            ->artisan(self::COMMAND)
             ->assertSuccessful()
             ->expectsTable(
                 ['_id', '_seq_no', '_type', '_version', 'result', '_primary_term', 'status'],
@@ -115,7 +115,7 @@ class FillUsersSearchIndexTest extends TestCase
         });
 
         $this
-            ->artisan($this->command)
+            ->artisan(self::COMMAND)
             ->assertSuccessful()
             ->expectsOutput('null');
 
@@ -136,6 +136,6 @@ class FillUsersSearchIndexTest extends TestCase
         $this->expectException(ElasticsearchApiException::class);
         $this->expectExceptionMessage('Index filling error');
 
-        $this->artisan($this->command);
+        $this->artisan(self::COMMAND);
     }
 }

@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 class ReverseStringTest extends TestCase
 {
-    private string $command = 'app:reverse-string';
+    private const COMMAND = 'app:reverse-string';
 
     public function test_reverse_string_with_passed_argument(): void
     {
@@ -17,7 +17,7 @@ class ReverseStringTest extends TestCase
         $reversedString = 'тевирп';
 
         $this
-            ->artisan($this->command, [
+            ->artisan(self::COMMAND, [
                 'string:string' => $string,
             ])
             ->assertSuccessful()
@@ -28,6 +28,6 @@ class ReverseStringTest extends TestCase
     {
         $this->expectException(RuntimeException::class);
 
-        $this->artisan($this->command);
+        $this->artisan(self::COMMAND);
     }
 }

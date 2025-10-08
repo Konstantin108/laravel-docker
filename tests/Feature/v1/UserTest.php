@@ -10,7 +10,7 @@ class UserTest extends TestCase
 {
     use RefreshDatabase;
 
-    private string $indexRoute = 'api.v1.user.index';
+    private const INDEX_ROUTE = 'api.v1.user.index';
 
     public function test_index_v1_no_param()
     {
@@ -18,7 +18,7 @@ class UserTest extends TestCase
         User::factory()->count($count)->withContact()->create();
 
         $response = $this
-            ->getJson(route($this->indexRoute))
+            ->getJson(route(self::INDEX_ROUTE))
             ->assertOk()
             ->assertJsonPath('meta.total', $count)
             ->assertJsonStructure([
@@ -69,7 +69,7 @@ class UserTest extends TestCase
         $page = 2;
 
         $this
-            ->getJson(route($this->indexRoute, [
+            ->getJson(route(self::INDEX_ROUTE, [
                 'page' => $page,
             ]))
             ->assertOk()
@@ -82,7 +82,7 @@ class UserTest extends TestCase
         $perPage = 1;
 
         $response = $this
-            ->getJson(route($this->indexRoute, [
+            ->getJson(route(self::INDEX_ROUTE, [
                 'per_page' => $perPage,
             ]))
             ->assertOk()
@@ -101,7 +101,7 @@ class UserTest extends TestCase
         $count = 2;
 
         $response = $this
-            ->getJson(route($this->indexRoute, [
+            ->getJson(route(self::INDEX_ROUTE, [
                 'search' => $search,
             ]))
             ->assertOk()

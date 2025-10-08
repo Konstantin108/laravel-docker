@@ -12,7 +12,7 @@ use Tests\TestCase;
 
 class CreateUsersSearchIndexTest extends TestCase
 {
-    private string $command = 'app:search:create-users-search-index';
+    private const COMMAND = 'app:search:create-users-search-index';
 
     /**
      * @throws \ReflectionException
@@ -24,7 +24,7 @@ class CreateUsersSearchIndexTest extends TestCase
         });
 
         $this
-            ->artisan($this->command)
+            ->artisan(self::COMMAND)
             ->assertSuccessful()
             ->expectsOutput(json_encode([
                 'acknowledged' => true,
@@ -45,6 +45,6 @@ class CreateUsersSearchIndexTest extends TestCase
         $this->expectException(ElasticsearchApiException::class);
         $this->expectExceptionMessage('An error occurred while creating the index');
 
-        $this->artisan($this->command);
+        $this->artisan(self::COMMAND);
     }
 }
