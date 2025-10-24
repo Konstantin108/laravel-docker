@@ -40,4 +40,10 @@ interface ElasticsearchClientContract
      * @return array<string, mixed>
      */
     public function search(array $body, string $indexName): array;
+
+    /**
+     * @param  array<string, mixed>  $body
+     * @return array<string, mixed>
+     */
+    public function clearIndex(array $body, string $indexName): array;
 }

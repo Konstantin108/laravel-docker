@@ -22,6 +22,8 @@ class ContactSeeder extends Seeder
             );
         }
 
+        // TODO kpstya возможно переделать сидеры
+
         $users
             ->where(static fn (User $user): bool => $user->contact === null)
             ->each(static fn (User $user): Contact => Contact::factory()

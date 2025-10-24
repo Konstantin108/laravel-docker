@@ -89,6 +89,7 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
             ->get()
             ->map(static fn ($element) => app($service)->enrich($element));
 
+        // TODO kpstya зачем тут as FakerFactory
         $maxScore = FakerFactory::create()
             ->randomFloat(6, 20, 70);
 
@@ -116,5 +117,15 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
                 ])->toArray(),
             ],
         ];
+    }
+
+    /**
+     * @param  array<string, mixed>  $body
+     * @return array<string, mixed>
+     */
+    public function clearIndex(array $body, string $indexName): array
+    {
+        // TODO kpstya реализовать
+        return [];
     }
 }

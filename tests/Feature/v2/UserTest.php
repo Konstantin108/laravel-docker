@@ -9,6 +9,7 @@ use App\Exceptions\ElasticsearchApiException;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Client\RequestException;
+use ReflectionException;
 use Tests\TestCase;
 
 class UserTest extends TestCase
@@ -18,7 +19,7 @@ class UserTest extends TestCase
     private const INDEX_ROUTE = 'api.v2.user.index';
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function test_index_v2_no_param(): void
     {
@@ -52,7 +53,7 @@ class UserTest extends TestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function test_index_v2_page_param(): void
     {
@@ -83,7 +84,7 @@ class UserTest extends TestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function test_index_v2_per_page_param(): void
     {
@@ -104,7 +105,7 @@ class UserTest extends TestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function test_index_v2_failed(): void
     {

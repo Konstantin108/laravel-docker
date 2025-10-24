@@ -11,9 +11,16 @@ use GuzzleHttp\Psr7\Utils;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
+use stdClass;
 
 class ElasticsearchClient implements ElasticsearchClientContract
 {
+    // TODO kpstya возможно добавить timeout и вынести подключение в приватный метод
+    /*
+    ->timeout(15)
+    ->connectTimeout(3)
+    */
+
     private readonly string $url;
 
     public function __construct(string $url)
@@ -89,6 +96,32 @@ class ElasticsearchClient implements ElasticsearchClientContract
             ->baseUrl($this->url)
             ->retry(3, 100)
             ->post($indexName.'/_search', $body)
+            ->onError(static function (PromiseInterface|Response $response) {
+                throw ElasticsearchApiException::buildMessage($response->body(), $response->status());
+            })
+            ->json();
+    }
+
+    /**
+     * @param  array<string, mixed>  $body
+     * @return array<string, mixed>
+     *
+     * @throws ConnectionException
+     * @throws ElasticsearchApiException
+     */
+    public function clearIndex(array $body, string $indexName): array
+    {
+        // TODO kpstya вынести в сервис и написать тесты
+        $body = [
+            'query' => [
+                'match_all' => new stdClass,
+            ],
+        ];
+
+        return Http::asJson()
+            ->baseUrl($this->url)
+            ->retry(3, 100)
+            ->post($indexName.'/_delete_by_query', $body)
             ->onError(static function (PromiseInterface|Response $response) {
                 throw ElasticsearchApiException::buildMessage($response->body(), $response->status());
             })

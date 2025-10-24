@@ -3,15 +3,11 @@
 namespace App\Mail;
 
 use App\Dto\User\UserEnrichedDto;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Support\Collection;
 
-class UsersSearchIndexDataMail extends Mailable implements ShouldQueue
+class UsersSearchIndexDataMail extends Mailable
 {
-    use Queueable;
-
     public function __construct(
         /** @var Collection<int, UserEnrichedDto> */
         public readonly Collection $users,
