@@ -4,7 +4,6 @@ namespace Tests\Feature\Console\Commands\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
-use App\Clients\Elasticsearch\ElasticsearchClientStub;
 use App\Events\Search\UsersSearchIndexFilledEvent;
 use App\Exceptions\ElasticsearchApiException;
 use App\Jobs\SendUsersSearchIndexDataJob;
@@ -43,15 +42,8 @@ class FillUsersSearchIndexTest extends TestCase
         $this->listener = $this->app->get(UsersSearchIndexFilledListener::class);
     }
 
-    /**
-     * @throws ReflectionException
-     */
     public function test_fill_users_search_index_success(): void
     {
-        $this->app->bind(ElasticsearchClientContract::class, static function () {
-            return new ElasticsearchClientStub;
-        });
-
         $indexName = 'users';
         $count = 2;
         $users = User::factory()->count($count)->withContact()->create();
@@ -117,15 +109,8 @@ class FillUsersSearchIndexTest extends TestCase
         );
     }
 
-    /**
-     * @throws ReflectionException
-     */
     public function test_fill_users_search_index_when_users_table_is_empty(): void
     {
-        $this->app->bind(ElasticsearchClientContract::class, static function () {
-            return new ElasticsearchClientStub;
-        });
-
         $this->artisan(self::COMMAND)
             ->assertSuccessful()
             ->expectsOutput('null');
@@ -145,7 +130,7 @@ class FillUsersSearchIndexTest extends TestCase
         User::factory()->count(2)->withContact()->create();
 
         $this->expectException(ElasticsearchApiException::class);
-        $this->expectExceptionMessage('Index filling error');
+        $this->expectExceptionMessage('Index filling error.');
 
         $this->artisan(self::COMMAND);
     }

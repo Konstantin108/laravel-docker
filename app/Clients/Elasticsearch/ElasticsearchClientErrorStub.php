@@ -17,7 +17,7 @@ class ElasticsearchClientErrorStub implements ElasticsearchClientContract
      */
     public function createIndex(array $body, string $indexName): array
     {
-        throw ElasticsearchApiException::buildMessage('An error occurred while creating the index');
+        throw ElasticsearchApiException::buildMessage('An error occurred while creating the index.');
     }
 
     /**
@@ -27,7 +27,7 @@ class ElasticsearchClientErrorStub implements ElasticsearchClientContract
      */
     public function bulkIndex(string $body, string $indexName): array
     {
-        throw ElasticsearchApiException::buildMessage('Index filling error');
+        throw ElasticsearchApiException::buildMessage('Index filling error.');
     }
 
     /**
@@ -37,7 +37,7 @@ class ElasticsearchClientErrorStub implements ElasticsearchClientContract
      */
     public function deleteIndex(string $indexName): array
     {
-        throw ElasticsearchApiException::buildMessage('Index deleting error');
+        throw ElasticsearchApiException::buildMessage('Index deleting error.');
     }
 
     /**
@@ -48,7 +48,7 @@ class ElasticsearchClientErrorStub implements ElasticsearchClientContract
      */
     public function search(array $body, string $indexName): array
     {
-        throw ElasticsearchApiException::buildMessage('Index search error');
+        throw ElasticsearchApiException::buildMessage('Index search error.');
     }
 
     /**
@@ -59,6 +59,6 @@ class ElasticsearchClientErrorStub implements ElasticsearchClientContract
      */
     public function clearIndex(array $body, string $indexName): array
     {
-        throw ElasticsearchApiException::buildMessage('Index clearing error');
+        throw ElasticsearchApiException::buildMessage('Index clearing error.');
     }
 }

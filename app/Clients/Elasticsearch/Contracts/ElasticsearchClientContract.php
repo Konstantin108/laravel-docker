@@ -12,8 +12,8 @@ interface ElasticsearchClientContract
     запрос: users/_delete_by_query  POST
     тело запроса:
     {
-        "query": {
-            "match_all": {}
+        'query': {
+            'match_all': {}
         }
     }'
 
