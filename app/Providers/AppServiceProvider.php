@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\ElasticsearchClient;
+use App\Clients\Elasticsearch\ElasticsearchClientStub;
 use App\Factories\Contracts\SourceDtoFactoryContract;
 use App\Services\SourceDtoCollectionService;
 use Illuminate\Foundation\Application;
@@ -18,8 +19,11 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(
             ElasticsearchClientContract::class,
-            static function (): ElasticsearchClient {
-                return new ElasticsearchClient(config('elasticsearch.url'));
+            static function (): ElasticsearchClientContract {
+                return match (config('app.env')) {
+                    'testing' => new ElasticsearchClientStub,
+                    default => new ElasticsearchClient(config('elasticsearch.url'))
+                };
             }
         );
 

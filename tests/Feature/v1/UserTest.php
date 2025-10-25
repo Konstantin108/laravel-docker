@@ -17,8 +17,7 @@ class UserTest extends TestCase
         $count = 3;
         User::factory()->count($count)->withContact()->create();
 
-        $response = $this
-            ->getJson(route(self::INDEX_ROUTE))
+        $response = $this->getJson(route(self::INDEX_ROUTE))
             ->assertOk()
             ->assertJsonPath('meta.total', $count)
             ->assertJsonStructure([
@@ -68,10 +67,9 @@ class UserTest extends TestCase
         User::factory()->count(3)->withContact()->create();
         $page = 2;
 
-        $this
-            ->getJson(route(self::INDEX_ROUTE, [
-                'page' => $page,
-            ]))
+        $this->getJson(route(self::INDEX_ROUTE, [
+            'page' => $page,
+        ]))
             ->assertOk()
             ->assertJsonPath('meta.current_page', $page);
     }
@@ -81,10 +79,9 @@ class UserTest extends TestCase
         User::factory()->count(3)->withContact()->create();
         $perPage = 1;
 
-        $response = $this
-            ->getJson(route(self::INDEX_ROUTE, [
-                'per_page' => $perPage,
-            ]))
+        $response = $this->getJson(route(self::INDEX_ROUTE, [
+            'per_page' => $perPage,
+        ]))
             ->assertOk()
             ->assertJsonPath('meta.per_page', $perPage);
 
@@ -100,10 +97,9 @@ class UserTest extends TestCase
         $search = 'find';
         $count = 2;
 
-        $response = $this
-            ->getJson(route(self::INDEX_ROUTE, [
-                'search' => $search,
-            ]))
+        $response = $this->getJson(route(self::INDEX_ROUTE, [
+            'search' => $search,
+        ]))
             ->assertOk()
             ->assertJsonPath('meta.total', $count);
 

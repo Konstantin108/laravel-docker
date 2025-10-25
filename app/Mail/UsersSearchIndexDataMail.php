@@ -17,11 +17,9 @@ class UsersSearchIndexDataMail extends Mailable
 
     public function build(): UsersSearchIndexDataMail
     {
-        return $this
-            ->subject(sprintf(
-                'Индекс %s заполнен',
-                strtoupper($this->indexName)
-            ))
+        return $this->subject(
+            sprintf('Индекс %s заполнен', strtoupper($this->indexName))
+        )
             ->view('mail.users_search_index_data');
     }
 }

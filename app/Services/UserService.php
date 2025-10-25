@@ -52,9 +52,11 @@ class UserService
 
     public function getPaginationDataForSearchIndex(IndexDto $indexDto): PaginationRequestDto
     {
-        return $this
-            ->elasticsearchPaginationService
-            ->makePaginationData($indexDto->toArray(), self::PER_PAGE);
+        return $this->elasticsearchPaginationService
+            ->makePaginationData(
+                $indexDto->toArray(),
+                self::PER_PAGE
+            );
     }
 
     public function enrich(User $user): UserEnrichedDto

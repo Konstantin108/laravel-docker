@@ -12,8 +12,8 @@ interface ElasticsearchClientContract
     запрос: users/_delete_by_query  POST
     тело запроса:
     {
-        "query": {
-            "match_all": {}
+        'query': {
+            'match_all': {}
         }
     }'
 
@@ -28,7 +28,10 @@ interface ElasticsearchClientContract
      */
     public function createIndex(array $body, string $indexName): array;
 
-    public function bulkIndex(string $body, string $indexName): mixed;
+    /**
+     * @return array<string, mixed>
+     */
+    public function bulkIndex(string $body, string $indexName): array;
 
     /**
      * @return array<string, bool>

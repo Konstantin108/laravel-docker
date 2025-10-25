@@ -4,7 +4,6 @@ namespace Tests\Feature\v2;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
-use App\Clients\Elasticsearch\ElasticsearchClientStub;
 use App\Exceptions\ElasticsearchApiException;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -18,20 +17,12 @@ class UserTest extends TestCase
 
     private const INDEX_ROUTE = 'api.v2.user.index';
 
-    /**
-     * @throws ReflectionException
-     */
     public function test_index_v2_no_param(): void
     {
-        $this->app->bind(ElasticsearchClientContract::class, static function () {
-            return new ElasticsearchClientStub;
-        });
-
         $count = 3;
         User::factory()->count($count)->withContact()->create();
 
-        $response = $this
-            ->getJson(route(self::INDEX_ROUTE))
+        $response = $this->getJson(route(self::INDEX_ROUTE))
             ->assertOk()
             ->assertJsonStructure([
                 'data' => [
@@ -52,26 +43,18 @@ class UserTest extends TestCase
         $this->assertCount($count, $response->json('data'));
     }
 
-    /**
-     * @throws ReflectionException
-     */
     public function test_index_v2_page_param(): void
     {
-        $this->app->bind(ElasticsearchClientContract::class, static function () {
-            return new ElasticsearchClientStub;
-        });
-
         $count = 13;
         User::factory()->count($count)->withContact()->create();
 
         $page = 2;
         $perPage = 9;
 
-        $response = $this
-            ->getJson(route(self::INDEX_ROUTE, [
-                'page' => $page,
-                'per_page' => $perPage,
-            ]))
+        $response = $this->getJson(route(self::INDEX_ROUTE, [
+            'page' => $page,
+            'per_page' => $perPage,
+        ]))
             ->assertOk();
 
         $data = $response->json('data');
@@ -83,22 +66,14 @@ class UserTest extends TestCase
         $this->assertCount($count - $perPage, $data);
     }
 
-    /**
-     * @throws ReflectionException
-     */
     public function test_index_v2_per_page_param(): void
     {
-        $this->app->bind(ElasticsearchClientContract::class, static function () {
-            return new ElasticsearchClientStub;
-        });
-
         User::factory()->count(3)->withContact()->create();
         $perPage = 1;
 
-        $response = $this
-            ->getJson(route(self::INDEX_ROUTE, [
-                'per_page' => $perPage,
-            ]))
+        $response = $this->getJson(route(self::INDEX_ROUTE, [
+            'per_page' => $perPage,
+        ]))
             ->assertOk();
 
         $this->assertCount($perPage, $response->json('data'));
@@ -116,10 +91,9 @@ class UserTest extends TestCase
         User::factory()->count(3)->withContact()->create();
 
         $this->expectException(ElasticsearchApiException::class);
-        $this->expectExceptionMessage('Index search error');
+        $this->expectExceptionMessage('Index search error.');
 
-        $this
-            ->withoutExceptionHandling()
+        $this->withoutExceptionHandling()
             ->getJson(route(self::INDEX_ROUTE))
             ->assertInternalServerError();
 
