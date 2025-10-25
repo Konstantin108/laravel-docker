@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -25,7 +26,7 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $notifications_count
  * @property-read Contact|null $contact
  *
- * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
+ * @method static UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<User>|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<User>|User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<User>|User query()
@@ -42,7 +43,7 @@ use Illuminate\Support\Carbon;
  */
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
     /**

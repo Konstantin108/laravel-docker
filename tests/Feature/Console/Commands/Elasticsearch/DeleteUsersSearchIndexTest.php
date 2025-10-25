@@ -8,14 +8,15 @@ use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
 use App\Clients\Elasticsearch\ElasticsearchClientStub;
 use App\Exceptions\ElasticsearchApiException;
+use ReflectionException;
 use Tests\TestCase;
 
 class DeleteUsersSearchIndexTest extends TestCase
 {
-    private string $command = 'app:search:delete-users-search-index';
+    private const COMMAND = 'app:search:delete-users-search-index';
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function test_delete_users_search_index_success(): void
     {
@@ -24,7 +25,7 @@ class DeleteUsersSearchIndexTest extends TestCase
         });
 
         $this
-            ->artisan($this->command)
+            ->artisan(self::COMMAND)
             ->assertSuccessful()
             ->expectsOutput(json_encode([
                 'acknowledged' => true,
@@ -32,7 +33,7 @@ class DeleteUsersSearchIndexTest extends TestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function test_delete_users_search_index_failed(): void
     {
@@ -43,6 +44,6 @@ class DeleteUsersSearchIndexTest extends TestCase
         $this->expectException(ElasticsearchApiException::class);
         $this->expectExceptionMessage('Index deleting error');
 
-        $this->artisan($this->command);
+        $this->artisan(self::COMMAND);
     }
 }

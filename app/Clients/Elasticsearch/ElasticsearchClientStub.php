@@ -6,7 +6,7 @@ namespace App\Clients\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Exceptions\SearchIndexDoesNotExist;
-use Faker\Factory as FakerFactory;
+use Faker\Factory;
 
 class ElasticsearchClientStub implements ElasticsearchClientContract
 {
@@ -89,7 +89,7 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
             ->get()
             ->map(static fn ($element) => app($service)->enrich($element));
 
-        $maxScore = FakerFactory::create()
+        $maxScore = Factory::create()
             ->randomFloat(6, 20, 70);
 
         return [
@@ -116,5 +116,15 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
                 ])->toArray(),
             ],
         ];
+    }
+
+    /**
+     * @param  array<string, mixed>  $body
+     * @return array<string, mixed>
+     */
+    public function clearIndex(array $body, string $indexName): array
+    {
+        // TODO kpstya реализовать
+        return [];
     }
 }

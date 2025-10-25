@@ -9,16 +9,17 @@ use App\Exceptions\ElasticsearchApiException;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Client\RequestException;
+use ReflectionException;
 use Tests\TestCase;
 
 class UserTest extends TestCase
 {
     use RefreshDatabase;
 
-    private string $indexRoute = 'api.v2.user.index';
+    private const INDEX_ROUTE = 'api.v2.user.index';
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function test_index_v2_no_param(): void
     {
@@ -30,7 +31,7 @@ class UserTest extends TestCase
         User::factory()->count($count)->withContact()->create();
 
         $response = $this
-            ->getJson(route($this->indexRoute))
+            ->getJson(route(self::INDEX_ROUTE))
             ->assertOk()
             ->assertJsonStructure([
                 'data' => [
@@ -52,7 +53,7 @@ class UserTest extends TestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function test_index_v2_page_param(): void
     {
@@ -67,7 +68,7 @@ class UserTest extends TestCase
         $perPage = 9;
 
         $response = $this
-            ->getJson(route($this->indexRoute, [
+            ->getJson(route(self::INDEX_ROUTE, [
                 'page' => $page,
                 'per_page' => $perPage,
             ]))
@@ -83,7 +84,7 @@ class UserTest extends TestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function test_index_v2_per_page_param(): void
     {
@@ -95,7 +96,7 @@ class UserTest extends TestCase
         $perPage = 1;
 
         $response = $this
-            ->getJson(route($this->indexRoute, [
+            ->getJson(route(self::INDEX_ROUTE, [
                 'per_page' => $perPage,
             ]))
             ->assertOk();
@@ -104,7 +105,7 @@ class UserTest extends TestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function test_index_v2_failed(): void
     {
@@ -119,7 +120,7 @@ class UserTest extends TestCase
 
         $this
             ->withoutExceptionHandling()
-            ->getJson(route($this->indexRoute))
+            ->getJson(route(self::INDEX_ROUTE))
             ->assertInternalServerError();
 
         $this->expectException(RequestException::class);

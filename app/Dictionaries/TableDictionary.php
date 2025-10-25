@@ -16,6 +16,10 @@ class TableDictionary
 
     public const FAILED_JOBS = 'failed_jobs';
 
+    public const PASSWORD_RESET_TOKENS = 'password_reset_tokens';
+
+    public const SESSIONS = 'sessions';
+
     public const USERS = 'users';
 
     public const CONTACTS = 'contacts';

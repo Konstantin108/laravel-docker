@@ -50,4 +50,15 @@ class ElasticsearchClientErrorStub implements ElasticsearchClientContract
     {
         throw ElasticsearchApiException::buildMessage('Index search error');
     }
+
+    /**
+     * @param  array<string, mixed>  $body
+     * @return array<string, mixed>
+     *
+     * @throws ElasticsearchApiException
+     */
+    public function clearIndex(array $body, string $indexName): array
+    {
+        throw ElasticsearchApiException::buildMessage('Index clearing error');
+    }
 }

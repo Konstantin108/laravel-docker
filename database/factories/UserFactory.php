@@ -9,18 +9,13 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * @extends Factory<User>
  */
 class UserFactory extends Factory
 {
-    /**
-     * The current password being used by the factory.
-     */
     protected static ?string $password;
 
     /**
-     * Define the model's default state.
-     *
      * @return array<string, mixed>
      */
     public function definition(): array
@@ -34,20 +29,19 @@ class UserFactory extends Factory
         ];
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
-    public function unverified(): static
+    public function unverified(): UserFactory
     {
-        return $this->state(static fn (array $attributes) => [
+        return $this->state(static fn (): array => [
             'email_verified_at' => null,
         ]);
     }
 
-    public function withContact(): self
+    // TODO kpstya возможно нужно переделать afterCreating() на has()
+
+    public function withContact(): UserFactory
     {
         return $this->afterCreating(
-            static fn (User $user) => Contact::factory()->for($user)->create()
+            static fn (User $user): Contact => Contact::factory()->for($user)->create()
         );
     }
 }

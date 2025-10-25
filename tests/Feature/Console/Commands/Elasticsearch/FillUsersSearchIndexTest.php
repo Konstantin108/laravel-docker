@@ -9,19 +9,23 @@ use App\Events\Search\UsersSearchIndexFilledEvent;
 use App\Exceptions\ElasticsearchApiException;
 use App\Jobs\SendUsersSearchIndexDataJob;
 use App\Listeners\UsersSearchIndexFilledListener;
+use App\Mail\UsersSearchIndexDataMail;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Mail\Mailer;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use ReflectionException;
 use Tests\TestCase;
 
 class FillUsersSearchIndexTest extends TestCase
 {
     use RefreshDatabase;
 
-    private string $command = 'app:search:fill-users-search-index';
+    private const COMMAND = 'app:search:fill-users-search-index';
 
     private UsersSearchIndexFilledListener $listener;
 
@@ -35,11 +39,12 @@ class FillUsersSearchIndexTest extends TestCase
 
         Event::fake();
         Queue::fake();
+        Mail::fake();
         $this->listener = $this->app->get(UsersSearchIndexFilledListener::class);
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function test_fill_users_search_index_success(): void
     {
@@ -52,7 +57,7 @@ class FillUsersSearchIndexTest extends TestCase
         $users = User::factory()->count($count)->withContact()->create();
 
         $expectedRows = $users
-            ->map(static fn (User $user) => [
+            ->map(static fn (User $user): array => [
                 $user->id,
                 --$user->id,
                 '_doc',
@@ -63,7 +68,7 @@ class FillUsersSearchIndexTest extends TestCase
             ]);
 
         $this
-            ->artisan($this->command)
+            ->artisan(self::COMMAND)
             ->assertSuccessful()
             ->expectsTable(
                 ['_id', '_seq_no', '_type', '_version', 'result', '_primary_term', 'status'],
@@ -81,32 +86,40 @@ class FillUsersSearchIndexTest extends TestCase
             ->doesntExpectOutput(sprintf('updated: %d', $count))
             ->doesntExpectOutput(sprintf('total: %d', 0));
 
-        $dispatchedEvents = Event::dispatched(UsersSearchIndexFilledEvent::class);
-        $event = $dispatchedEvents->first()[0];
-
+        $event = Event::dispatched(UsersSearchIndexFilledEvent::class)
+            ->first()[0];
         $this->assertNotNull($event);
 
-        Event::assertDispatched(
-            $event::class,
-            static function (UsersSearchIndexFilledEvent $event) use ($users, $indexName) {
-                return $event->users->count() === $users->count()
-                    && $event->indexName === $indexName;
-            }
-        );
+        Event::assertDispatched($event::class, static function (UsersSearchIndexFilledEvent $event) use ($users, $indexName): bool {
+            return $event->users->count() === $users->count()
+                && $event->indexName === $indexName;
+        });
 
         $this->listener->handle($event);
 
-        Queue::assertPushed(
-            SendUsersSearchIndexDataJob::class,
-            static function (SendUsersSearchIndexDataJob $job) use ($users, $indexName) {
-                return $job->users->count() === $users->count()
-                    && $job->indexName === $indexName;
+        /** @var SendUsersSearchIndexDataJob $job */
+        $job = Queue::pushed(SendUsersSearchIndexDataJob::class)
+            ->first();
+        $this->assertNotNull($job);
+
+        Queue::assertPushed($job::class, static function (SendUsersSearchIndexDataJob $job) use ($users, $indexName): bool {
+            return $job->users->count() === $users->count()
+                && $job->indexName === $indexName;
+        });
+
+        $job->handle(app(Mailer::class));
+
+        Mail::assertSent(
+            UsersSearchIndexDataMail::class,
+            static function (UsersSearchIndexDataMail $mail) use ($users, $indexName): bool {
+                return $mail->usersCount === $users->count()
+                    && $mail->indexName === $indexName;
             }
         );
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function test_fill_users_search_index_when_users_table_is_empty(): void
     {
@@ -115,7 +128,7 @@ class FillUsersSearchIndexTest extends TestCase
         });
 
         $this
-            ->artisan($this->command)
+            ->artisan(self::COMMAND)
             ->assertSuccessful()
             ->expectsOutput('null');
 
@@ -123,7 +136,7 @@ class FillUsersSearchIndexTest extends TestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function test_fill_users_search_index_failed(): void
     {
@@ -136,6 +149,6 @@ class FillUsersSearchIndexTest extends TestCase
         $this->expectException(ElasticsearchApiException::class);
         $this->expectExceptionMessage('Index filling error');
 
-        $this->artisan($this->command);
+        $this->artisan(self::COMMAND);
     }
 }

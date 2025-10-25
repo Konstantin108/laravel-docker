@@ -116,7 +116,7 @@ class UsersIndexElasticsearchService extends ElasticsearchService
 
         return tap(
             $this->client->bulkIndex($body, static::INDEX_NAME),
-            static fn () => UsersSearchIndexFilledEvent::dispatch($users, static::INDEX_NAME)
+            static fn (): ?array => UsersSearchIndexFilledEvent::dispatch($users, static::INDEX_NAME)
         );
     }
 }

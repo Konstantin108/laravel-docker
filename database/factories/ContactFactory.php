@@ -2,17 +2,16 @@
 
 namespace Database\Factories;
 
+use App\Models\Contact;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Contact>
+ * @extends Factory<Contact>
  */
 class ContactFactory extends Factory
 {
     /**
-     * Define the model's default state.
-     *
      * @return array<string, mixed>
      */
     public function definition(): array
@@ -25,9 +24,9 @@ class ContactFactory extends Factory
         ];
     }
 
-    public function user(int $userId): self
+    public function user(int $userId): ContactFactory
     {
-        return $this->state(fn () => [
+        return $this->state(fn (): array => [
             'user_id' => $userId,
         ]);
     }
