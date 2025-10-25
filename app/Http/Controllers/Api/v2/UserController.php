@@ -25,8 +25,7 @@ class UserController extends Controller
      */
     public function index(IndexRequest $request): AnonymousResourceCollection
     {
-        $paginationRequestDto = $this
-            ->userService
+        $paginationRequestDto = $this->userService
             ->getPaginationDataForSearchIndex(
                 IndexDto::from($request->validated())
             );

@@ -21,10 +21,9 @@ class ReverseStringTest extends TestCase
         string $string,
         string $reversedString
     ): void {
-        $this
-            ->artisan(self::COMMAND, [
-                'string:string' => $string,
-            ])
+        $this->artisan(self::COMMAND, [
+            'string:string' => $string,
+        ])
             ->assertSuccessful()
             ->expectsOutput($reversedString);
     }

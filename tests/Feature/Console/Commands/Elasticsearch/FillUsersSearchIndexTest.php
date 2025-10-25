@@ -67,8 +67,7 @@ class FillUsersSearchIndexTest extends TestCase
                 201,
             ]);
 
-        $this
-            ->artisan(self::COMMAND)
+        $this->artisan(self::COMMAND)
             ->assertSuccessful()
             ->expectsTable(
                 ['_id', '_seq_no', '_type', '_version', 'result', '_primary_term', 'status'],
@@ -127,8 +126,7 @@ class FillUsersSearchIndexTest extends TestCase
             return new ElasticsearchClientStub;
         });
 
-        $this
-            ->artisan(self::COMMAND)
+        $this->artisan(self::COMMAND)
             ->assertSuccessful()
             ->expectsOutput('null');
 

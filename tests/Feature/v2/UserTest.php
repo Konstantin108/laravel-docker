@@ -30,8 +30,7 @@ class UserTest extends TestCase
         $count = 3;
         User::factory()->count($count)->withContact()->create();
 
-        $response = $this
-            ->getJson(route(self::INDEX_ROUTE))
+        $response = $this->getJson(route(self::INDEX_ROUTE))
             ->assertOk()
             ->assertJsonStructure([
                 'data' => [
@@ -67,11 +66,10 @@ class UserTest extends TestCase
         $page = 2;
         $perPage = 9;
 
-        $response = $this
-            ->getJson(route(self::INDEX_ROUTE, [
-                'page' => $page,
-                'per_page' => $perPage,
-            ]))
+        $response = $this->getJson(route(self::INDEX_ROUTE, [
+            'page' => $page,
+            'per_page' => $perPage,
+        ]))
             ->assertOk();
 
         $data = $response->json('data');
@@ -95,10 +93,9 @@ class UserTest extends TestCase
         User::factory()->count(3)->withContact()->create();
         $perPage = 1;
 
-        $response = $this
-            ->getJson(route(self::INDEX_ROUTE, [
-                'per_page' => $perPage,
-            ]))
+        $response = $this->getJson(route(self::INDEX_ROUTE, [
+            'per_page' => $perPage,
+        ]))
             ->assertOk();
 
         $this->assertCount($perPage, $response->json('data'));
@@ -118,8 +115,7 @@ class UserTest extends TestCase
         $this->expectException(ElasticsearchApiException::class);
         $this->expectExceptionMessage('Index search error');
 
-        $this
-            ->withoutExceptionHandling()
+        $this->withoutExceptionHandling()
             ->getJson(route(self::INDEX_ROUTE))
             ->assertInternalServerError();
 

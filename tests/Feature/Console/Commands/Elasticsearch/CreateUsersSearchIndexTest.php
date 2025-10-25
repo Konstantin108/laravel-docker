@@ -24,8 +24,7 @@ class CreateUsersSearchIndexTest extends TestCase
             return new ElasticsearchClientStub;
         });
 
-        $this
-            ->artisan(self::COMMAND)
+        $this->artisan(self::COMMAND)
             ->assertSuccessful()
             ->expectsOutput(json_encode([
                 'acknowledged' => true,
