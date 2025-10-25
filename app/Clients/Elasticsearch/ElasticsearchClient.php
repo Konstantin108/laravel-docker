@@ -6,9 +6,8 @@ namespace App\Clients\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Exceptions\ElasticsearchApiException;
-use GuzzleHttp\Promise\PromiseInterface;
+use Exception;
 use GuzzleHttp\Psr7\Utils;
-use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
@@ -32,76 +31,57 @@ class ElasticsearchClient implements ElasticsearchClientContract
      * @return array<string, mixed>
      *
      * @throws ElasticsearchApiException
-     * @throws ConnectionException
      */
     public function createIndex(array $body, string $indexName): array
     {
-        return $this
-            ->baseHttpRequest()
-            ->put($indexName, $body)
-            ->onError(static function (PromiseInterface|Response $response) {
-                throw ElasticsearchApiException::buildMessage($response->body(), $response->status());
-            })
-            ->json();
+        return $this->execute(fn (): Response => $this
+            ->baseHttpRequest()->put($indexName, $body)
+        );
     }
 
     /**
+     * @return array<string, mixed>
+     *
      * @throws ElasticsearchApiException
-     * @throws ConnectionException
      */
-    public function bulkIndex(string $body, string $indexName): mixed
+    public function bulkIndex(string $body, string $indexName): array
     {
-        return $this
-            ->baseHttpRequest()
-            ->send('POST', $indexName.'/_bulk', [
+        return $this->execute(fn (): Response => $this
+            ->baseHttpRequest()->send('POST', $indexName.'/_bulk', [
                 'body' => Utils::streamFor($body),
             ])
-            ->onError(static function (PromiseInterface|Response $response) {
-                throw ElasticsearchApiException::buildMessage($response->body(), $response->status());
-            })
-            ->json();
+        );
     }
 
     /**
      * @return array<string, bool>
      *
-     * @throws ConnectionException
      * @throws ElasticsearchApiException
      */
     public function deleteIndex(string $indexName): array
     {
-        return $this
-            ->baseHttpRequest()
-            ->delete($indexName)
-            ->onError(static function (PromiseInterface|Response $response) {
-                throw ElasticsearchApiException::buildMessage($response->body(), $response->status());
-            })
-            ->json();
+        return $this->execute(fn (): Response => $this
+            ->baseHttpRequest()->delete($indexName)
+        );
     }
 
     /**
      * @param  array<string, mixed>  $body
      * @return array<string, mixed>
      *
-     * @throws ConnectionException
      * @throws ElasticsearchApiException
      */
     public function search(array $body, string $indexName): array
     {
-        return $this
-            ->baseHttpRequest()
-            ->post($indexName.'/_search', $body)
-            ->onError(static function (PromiseInterface|Response $response) {
-                throw ElasticsearchApiException::buildMessage($response->body(), $response->status());
-            })
-            ->json();
+        return $this->execute(fn (): Response => $this
+            ->baseHttpRequest()->post($indexName.'/_search', $body)
+        );
     }
 
     /**
      * @param  array<string, mixed>  $body
      * @return array<string, mixed>
      *
-     * @throws ConnectionException
      * @throws ElasticsearchApiException
      */
     public function clearIndex(array $body, string $indexName): array
@@ -113,13 +93,23 @@ class ElasticsearchClient implements ElasticsearchClientContract
             ],
         ];
 
-        return $this
-            ->baseHttpRequest()
-            ->post($indexName.'/_delete_by_query', $body)
-            ->onError(static function (PromiseInterface|Response $response) {
-                throw ElasticsearchApiException::buildMessage($response->body(), $response->status());
-            })
-            ->json();
+        return $this->execute(fn (): Response => $this
+            ->baseHttpRequest()->post($indexName.'/_delete_by_query', $body)
+        );
+    }
+
+    /**
+     * @return array<string, mixed>
+     *
+     * @throws ElasticsearchApiException
+     */
+    private function execute(callable $request): array
+    {
+        try {
+            return $request()->throw()->json();
+        } catch (Exception $e) {
+            throw ElasticsearchApiException::buildMessage($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     private function baseHttpRequest(): PendingRequest
