@@ -6,7 +6,7 @@ namespace App\Clients\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Exceptions\SearchIndexDoesNotExist;
-use Faker\Factory as FakerFactory;
+use Faker\Factory;
 
 class ElasticsearchClientStub implements ElasticsearchClientContract
 {
@@ -89,8 +89,7 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
             ->get()
             ->map(static fn ($element) => app($service)->enrich($element));
 
-        // TODO kpstya зачем тут as FakerFactory
-        $maxScore = FakerFactory::create()
+        $maxScore = Factory::create()
             ->randomFloat(6, 20, 70);
 
         return [

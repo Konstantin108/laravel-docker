@@ -9,17 +9,16 @@ use App\Exceptions\ElasticsearchApiException;
 use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\Utils;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use stdClass;
 
 class ElasticsearchClient implements ElasticsearchClientContract
 {
-    // TODO kpstya возможно добавить timeout и вынести подключение в приватный метод
-    /*
-    ->timeout(15)
-    ->connectTimeout(3)
-    */
+    // TODO kpstya применить рекомендации от Каната
+    // TODO kpstya APP_MAINTENANCE_DRIVER - что это за параметр (.env)
+    // TODO kpstya изучить параметры в .env
 
     private readonly string $url;
 
@@ -37,9 +36,8 @@ class ElasticsearchClient implements ElasticsearchClientContract
      */
     public function createIndex(array $body, string $indexName): array
     {
-        return Http::asJson()
-            ->baseUrl($this->url)
-            ->retry(3, 100)
+        return $this
+            ->baseHttpRequest()
             ->put($indexName, $body)
             ->onError(static function (PromiseInterface|Response $response) {
                 throw ElasticsearchApiException::buildMessage($response->body(), $response->status());
@@ -53,9 +51,8 @@ class ElasticsearchClient implements ElasticsearchClientContract
      */
     public function bulkIndex(string $body, string $indexName): mixed
     {
-        return Http::asJson()
-            ->baseUrl($this->url)
-            ->retry(3, 100)
+        return $this
+            ->baseHttpRequest()
             ->send('POST', $indexName.'/_bulk', [
                 'body' => Utils::streamFor($body),
             ])
@@ -73,9 +70,8 @@ class ElasticsearchClient implements ElasticsearchClientContract
      */
     public function deleteIndex(string $indexName): array
     {
-        return Http::asJson()
-            ->baseUrl($this->url)
-            ->retry(3, 100)
+        return $this
+            ->baseHttpRequest()
             ->delete($indexName)
             ->onError(static function (PromiseInterface|Response $response) {
                 throw ElasticsearchApiException::buildMessage($response->body(), $response->status());
@@ -92,9 +88,8 @@ class ElasticsearchClient implements ElasticsearchClientContract
      */
     public function search(array $body, string $indexName): array
     {
-        return Http::asJson()
-            ->baseUrl($this->url)
-            ->retry(3, 100)
+        return $this
+            ->baseHttpRequest()
             ->post($indexName.'/_search', $body)
             ->onError(static function (PromiseInterface|Response $response) {
                 throw ElasticsearchApiException::buildMessage($response->body(), $response->status());
@@ -118,13 +113,21 @@ class ElasticsearchClient implements ElasticsearchClientContract
             ],
         ];
 
-        return Http::asJson()
-            ->baseUrl($this->url)
-            ->retry(3, 100)
+        return $this
+            ->baseHttpRequest()
             ->post($indexName.'/_delete_by_query', $body)
             ->onError(static function (PromiseInterface|Response $response) {
                 throw ElasticsearchApiException::buildMessage($response->body(), $response->status());
             })
             ->json();
+    }
+
+    private function baseHttpRequest(): PendingRequest
+    {
+        return Http::asJson()
+            ->baseUrl($this->url)
+            ->timeout(9)
+            ->connectTimeout(3)
+            ->retry(3, 100);
     }
 }
