@@ -84,7 +84,7 @@ class UserTest extends TestCase
      */
     public function test_index_v2_failed(): void
     {
-        $this->app->bind(ElasticsearchClientContract::class, static function () {
+        $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
             return new ElasticsearchClientErrorStub;
         });
 

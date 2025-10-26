@@ -19,6 +19,8 @@ class ElasticsearchClient implements ElasticsearchClientContract
     // TODO kpstya APP_MAINTENANCE_DRIVER - что это за параметр (.env)
     // TODO kpstya изучить параметры в .env
 
+    // TODO kpstya возможно добавить креды для elasticsearch
+
     private readonly string $url;
 
     public function __construct(string $url)
