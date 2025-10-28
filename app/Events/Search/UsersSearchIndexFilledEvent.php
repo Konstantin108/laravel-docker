@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Events\Search;
 
 use App\Dto\User\UserEnrichedDto;

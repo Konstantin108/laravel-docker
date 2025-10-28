@@ -46,6 +46,8 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+    // TODO kpstya надо уточнить по поводу генерации документации для моделей плагином laravel-ide-helper
+
     /**
      * The attributes that are mass assignable.
      *

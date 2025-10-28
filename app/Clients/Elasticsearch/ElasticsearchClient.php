@@ -19,7 +19,7 @@ class ElasticsearchClient implements ElasticsearchClientContract
     // TODO kpstya APP_MAINTENANCE_DRIVER - что это за параметр (.env)
     // TODO kpstya изучить параметры в .env
 
-    // TODO kpstya возможно добавить креды для elasticsearch
+    // TODO kpstya возможно добавить креды для Elasticsearch
 
     private readonly string $url;
 
@@ -108,9 +108,9 @@ class ElasticsearchClient implements ElasticsearchClientContract
     private function execute(callable $request): array
     {
         try {
-            return $request()->throw()->json();
+            return $request()->json();
         } catch (Exception $e) {
-            throw ElasticsearchApiException::buildMessage($e->getMessage(), $e->getCode(), $e);
+            throw ElasticsearchApiException::buildMessage($e);
         }
     }
 

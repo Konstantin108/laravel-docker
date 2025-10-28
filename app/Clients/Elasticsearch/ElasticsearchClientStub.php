@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Clients\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
-use App\Exceptions\SearchIndexDoesNotExist;
+use App\Exceptions\SearchIndexException;
 use Faker\Factory;
 
 class ElasticsearchClientStub implements ElasticsearchClientContract
@@ -72,7 +72,7 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
      * @param  array<string, mixed>  $body
      * @return array<string, mixed>
      *
-     * @throws SearchIndexDoesNotExist
+     * @throws SearchIndexException
      */
     public function search(array $body, string $indexName): array
     {
@@ -80,7 +80,7 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
         $service = config('elasticsearch.model_services.'.$indexName);
 
         if ($modelName === null || $service === null) {
-            throw SearchIndexDoesNotExist::buildMessage($indexName);
+            throw SearchIndexException::doesNotExist($indexName);
         }
 
         $elements = $modelName::query()

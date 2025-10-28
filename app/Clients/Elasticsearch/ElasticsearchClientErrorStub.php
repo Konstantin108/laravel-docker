@@ -6,6 +6,7 @@ namespace App\Clients\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Exceptions\ElasticsearchApiException;
+use Exception;
 
 class ElasticsearchClientErrorStub implements ElasticsearchClientContract
 {
@@ -17,7 +18,9 @@ class ElasticsearchClientErrorStub implements ElasticsearchClientContract
      */
     public function createIndex(array $body, string $indexName): array
     {
-        throw ElasticsearchApiException::buildMessage('An error occurred while creating the index.');
+        throw ElasticsearchApiException::buildMessage(
+            new Exception('An error occurred while creating the index.')
+        );
     }
 
     /**
@@ -27,7 +30,9 @@ class ElasticsearchClientErrorStub implements ElasticsearchClientContract
      */
     public function bulkIndex(string $body, string $indexName): array
     {
-        throw ElasticsearchApiException::buildMessage('Index filling error.');
+        throw ElasticsearchApiException::buildMessage(
+            new Exception('Index filling error.')
+        );
     }
 
     /**
@@ -37,7 +42,9 @@ class ElasticsearchClientErrorStub implements ElasticsearchClientContract
      */
     public function deleteIndex(string $indexName): array
     {
-        throw ElasticsearchApiException::buildMessage('Index deleting error.');
+        throw ElasticsearchApiException::buildMessage(
+            new Exception('Index deleting error.')
+        );
     }
 
     /**
@@ -48,7 +55,9 @@ class ElasticsearchClientErrorStub implements ElasticsearchClientContract
      */
     public function search(array $body, string $indexName): array
     {
-        throw ElasticsearchApiException::buildMessage('Index search error.');
+        throw ElasticsearchApiException::buildMessage(
+            new Exception('Index search error.')
+        );
     }
 
     /**
@@ -59,6 +68,8 @@ class ElasticsearchClientErrorStub implements ElasticsearchClientContract
      */
     public function clearIndex(array $body, string $indexName): array
     {
-        throw ElasticsearchApiException::buildMessage('Index clearing error.');
+        throw ElasticsearchApiException::buildMessage(
+            new Exception('Index clearing error.')
+        );
     }
 }

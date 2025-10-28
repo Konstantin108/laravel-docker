@@ -7,7 +7,7 @@ namespace App\Services\Elasticsearch;
 use App\Dto\Elasticsearch\SearchIndexHitsDto;
 use App\Dto\Elasticsearch\SearchIndexShardsDto;
 use App\Entities\Elasticsearch\SearchResponse;
-use App\Exceptions\SearchIndexDoesNotExist;
+use App\Exceptions\SearchIndexException;
 use App\Services\SourceDtoCollectionService;
 
 class SearchResponseService
@@ -38,7 +38,7 @@ class SearchResponseService
      *     }
      * } $response
      *
-     * @throws SearchIndexDoesNotExist
+     * @throws SearchIndexException
      */
     public function execute(array $response): SearchResponse
     {
