@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Clients\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
+use App\Dto\Elasticsearch\SettingsDto;
 use App\Exceptions\ElasticsearchApiException;
 use Exception;
 use GuzzleHttp\Psr7\Utils;
@@ -23,9 +24,12 @@ class ElasticsearchClient implements ElasticsearchClientContract
 
     private readonly string $url;
 
-    public function __construct(string $url)
+    private readonly SettingsDto $settings;
+
+    public function __construct(string $url, SettingsDto $settings)
     {
         $this->url = rtrim($url, '/');
+        $this->settings = $settings;
     }
 
     /**
@@ -118,8 +122,11 @@ class ElasticsearchClient implements ElasticsearchClientContract
     {
         return Http::asJson()
             ->baseUrl($this->url)
-            ->timeout(9)
-            ->connectTimeout(3)
-            ->retry(3, 100);
+            ->timeout($this->settings->timeout)
+            ->connectTimeout($this->settings->connectTimeout)
+            ->retry(
+                $this->settings->retryTimes,
+                $this->settings->retrySleepMilliseconds
+            );
     }
 }
