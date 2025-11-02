@@ -8,6 +8,7 @@ use App\Exceptions\ElasticsearchApiException;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Client\RequestException;
+use PHPUnit\Framework\Attributes\TestWith;
 use ReflectionException;
 use Tests\TestCase;
 
@@ -43,7 +44,20 @@ class UserTest extends TestCase
         $this->assertCount($count, $response->json('data'));
     }
 
-    public function test_index_v2_page_param(): void
+    #[TestWith(['page', '2s'])]
+    #[TestWith(['per_page', 's'])]
+    public function test_index_v2_with_params_failed(string $param, string $value): void
+    {
+        User::factory()->count(3)->withContact()->create();
+
+        $this->getJson(route(self::INDEX_ROUTE, [
+            $param => $value,
+        ]))
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors([$param]);
+    }
+
+    public function test_index_v2_with_page_param(): void
     {
         $count = 13;
         User::factory()->count($count)->withContact()->create();
@@ -66,7 +80,7 @@ class UserTest extends TestCase
         $this->assertCount($count - $perPage, $data);
     }
 
-    public function test_index_v2_per_page_param(): void
+    public function test_index_v2_with_per_page_param(): void
     {
         User::factory()->count(3)->withContact()->create();
         $perPage = 1;
@@ -82,9 +96,9 @@ class UserTest extends TestCase
     /**
      * @throws ReflectionException
      */
-    public function test_index_v2_failed(): void
+    public function test_index_v2_elasticsearch_failed(): void
     {
-        $this->app->bind(ElasticsearchClientContract::class, static function () {
+        $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
             return new ElasticsearchClientErrorStub;
         });
 

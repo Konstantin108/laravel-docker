@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Exceptions;
 
 use Exception;
 use Throwable;
 
-class ElasticsearchApiException extends Exception
+final class ElasticsearchApiException extends Exception
 {
-    public static function buildMessage(string $errorText, int $code = 500, ?Throwable $previous = null): ElasticsearchApiException
+    public static function buildMessage(Throwable $previous): self
     {
-        return new self($errorText, $code, $previous);
+        return new self($previous->getMessage(), $previous->getCode(), $previous);
     }
 }

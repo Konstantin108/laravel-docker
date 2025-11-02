@@ -11,10 +11,10 @@ return new class extends Migration
     {
         Schema::create(TableDictionary::CONTACTS, function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->unique();
-            $table->foreign('user_id')
-                ->references('id')
-                ->on(TableDictionary::USERS);
+            $table->foreignId('user_id')
+                ->unique()
+                ->constrained(TableDictionary::USERS)
+                ->onDelete('cascade');
             $table->string('email')->unique();
             $table->string('phone')->unique();
             $table->string('telegram')->nullable();

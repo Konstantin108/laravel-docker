@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
-use App\Dto\User\UserEnrichedDto;
+use App\Entities\User\UserEnriched;
 use App\EntityFactories\Elasticsearch\UserDocElementFactory;
 use App\Events\Search\UsersSearchIndexFilledEvent;
 use App\Services\Elasticsearch\Abstract\ElasticsearchService;
@@ -84,7 +84,7 @@ class UsersIndexElasticsearchService extends ElasticsearchService
     }
 
     /**
-     * @return string[]
+     * @return list<string>
      */
     protected function multiMatchFieldsSettings(): array
     {
@@ -107,11 +107,10 @@ class UsersIndexElasticsearchService extends ElasticsearchService
             return null;
         }
 
-        $body = $users
-            ->map(fn (UserEnrichedDto $user): string => $this->makeDocElement(
-                $this->userDocElementFactory->make($user)->toArray(),
-                static::INDEX_NAME
-            ))
+        $body = $users->map(fn (UserEnriched $user): string => $this->makeDocElement(
+            $this->userDocElementFactory->make($user)->toArray(),
+            static::INDEX_NAME
+        ))
             ->implode('');
 
         return tap(

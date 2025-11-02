@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Jobs;
 
-use App\Dto\User\UserEnrichedDto;
+use App\Entities\User\UserEnriched;
 use App\Jobs\SendUsersSearchIndexDataJob;
 use App\Mail\UsersSearchIndexDataMail;
 use Illuminate\Contracts\Mail\Mailer;
@@ -18,7 +18,7 @@ class SendUsersSearchIndexDataJobTest extends TestCase
         $indexName = 'users';
 
         $users = new Collection(
-            new UserEnrichedDto(
+            new UserEnriched(
                 id: 1,
                 name: 'Ivan',
                 email: 'ivan@example.com',

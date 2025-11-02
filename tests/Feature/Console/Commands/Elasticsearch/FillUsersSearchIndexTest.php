@@ -48,16 +48,15 @@ class FillUsersSearchIndexTest extends TestCase
         $count = 2;
         $users = User::factory()->count($count)->withContact()->create();
 
-        $expectedRows = $users
-            ->map(static fn (User $user): array => [
-                $user->id,
-                --$user->id,
-                '_doc',
-                1,
-                'created',
-                1,
-                201,
-            ]);
+        $expectedRows = $users->map(static fn (User $user): array => [
+            $user->id,
+            --$user->id,
+            '_doc',
+            1,
+            'created',
+            1,
+            201,
+        ]);
 
         $this->artisan(self::COMMAND)
             ->assertSuccessful()
@@ -77,8 +76,7 @@ class FillUsersSearchIndexTest extends TestCase
             ->doesntExpectOutput(sprintf('updated: %d', $count))
             ->doesntExpectOutput(sprintf('total: %d', 0));
 
-        $event = Event::dispatched(UsersSearchIndexFilledEvent::class)
-            ->first()[0];
+        $event = Event::dispatched(UsersSearchIndexFilledEvent::class)->first()[0];
         $this->assertNotNull($event);
 
         Event::assertDispatched($event::class, static function (UsersSearchIndexFilledEvent $event) use ($users, $indexName): bool {
@@ -89,8 +87,7 @@ class FillUsersSearchIndexTest extends TestCase
         $this->listener->handle($event);
 
         /** @var SendUsersSearchIndexDataJob $job */
-        $job = Queue::pushed(SendUsersSearchIndexDataJob::class)
-            ->first();
+        $job = Queue::pushed(SendUsersSearchIndexDataJob::class)->first();
         $this->assertNotNull($job);
 
         Queue::assertPushed($job::class, static function (SendUsersSearchIndexDataJob $job) use ($users, $indexName): bool {
@@ -123,7 +120,7 @@ class FillUsersSearchIndexTest extends TestCase
      */
     public function test_fill_users_search_index_failed(): void
     {
-        $this->app->bind(ElasticsearchClientContract::class, static function () {
+        $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
             return new ElasticsearchClientErrorStub;
         });
 

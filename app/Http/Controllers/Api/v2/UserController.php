@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\v2;
 
 use App\Dto\User\IndexDto;
-use App\Exceptions\SearchIndexDoesNotExist;
+use App\Exceptions\SearchIndexException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\IndexRequest;
 use App\Http\Resources\User\IndexResource;
@@ -21,14 +21,13 @@ class UserController extends Controller
     ) {}
 
     /**
-     * @throws SearchIndexDoesNotExist
+     * @throws SearchIndexException
      */
     public function index(IndexRequest $request): AnonymousResourceCollection
     {
-        $paginationRequestDto = $this->userService
-            ->getPaginationDataForSearchIndex(
-                IndexDto::from($request->validated())
-            );
+        $paginationRequestDto = $this->userService->getPaginationDataForSearchIndex(
+            IndexDto::from($request->validated())
+        );
 
         return IndexResource::collection(
             $this->searchResponseService->execute(

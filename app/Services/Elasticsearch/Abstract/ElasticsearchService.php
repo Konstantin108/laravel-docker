@@ -9,6 +9,8 @@ use App\Dto\Elasticsearch\PaginationRequestDto;
 use App\Services\UserService;
 use stdClass;
 
+// TODO kpstya наверное лучше сделать это через интерфейс
+
 abstract class ElasticsearchService
 {
     public function __construct(
@@ -24,7 +26,7 @@ abstract class ElasticsearchService
     abstract protected function bodyIndexCreate(): array;
 
     /**
-     * @return string[]
+     * @return list<string>
      */
     abstract protected function multiMatchFieldsSettings(): array;
 

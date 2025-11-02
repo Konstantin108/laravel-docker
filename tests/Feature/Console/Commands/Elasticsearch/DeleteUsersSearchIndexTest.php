@@ -28,7 +28,7 @@ class DeleteUsersSearchIndexTest extends TestCase
      */
     public function test_delete_users_search_index_failed(): void
     {
-        $this->app->bind(ElasticsearchClientContract::class, static function () {
+        $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
             return new ElasticsearchClientErrorStub;
         });
 

@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace App\Clients\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
+use App\Dto\Elasticsearch\SettingsDto;
 use App\Exceptions\ElasticsearchApiException;
-use Exception;
 use GuzzleHttp\Psr7\Utils;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use stdClass;
+use Throwable;
 
 class ElasticsearchClient implements ElasticsearchClientContract
 {
@@ -19,11 +20,16 @@ class ElasticsearchClient implements ElasticsearchClientContract
     // TODO kpstya APP_MAINTENANCE_DRIVER - что это за параметр (.env)
     // TODO kpstya изучить параметры в .env
 
+    // TODO kpstya возможно добавить креды для Elasticsearch
+
     private readonly string $url;
 
-    public function __construct(string $url)
+    private readonly SettingsDto $settings;
+
+    public function __construct(string $url, SettingsDto $settings)
     {
         $this->url = rtrim($url, '/');
+        $this->settings = $settings;
     }
 
     /**
@@ -34,8 +40,8 @@ class ElasticsearchClient implements ElasticsearchClientContract
      */
     public function createIndex(array $body, string $indexName): array
     {
-        return $this->execute(fn (): Response => $this
-            ->baseHttpRequest()->put($indexName, $body)
+        return $this->execute(fn (): Response => $this->baseHttpRequest()
+            ->put($indexName, $body)
         );
     }
 
@@ -46,8 +52,8 @@ class ElasticsearchClient implements ElasticsearchClientContract
      */
     public function bulkIndex(string $body, string $indexName): array
     {
-        return $this->execute(fn (): Response => $this
-            ->baseHttpRequest()->send('POST', $indexName.'/_bulk', [
+        return $this->execute(fn (): Response => $this->baseHttpRequest()
+            ->send('POST', $indexName.'/_bulk', [
                 'body' => Utils::streamFor($body),
             ])
         );
@@ -60,8 +66,8 @@ class ElasticsearchClient implements ElasticsearchClientContract
      */
     public function deleteIndex(string $indexName): array
     {
-        return $this->execute(fn (): Response => $this
-            ->baseHttpRequest()->delete($indexName)
+        return $this->execute(fn (): Response => $this->baseHttpRequest()
+            ->delete($indexName)
         );
     }
 
@@ -73,8 +79,8 @@ class ElasticsearchClient implements ElasticsearchClientContract
      */
     public function search(array $body, string $indexName): array
     {
-        return $this->execute(fn (): Response => $this
-            ->baseHttpRequest()->post($indexName.'/_search', $body)
+        return $this->execute(fn (): Response => $this->baseHttpRequest()
+            ->post($indexName.'/_search', $body)
         );
     }
 
@@ -93,8 +99,8 @@ class ElasticsearchClient implements ElasticsearchClientContract
             ],
         ];
 
-        return $this->execute(fn (): Response => $this
-            ->baseHttpRequest()->post($indexName.'/_delete_by_query', $body)
+        return $this->execute(fn (): Response => $this->baseHttpRequest()
+            ->post($indexName.'/_delete_by_query', $body)
         );
     }
 
@@ -106,9 +112,9 @@ class ElasticsearchClient implements ElasticsearchClientContract
     private function execute(callable $request): array
     {
         try {
-            return $request()->throw()->json();
-        } catch (Exception $e) {
-            throw ElasticsearchApiException::buildMessage($e->getMessage(), $e->getCode(), $e);
+            return $request()->json();
+        } catch (Throwable $e) {
+            throw ElasticsearchApiException::buildMessage($e);
         }
     }
 
@@ -116,8 +122,11 @@ class ElasticsearchClient implements ElasticsearchClientContract
     {
         return Http::asJson()
             ->baseUrl($this->url)
-            ->timeout(9)
-            ->connectTimeout(3)
-            ->retry(3, 100);
+            ->timeout($this->settings->timeout)
+            ->connectTimeout($this->settings->connectTimeout)
+            ->retry(
+                $this->settings->retryTimes,
+                $this->settings->retrySleepMilliseconds
+            );
     }
 }

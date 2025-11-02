@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Contracts\SearchableContract;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,6 +15,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 
 /**
+ *  App\Models\User
+ *
  * @property int $id
  * @property string $name
  * @property string $email
@@ -41,25 +44,19 @@ use Illuminate\Support\Carbon;
  *
  * @mixin Model
  */
-class User extends Authenticatable
+class User extends Authenticatable implements SearchableContract
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    // TODO kpstya надо уточнить по поводу генерации документации для моделей плагином laravel-ide-helper
 
     /**
-     * The attributes that should be hidden for serialization.
-     *
+     * @var list<string>
+     */
+    protected $guarded = ['id'];
+
+    /**
      * @var list<string>
      */
     protected $hidden = [
@@ -68,8 +65,6 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
      * @return array<string, string>
      */
     protected function casts(): array

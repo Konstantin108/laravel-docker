@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\ElasticsearchClient;
 use App\Clients\Elasticsearch\ElasticsearchClientStub;
+use App\Dto\Elasticsearch\SettingsDto;
 use App\Factories\Contracts\SourceDtoFactoryContract;
 use App\Services\SourceDtoCollectionService;
 use Illuminate\Foundation\Application;
@@ -17,25 +18,22 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(
-            ElasticsearchClientContract::class,
-            static function (): ElasticsearchClientContract {
-                return match (config('app.env')) {
-                    'testing' => new ElasticsearchClientStub,
-                    default => new ElasticsearchClient(config('elasticsearch.url'))
-                };
-            }
-        );
+        $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
+            return match (config('app.env')) {
+                'testing' => new ElasticsearchClientStub,
+                default => new ElasticsearchClient(
+                    config('elasticsearch.url'),
+                    SettingsDto::from(config('elasticsearch.settings')),
+                )
+            };
+        });
 
-        $this->app->bind(
-            SourceDtoCollectionService::class,
-            static function (Application $app): SourceDtoCollectionService {
-                return new SourceDtoCollectionService(...array_map(
-                    static fn (string $className): SourceDtoFactoryContract => $app->make($className),
-                    config('elasticsearch.source_dto_factories')
-                ));
-            }
-        );
+        $this->app->bind(SourceDtoCollectionService::class, static function (Application $app): SourceDtoCollectionService {
+            return new SourceDtoCollectionService(...array_map(
+                static fn (string $className): SourceDtoFactoryContract => $app->make($className),
+                config('elasticsearch.source_dto_factories')
+            ));
+        });
     }
 
     /**

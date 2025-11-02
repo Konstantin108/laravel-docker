@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Repositories\Scopes\User;
+namespace App\Repositories\User\Scopes;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 
-class SearchScope
+final readonly class SearchScope
 {
     private ?string $search;
 

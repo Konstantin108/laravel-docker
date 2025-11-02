@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Factories;
 
-use App\Dto\Contracts\SourceDtoContract;
-use App\Dto\User\UserEnrichedDto;
+use App\Entities\User\Contracts\SearchableSourceContract;
+use App\Entities\User\UserEnriched;
 use App\Factories\Contracts\SourceDtoFactoryContract;
 use Illuminate\Support\Carbon;
 
@@ -14,9 +14,9 @@ class UserSourceDtoFactory implements SourceDtoFactoryContract
     /**
      * @param  array<string, mixed>  $source
      */
-    public function createFromArray(array $source): SourceDtoContract
+    public function createFromArray(array $source): SearchableSourceContract
     {
-        return new UserEnrichedDto(
+        return new UserEnriched(
             id: $source['id'],
             name: $source['name'],
             email: $source['email'],

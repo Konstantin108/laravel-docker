@@ -20,8 +20,7 @@ class UserController extends Controller
         $data = $request->validated();
 
         return IndexResource::collection(
-            $this->userService
-                ->getPagination(IndexDto::from($data))
+            $this->userService->getPagination(IndexDto::from($data))
                 ->appends($data)
         );
     }

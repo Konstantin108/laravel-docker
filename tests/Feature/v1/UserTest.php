@@ -4,6 +4,7 @@ namespace Tests\Feature\v1;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\TestWith;
 use Tests\TestCase;
 
 class UserTest extends TestCase
@@ -62,7 +63,20 @@ class UserTest extends TestCase
         $this->assertIsInt($response->json('meta.total'));
     }
 
-    public function test_index_v1_page_param(): void
+    #[TestWith(['page', 'two'])]
+    #[TestWith(['per_page', 'one'])]
+    public function test_index_v1_with_params_failed(string $param, string $value): void
+    {
+        User::factory()->count(3)->withContact()->create();
+
+        $this->getJson(route(self::INDEX_ROUTE, [
+            $param => $value,
+        ]))
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors([$param]);
+    }
+
+    public function test_index_v1_with_page_param(): void
     {
         User::factory()->count(3)->withContact()->create();
         $page = 2;
@@ -74,7 +88,7 @@ class UserTest extends TestCase
             ->assertJsonPath('meta.current_page', $page);
     }
 
-    public function test_index_v1_per_page_param(): void
+    public function test_index_v1_with_per_page_param(): void
     {
         User::factory()->count(3)->withContact()->create();
         $perPage = 1;
@@ -88,21 +102,32 @@ class UserTest extends TestCase
         $this->assertCount($perPage, $response->json('data'));
     }
 
-    public function test_index_v1_search_param(): void
+    #[TestWith(['Иван', 1])]
+    #[TestWith(['BK.RU', 2])]
+    #[TestWith(['Василий', 0])]
+    public function test_index_v1_with_search_param(string $search, int $resultCount): void
     {
-        User::factory()->withContact()->create(['email' => 'user.first@mail.ru']);
-        User::factory()->withContact()->create(['name' => 'find abc']);
-        User::factory()->withContact()->create(['email' => 'thirdfind@mail.ru']);
+        // TODO kpstya переделать на использование sequence
 
-        $search = 'find';
-        $count = 2;
+        User::factory()->withContact()->create([
+            'name' => 'Иван',
+            'email' => 'ivan@bk.ru',
+        ]);
+        User::factory()->withContact()->create([
+            'name' => 'Сергей',
+            'email' => 'sergey@gmail.com',
+        ]);
+        User::factory()->withContact()->create([
+            'name' => 'Кирилл',
+            'email' => 'kirill@bk.ru',
+        ]);
 
         $response = $this->getJson(route(self::INDEX_ROUTE, [
             'search' => $search,
         ]))
             ->assertOk()
-            ->assertJsonPath('meta.total', $count);
+            ->assertJsonPath('meta.total', $resultCount);
 
-        $this->assertCount($count, $response->json('data'));
+        $this->assertCount($resultCount, $response->json('data'));
     }
 }

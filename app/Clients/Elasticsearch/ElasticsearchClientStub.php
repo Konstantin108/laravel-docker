@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace App\Clients\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
-use App\Exceptions\SearchIndexDoesNotExist;
+use App\Entities\User\Contracts\SearchableSourceContract;
+use App\Exceptions\SearchIndexException;
 use Faker\Factory;
 
 class ElasticsearchClientStub implements ElasticsearchClientContract
@@ -72,7 +73,7 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
      * @param  array<string, mixed>  $body
      * @return array<string, mixed>
      *
-     * @throws SearchIndexDoesNotExist
+     * @throws SearchIndexException
      */
     public function search(array $body, string $indexName): array
     {
@@ -80,7 +81,7 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
         $service = config('elasticsearch.model_services.'.$indexName);
 
         if ($modelName === null || $service === null) {
-            throw SearchIndexDoesNotExist::buildMessage($indexName);
+            throw SearchIndexException::doesNotExist($indexName);
         }
 
         $elements = $modelName::query()
@@ -89,8 +90,7 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
             ->get()
             ->map(static fn ($element) => app($service)->enrich($element));
 
-        $maxScore = Factory::create()
-            ->randomFloat(6, 20, 70);
+        $maxScore = Factory::create()->randomFloat(6, 20, 70);
 
         return [
             'took' => rand(1, 30),
@@ -103,14 +103,14 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
             ],
             'hits' => [
                 'total' => [
-                    'value' => count($elements),
+                    'value' => $elements->count(),
                     'relation' => 'eq',
                 ],
                 'max_score' => $maxScore,
-                'hits' => $elements->map(static fn ($element, $key): array => [
+                'hits' => $elements->map(static fn (SearchableSourceContract $element, int $key): array => [
                     '_index' => $indexName,
                     '_type' => '_doc',
-                    '_id' => (string) $element->id,
+                    '_id' => (string) $element->getId(),
                     '_score' => $maxScore - $key * rand(1, 9),
                     '_source' => $element->toArray(),
                 ])->toArray(),

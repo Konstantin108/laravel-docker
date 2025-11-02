@@ -6,7 +6,7 @@ namespace App\Entities\Elasticsearch;
 
 use App\Dto\Elasticsearch\SearchIndexHitsDto;
 use App\Dto\Elasticsearch\SearchIndexShardsDto;
-use App\Dto\User\UserEnrichedDto;
+use App\Entities\User\UserEnriched;
 use Illuminate\Support\Collection;
 use Spatie\LaravelData\Data;
 
@@ -17,7 +17,7 @@ final class SearchResponse extends Data
         public readonly bool $timedOut,
         public readonly SearchIndexShardsDto $shardsDto,
         public readonly SearchIndexHitsDto $hitsDto,
-        /** @var Collection<string, UserEnrichedDto> */
+        /** @var Collection<string, UserEnriched> */
         public readonly Collection $hits
     ) {}
 }

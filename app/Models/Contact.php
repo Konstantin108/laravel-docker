@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Contracts\SearchableContract;
 use Database\Factories\ContactFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,22 +19,19 @@ use Illuminate\Support\Carbon;
  * @property string $telegram
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read User|null $user
+ * @property-read User $user
  *
  * @method static ContactFactory factory($count = null, $state = [])
  */
-class Contact extends Model
+class Contact extends Model implements SearchableContract
 {
     /** @use HasFactory<ContactFactory> */
     use HasFactory;
 
+    /**
+     * @var list<string>
+     */
     protected $guarded = ['id'];
-
-    protected $hidden = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
 
     /**
      * @return BelongsTo<User, $this>
