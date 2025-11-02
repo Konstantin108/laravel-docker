@@ -11,7 +11,7 @@ use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Mappers\SnakeCaseMapper;
 
 #[MapOutputName(SnakeCaseMapper::class)]
-class UserEnriched extends Data implements SearchableSourceContract
+final class UserEnriched extends Data implements SearchableSourceContract
 {
     public function __construct(
         public readonly int $id,

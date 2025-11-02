@@ -18,8 +18,6 @@ final readonly class SearchScope
             : null;
     }
 
-    // TODO kpstya возможно использовать Arr для значений из реквеста
-
     /**
      * @param  Builder<User>  $builder
      */

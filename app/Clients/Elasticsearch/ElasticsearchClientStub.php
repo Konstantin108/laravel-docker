@@ -54,8 +54,6 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
             $seqNumber++;
         }
 
-        // TODO kpstya нужны тесты на пустые результаты
-
         return [
             'took' => count($lines) * rand(1, 2),
             'errors' => false,

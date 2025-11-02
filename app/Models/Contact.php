@@ -33,8 +33,6 @@ class Contact extends Model implements SearchableContract
      */
     protected $guarded = ['id'];
 
-    // TODO kpstya нужно пересоздать таблицы
-
     /**
      * @return BelongsTo<User, $this>
      */

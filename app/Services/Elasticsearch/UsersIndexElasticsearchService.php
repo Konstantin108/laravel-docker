@@ -102,8 +102,6 @@ class UsersIndexElasticsearchService extends ElasticsearchService
      */
     public function fillSearchIndex(?int $count = null): HigherOrderTapProxy|array|null
     {
-        // TODO kpstya надо где-то добавить проверку на то что коллекция не пуста
-
         $users = $this->userService->getUsers($count);
         if ($users->isEmpty()) {
             return null;
