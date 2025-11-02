@@ -3,6 +3,9 @@
 return [
     'url' => env('ELASTICSEARCH_URL'),
 
+    'user' => env('ELASTICSEARCH_USER'),
+    'password' => env('ELASTICSEARCH_PASSWORD'),
+
     'settings' => [
         'timeout' => env('ELASTICSEARCH_TIMEOUT', 9),
         'connect_timeout' => env('ELASTICSEARCH_CONNECT_TIMEOUT', 3),

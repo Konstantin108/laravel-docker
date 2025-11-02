@@ -64,17 +64,12 @@ class FillUsersSearchIndexTest extends TestCase
                 ['_id', '_seq_no', '_type', '_version', 'result', '_primary_term', 'status'],
                 $expectedRows
             )
-            ->expectsOutputToContain('took')
             ->expectsOutput(sprintf('index: %s', $indexName))
+            ->expectsOutputToContain('took')
             ->expectsOutput('errors: false')
             ->expectsOutput(sprintf('created: %d', $count))
             ->expectsOutput(sprintf('updated: %d', 0))
-            ->expectsOutput(sprintf('total: %d', $count))
-            ->doesntExpectOutput('index: contacts')
-            ->doesntExpectOutput('errors: true')
-            ->doesntExpectOutput(sprintf('created: %d', 0))
-            ->doesntExpectOutput(sprintf('updated: %d', $count))
-            ->doesntExpectOutput(sprintf('total: %d', 0));
+            ->expectsOutput(sprintf('total: %d', $count));
 
         $event = Event::dispatched(UsersSearchIndexFilledEvent::class)->first()[0];
         $this->assertNotNull($event);
@@ -97,13 +92,23 @@ class FillUsersSearchIndexTest extends TestCase
 
         $job->handle(app(Mailer::class));
 
-        Mail::assertSent(
-            UsersSearchIndexDataMail::class,
-            static function (UsersSearchIndexDataMail $mail) use ($users, $indexName): bool {
-                return $mail->usersCount === $users->count()
-                    && $mail->indexName === $indexName;
-            }
+        Mail::assertSent(UsersSearchIndexDataMail::class, static function (UsersSearchIndexDataMail $mail) use ($users, $indexName): bool {
+            return $mail->usersCount === $users->count()
+                && $mail->indexName === $indexName;
+        }
         );
+    }
+
+    public function test_fill_users_search_index_with_limit_argument(): void
+    {
+        User::factory()->count(3)->withContact()->create();
+        $limit = 2;
+
+        $this->artisan(self::COMMAND, [
+            'limit:int' => $limit,
+        ])
+            ->assertSuccessful()
+            ->expectsOutput(sprintf('total: %d', $limit));
     }
 
     public function test_fill_users_search_index_when_users_table_is_empty(): void

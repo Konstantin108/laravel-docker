@@ -20,15 +20,23 @@ class ElasticsearchClient implements ElasticsearchClientContract
     // TODO kpstya APP_MAINTENANCE_DRIVER - что это за параметр (.env)
     // TODO kpstya изучить параметры в .env
 
-    // TODO kpstya возможно добавить креды для Elasticsearch
-
     private readonly string $url;
+
+    private readonly string $user;
+
+    private readonly string $password;
 
     private readonly SettingsDto $settings;
 
-    public function __construct(string $url, SettingsDto $settings)
-    {
+    public function __construct(
+        string $url,
+        string $user,
+        string $password,
+        SettingsDto $settings
+    ) {
         $this->url = rtrim($url, '/');
+        $this->user = $user;
+        $this->password = $password;
         $this->settings = $settings;
     }
 
@@ -122,6 +130,7 @@ class ElasticsearchClient implements ElasticsearchClientContract
     {
         return Http::asJson()
             ->baseUrl($this->url)
+            ->withBasicAuth($this->user, $this->password)
             ->timeout($this->settings->timeout)
             ->connectTimeout($this->settings->connectTimeout)
             ->retry(

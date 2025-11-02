@@ -23,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
                 'testing' => new ElasticsearchClientStub,
                 default => new ElasticsearchClient(
                     config('elasticsearch.url'),
+                    config('elasticsearch.user'),
+                    config('elasticsearch.password'),
                     SettingsDto::from(config('elasticsearch.settings')),
                 )
             };
