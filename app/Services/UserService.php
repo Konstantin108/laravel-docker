@@ -6,7 +6,7 @@ namespace App\Services;
 
 use App\Dto\Elasticsearch\PaginationRequestDto;
 use App\Dto\User\IndexDto;
-use App\Dto\User\UserEnrichedDto;
+use App\Entities\User\UserEnriched;
 use App\Models\User;
 use App\Repositories\User\UserRepository;
 use App\Services\Elasticsearch\PaginationService;
@@ -23,7 +23,7 @@ class UserService
     ) {}
 
     /**
-     * @return LengthAwarePaginator<int, UserEnrichedDto>
+     * @return LengthAwarePaginator<int, UserEnriched>
      */
     public function getPagination(IndexDto $indexDto): LengthAwarePaginator
     {
@@ -34,18 +34,18 @@ class UserService
 
         /** @var LengthAwarePaginator<User> $paginator */
         $userEnrichedCollection = $paginator->getCollection()
-            ->map(fn (User $user): UserEnrichedDto => $this->enrich($user));
+            ->map(fn (User $user): UserEnriched => $this->enrich($user));
 
         return $paginator->setCollection($userEnrichedCollection);
     }
 
     /**
-     * @return Collection<int, UserEnrichedDto>
+     * @return Collection<int, UserEnriched>
      */
     public function getUsers(?int $count = null): Collection
     {
         return $this->userRepository->getAllUsers($count)
-            ->map(fn (User $user): UserEnrichedDto => $this->enrich($user));
+            ->map(fn (User $user): UserEnriched => $this->enrich($user));
     }
 
     public function getPaginationDataForSearchIndex(IndexDto $indexDto): PaginationRequestDto
@@ -56,9 +56,9 @@ class UserService
         );
     }
 
-    public function enrich(User $user): UserEnrichedDto
+    public function enrich(User $user): UserEnriched
     {
-        return new UserEnrichedDto(
+        return new UserEnriched(
             id: $user->id,
             name: $user->name,
             email: $user->email,

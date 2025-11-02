@@ -9,6 +9,8 @@ use App\Dto\Elasticsearch\PaginationRequestDto;
 use App\Services\UserService;
 use stdClass;
 
+// TODO kpstya наверное лучше сделать это через интерфейс
+
 abstract class ElasticsearchService
 {
     public function __construct(

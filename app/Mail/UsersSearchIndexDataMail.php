@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Mail;
 
-use App\Dto\User\UserEnrichedDto;
+use App\Entities\User\UserEnriched;
 use Illuminate\Mail\Mailable;
 use Illuminate\Support\Collection;
 
 class UsersSearchIndexDataMail extends Mailable
 {
     public function __construct(
-        /** @var Collection<int, UserEnrichedDto> */
+        /** @var Collection<int, UserEnriched> */
         public readonly Collection $users,
         public readonly int $usersCount,
         public readonly string $indexName

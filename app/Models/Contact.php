@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Contracts\SearchableContract;
 use Database\Factories\ContactFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -22,7 +23,7 @@ use Illuminate\Support\Carbon;
  *
  * @method static ContactFactory factory($count = null, $state = [])
  */
-class Contact extends Model
+class Contact extends Model implements SearchableContract
 {
     /** @use HasFactory<ContactFactory> */
     use HasFactory;

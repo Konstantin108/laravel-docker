@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\EntityFactories\Elasticsearch;
 
-use App\Dto\User\UserEnrichedDto;
 use App\Entities\Elasticsearch\UserDocElement;
+use App\Entities\User\UserEnriched;
 
 class UserDocElementFactory
 {
-    public function make(UserEnrichedDto $user): UserDocElement
+    public function make(UserEnriched $user): UserDocElement
     {
         return new UserDocElement(
             id: $user->id,

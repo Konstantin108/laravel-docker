@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Clients\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
+use App\Entities\User\Contracts\SearchableSourceContract;
 use App\Exceptions\SearchIndexException;
 use Faker\Factory;
 
@@ -52,6 +53,8 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
             ];
             $seqNumber++;
         }
+
+        // TODO kpstya нужны тесты на пустые результаты
 
         return [
             'took' => count($lines) * rand(1, 2),
@@ -102,14 +105,14 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
             ],
             'hits' => [
                 'total' => [
-                    'value' => count($elements),
+                    'value' => $elements->count(),
                     'relation' => 'eq',
                 ],
                 'max_score' => $maxScore,
-                'hits' => $elements->map(static fn ($element, $key): array => [
+                'hits' => $elements->map(static fn (SearchableSourceContract $element, int $key): array => [
                     '_index' => $indexName,
                     '_type' => '_doc',
-                    '_id' => (string) $element->id,
+                    '_id' => (string) $element->getId(),
                     '_score' => $maxScore - $key * rand(1, 9),
                     '_source' => $element->toArray(),
                 ])->toArray(),

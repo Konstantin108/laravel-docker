@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
-use App\Dto\User\UserEnrichedDto;
+use App\Entities\User\UserEnriched;
 use App\Mail\UsersSearchIndexDataMail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Mail\Mailer;
@@ -18,7 +18,7 @@ class SendUsersSearchIndexDataJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable;
 
     public function __construct(
-        /** @var Collection<int, UserEnrichedDto> */
+        /** @var Collection<int, UserEnriched> */
         public readonly Collection $users,
         public readonly string $indexName
     ) {}
