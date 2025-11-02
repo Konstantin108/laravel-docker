@@ -1,7 +1,5 @@
 <?php
 
-// TODO kpstya что если параметра ELASTICSEARCH_URL не будет в .env
-
 return [
     'url' => env('ELASTICSEARCH_URL'),
 

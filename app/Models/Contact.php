@@ -18,7 +18,7 @@ use Illuminate\Support\Carbon;
  * @property string $telegram
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read User|null $user
+ * @property-read User $user
  *
  * @method static ContactFactory factory($count = null, $state = [])
  */
@@ -27,13 +27,12 @@ class Contact extends Model
     /** @use HasFactory<ContactFactory> */
     use HasFactory;
 
+    /**
+     * @var list<string>
+     */
     protected $guarded = ['id'];
 
-    protected $hidden = [
-        'created_at',
-        'updated_at',
-        'deleted_at',
-    ];
+    // TODO kpstya нужно пересоздать таблицы
 
     /**
      * @return BelongsTo<User, $this>

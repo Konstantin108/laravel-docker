@@ -84,7 +84,7 @@ class UsersIndexElasticsearchService extends ElasticsearchService
     }
 
     /**
-     * @return string[]
+     * @return list<string>
      */
     protected function multiMatchFieldsSettings(): array
     {
@@ -102,20 +102,20 @@ class UsersIndexElasticsearchService extends ElasticsearchService
      */
     public function fillSearchIndex(?int $count = null): HigherOrderTapProxy|array|null
     {
-        // TODO надо где-то добавить проверку на то что коллекция не пуста
+        // TODO kpstya надо где-то добавить проверку на то что коллекция не пуста
 
         $users = $this->userService->getUsers($count);
         if ($users->isEmpty()) {
             return null;
         }
 
-        $body = $users
-            ->map(fn (UserEnrichedDto $user): string => $this->makeDocElement(
-                $this->userDocElementFactory->make($user)->toArray(),
-                static::INDEX_NAME
-            ))
+        $body = $users->map(fn (UserEnrichedDto $user): string => $this->makeDocElement(
+            $this->userDocElementFactory->make($user)->toArray(),
+            static::INDEX_NAME
+        ))
             ->implode('');
 
+        // TODO kpstya тут нет ли ошибки в возвращаемом типе
         return tap(
             $this->client->bulkIndex($body, static::INDEX_NAME),
             static fn (): ?array => UsersSearchIndexFilledEvent::dispatch($users, static::INDEX_NAME)

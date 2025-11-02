@@ -8,7 +8,7 @@ use App\Dto\User\UserEnrichedDto;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Support\Collection;
 
-class UsersSearchIndexFilledEvent
+final class UsersSearchIndexFilledEvent
 {
     use Dispatchable;
 

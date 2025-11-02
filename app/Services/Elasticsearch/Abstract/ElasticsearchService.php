@@ -24,7 +24,7 @@ abstract class ElasticsearchService
     abstract protected function bodyIndexCreate(): array;
 
     /**
-     * @return string[]
+     * @return list<string>
      */
     abstract protected function multiMatchFieldsSettings(): array;
 

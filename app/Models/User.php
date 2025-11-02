@@ -14,6 +14,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 
 /**
+ *  App\Models\User
+ *
  * @property int $id
  * @property string $name
  * @property string $email
@@ -49,19 +51,11 @@ class User extends Authenticatable
     // TODO kpstya надо уточнить по поводу генерации документации для моделей плагином laravel-ide-helper
 
     /**
-     * The attributes that are mass assignable.
-     *
      * @var list<string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $guarded = ['id'];
 
     /**
-     * The attributes that should be hidden for serialization.
-     *
      * @var list<string>
      */
     protected $hidden = [
@@ -70,8 +64,6 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
      * @return array<string, string>
      */
     protected function casts(): array

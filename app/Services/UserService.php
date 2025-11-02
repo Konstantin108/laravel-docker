@@ -8,7 +8,7 @@ use App\Dto\Elasticsearch\PaginationRequestDto;
 use App\Dto\User\IndexDto;
 use App\Dto\User\UserEnrichedDto;
 use App\Models\User;
-use App\Repositories\UserRepository;
+use App\Repositories\User\UserRepository;
 use App\Services\Elasticsearch\PaginationService;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
@@ -33,8 +33,7 @@ class UserService
         );
 
         /** @var LengthAwarePaginator<User> $paginator */
-        $userEnrichedCollection = $paginator
-            ->getCollection()
+        $userEnrichedCollection = $paginator->getCollection()
             ->map(fn (User $user): UserEnrichedDto => $this->enrich($user));
 
         return $paginator->setCollection($userEnrichedCollection);
@@ -45,18 +44,16 @@ class UserService
      */
     public function getUsers(?int $count = null): Collection
     {
-        return $this->userRepository
-            ->getAllUsers($count)
+        return $this->userRepository->getAllUsers($count)
             ->map(fn (User $user): UserEnrichedDto => $this->enrich($user));
     }
 
     public function getPaginationDataForSearchIndex(IndexDto $indexDto): PaginationRequestDto
     {
-        return $this->elasticsearchPaginationService
-            ->makePaginationData(
-                $indexDto->toArray(),
-                self::PER_PAGE
-            );
+        return $this->elasticsearchPaginationService->makePaginationData(
+            $indexDto->toArray(),
+            self::PER_PAGE
+        );
     }
 
     public function enrich(User $user): UserEnrichedDto

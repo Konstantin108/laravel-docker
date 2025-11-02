@@ -88,8 +88,13 @@ class UserTest extends TestCase
         $this->assertCount($perPage, $response->json('data'));
     }
 
+    // TODO kpstya возможно добавить failed тесты для параметров
+    // TODO kpstya $response->assertJsonValidationErrors([$paramName]);
+
     public function test_index_v1_search_param(): void
     {
+        // TODO kpstya возможно переделать на использование sequence
+
         User::factory()->withContact()->create(['email' => 'user.first@mail.ru']);
         User::factory()->withContact()->create(['name' => 'find abc']);
         User::factory()->withContact()->create(['email' => 'thirdfind@mail.ru']);

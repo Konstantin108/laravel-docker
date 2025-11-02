@@ -25,8 +25,7 @@ class SendUsersSearchIndexDataJob implements ShouldQueue
 
     public function handle(Mailer $mailer): void
     {
-        $mailer
-            ->to(config('mail.admin_email_address'))
+        $mailer->to(config('mail.admin_email_address'))
             ->send(new UsersSearchIndexDataMail(
                 $this->users,
                 $this->users->count(),

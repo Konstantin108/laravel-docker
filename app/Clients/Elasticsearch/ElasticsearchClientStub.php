@@ -89,8 +89,7 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
             ->get()
             ->map(static fn ($element) => app($service)->enrich($element));
 
-        $maxScore = Factory::create()
-            ->randomFloat(6, 20, 70);
+        $maxScore = Factory::create()->randomFloat(6, 20, 70);
 
         return [
             'took' => rand(1, 30),
