@@ -113,7 +113,6 @@ class UsersIndexElasticsearchService extends ElasticsearchService
         ))
             ->implode('');
 
-        // TODO kpstya тут нет ли ошибки в возвращаемом типе
         return tap(
             $this->client->bulkIndex($body, static::INDEX_NAME),
             static fn (): ?array => UsersSearchIndexFilledEvent::dispatch($users, static::INDEX_NAME)
