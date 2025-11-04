@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+// TODO kpstya настроить .env.testing
+
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\ElasticsearchClient;
 use App\Clients\Elasticsearch\ElasticsearchClientStub;

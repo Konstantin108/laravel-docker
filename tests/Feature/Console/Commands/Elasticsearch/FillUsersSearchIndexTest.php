@@ -99,7 +99,7 @@ class FillUsersSearchIndexTest extends TestCase
         );
     }
 
-    public function test_fill_users_search_index_with_limit_argument(): void
+    public function test_fill_users_search_index_with_argument_limit(): void
     {
         User::factory()->count(3)->withContact()->create();
         $limit = 2;

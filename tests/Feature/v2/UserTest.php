@@ -18,7 +18,7 @@ class UserTest extends TestCase
 
     private const INDEX_ROUTE = 'api.v2.user.index';
 
-    public function test_index_v2_no_param(): void
+    public function test_index_v2_without_params(): void
     {
         $count = 3;
         User::factory()->count($count)->withContact()->create();
