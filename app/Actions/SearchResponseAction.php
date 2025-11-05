@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Elasticsearch;
+namespace App\Actions;
 
 use App\Dto\Elasticsearch\SearchIndexHitsDto;
 use App\Dto\Elasticsearch\SearchIndexShardsDto;
@@ -10,7 +10,7 @@ use App\Entities\Elasticsearch\SearchResponse;
 use App\Exceptions\SearchIndexException;
 use App\Services\SourceDtoCollectionService;
 
-class SearchResponseService
+class SearchResponseAction
 {
     public function __construct(
         private readonly SourceDtoCollectionService $collectionService

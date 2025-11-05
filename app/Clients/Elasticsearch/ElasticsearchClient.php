@@ -16,10 +16,6 @@ use Throwable;
 
 class ElasticsearchClient implements ElasticsearchClientContract
 {
-    // TODO kpstya применить рекомендации от Каната
-    // TODO kpstya APP_MAINTENANCE_DRIVER - что это за параметр (.env)
-    // TODO kpstya изучить параметры в .env
-
     private readonly string $url;
 
     private readonly string $user;
