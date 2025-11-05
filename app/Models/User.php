@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Contracts\SearchableContract;
 use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -15,32 +16,30 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 
 /**
- *  App\Models\User
- *
  * @property int $id
  * @property string $name
  * @property string $email
  * @property Carbon|null $email_verified_at
- * @property mixed $password
+ * @property string $password
  * @property string|null $remember_token
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property-read Contact|null $contact
  * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
- * @property-read Contact|null $contact
  *
  * @method static UserFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder<User>|User newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<User>|User newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder<User>|User query()
- * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereEmailVerifiedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder<User>|User wherePassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereRememberToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereUpdatedAt($value)
+ * @method static Builder<static>|User newModelQuery()
+ * @method static Builder<static>|User newQuery()
+ * @method static Builder<static>|User query()
+ * @method static Builder<static>|User whereCreatedAt($value)
+ * @method static Builder<static>|User whereEmail($value)
+ * @method static Builder<static>|User whereEmailVerifiedAt($value)
+ * @method static Builder<static>|User whereId($value)
+ * @method static Builder<static>|User whereName($value)
+ * @method static Builder<static>|User wherePassword($value)
+ * @method static Builder<static>|User whereRememberToken($value)
+ * @method static Builder<static>|User whereUpdatedAt($value)
  *
  * @mixin Model
  */
@@ -48,8 +47,6 @@ class User extends Authenticatable implements SearchableContract
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
-
-    // TODO kpstya надо уточнить по поводу генерации документации для моделей плагином laravel-ide-helper
 
     /**
      * @var list<string>
