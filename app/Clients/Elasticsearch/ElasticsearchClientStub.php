@@ -7,6 +7,7 @@ namespace App\Clients\Elasticsearch;
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Entities\User\Contracts\SearchableSourceContract;
 use App\Exceptions\SearchIndexException;
+use App\Models\Contracts\SearchableContract;
 use Faker\Factory;
 
 class ElasticsearchClientStub implements ElasticsearchClientContract
@@ -88,7 +89,9 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
             ->where('id', '>', $body['from'])
             ->limit($body['size'])
             ->get()
-            ->map(static fn ($element) => app($service)->enrich($element));
+            ->map(static function (SearchableContract $element) use ($service): SearchableSourceContract {
+                return app($service)->enrich($element);
+            });
 
         $maxScore = Factory::create()->randomFloat(6, 20, 70);
 

@@ -2,15 +2,16 @@
 
 namespace App\Providers;
 
-// TODO kpstya настроить .env.testing
-
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\ElasticsearchClient;
 use App\Clients\Elasticsearch\ElasticsearchClientStub;
 use App\Dto\Elasticsearch\SettingsDto;
 use App\Factories\Contracts\SourceDtoFactoryContract;
 use App\Services\SourceDtoCollectionService;
+use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -45,6 +46,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        if (config('app.query_log')) {
+            DB::listen(static function (QueryExecuted $query): void {
+                File::append(
+                    storage_path('/logs/query.log'),
+                    $query->sql.' ['.implode(', ', $query->bindings).']'.' time-'.$query->time.PHP_EOL
+                );
+            });
+        }
     }
 }
