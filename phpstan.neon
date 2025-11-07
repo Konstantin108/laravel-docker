@@ -11,3 +11,7 @@ parameters:
 
     excludePaths:
         - app/Http/Resources/
+
+rules:
+    - Utils\PHPStan\JsonResourceStaticMethodsRule
+    - Utils\PHPStan\JsonResourceStaticPropertyRule
