@@ -5,30 +5,33 @@ declare(strict_types=1);
 namespace App\Clients\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
-use App\Dto\Elasticsearch\SettingsDto;
-use App\Exceptions\ElasticsearchApiException;
+use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
+use App\Services\Elasticsearch\Dto\SettingsDto;
 use GuzzleHttp\Psr7\Utils;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
-use stdClass;
 use Throwable;
 
 class ElasticsearchClient implements ElasticsearchClientContract
 {
-    // TODO kpstya применить рекомендации от Каната
-    // TODO kpstya APP_MAINTENANCE_DRIVER - что это за параметр (.env)
-    // TODO kpstya изучить параметры в .env
-
-    // TODO kpstya возможно добавить креды для Elasticsearch
-
     private readonly string $url;
+
+    private readonly string $user;
+
+    private readonly string $password;
 
     private readonly SettingsDto $settings;
 
-    public function __construct(string $url, SettingsDto $settings)
-    {
+    public function __construct(
+        string $url,
+        string $user,
+        string $password,
+        SettingsDto $settings
+    ) {
         $this->url = rtrim($url, '/');
+        $this->user = $user;
+        $this->password = $password;
         $this->settings = $settings;
     }
 
@@ -92,13 +95,6 @@ class ElasticsearchClient implements ElasticsearchClientContract
      */
     public function clearIndex(array $body, string $indexName): array
     {
-        // TODO kpstya вынести в сервис и написать тесты
-        $body = [
-            'query' => [
-                'match_all' => new stdClass,
-            ],
-        ];
-
         return $this->execute(fn (): Response => $this->baseHttpRequest()
             ->post($indexName.'/_delete_by_query', $body)
         );
@@ -122,6 +118,7 @@ class ElasticsearchClient implements ElasticsearchClientContract
     {
         return Http::asJson()
             ->baseUrl($this->url)
+            ->withBasicAuth($this->user, $this->password)
             ->timeout($this->settings->timeout)
             ->connectTimeout($this->settings->connectTimeout)
             ->retry(

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Console\Commands\Elasticsearch;
+namespace App\Console\Commands\Elasticsearch\User;
 
 use App\Services\Elasticsearch\UsersIndexElasticsearchService;
 use Illuminate\Console\Command;

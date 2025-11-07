@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace App\Services\Elasticsearch\Abstract;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
-use App\Dto\Elasticsearch\PaginationRequestDto;
-use App\Services\UserService;
+use App\Services\Elasticsearch\Dto\PaginationRequestDto;
+use App\Services\User\UserService;
 use stdClass;
-
-// TODO kpstya наверное лучше сделать это через интерфейс
 
 abstract class ElasticsearchService
 {
@@ -58,6 +56,20 @@ abstract class ElasticsearchService
             : $this->searchMatchAll($requestDto);
 
         return $this->client->search($body, $this->indexName());
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function clearSearchIndex(): array
+    {
+        $body = [
+            'query' => [
+                'match_all' => new stdClass,
+            ],
+        ];
+
+        return $this->client->clearIndex($body, $this->indexName());
     }
 
     /**

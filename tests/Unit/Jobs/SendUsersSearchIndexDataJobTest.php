@@ -6,6 +6,7 @@ use App\Entities\User\UserEnriched;
 use App\Jobs\SendUsersSearchIndexDataJob;
 use App\Mail\UsersSearchIndexDataMail;
 use Illuminate\Contracts\Mail\Mailer;
+use Illuminate\Mail\Mailable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Mockery;
@@ -39,7 +40,7 @@ class SendUsersSearchIndexDataJobTest extends TestCase
 
         $mailerMock->shouldReceive('send')
             ->once()
-            ->with(Mockery::on(function ($mail) use ($users, $indexName) {
+            ->with(Mockery::on(function (Mailable $mail) use ($users, $indexName): bool {
                 return $mail instanceof UsersSearchIndexDataMail
                     && $mail->users === $users
                     && $mail->usersCount === $users->count()

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Dto\User;
+namespace App\Services\User\Dto;
 
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Data;

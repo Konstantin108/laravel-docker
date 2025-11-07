@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Dto\Elasticsearch;
+namespace App\Services\Elasticsearch\Dto;
 
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Data;

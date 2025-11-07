@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Clients\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
-use App\Exceptions\ElasticsearchApiException;
+use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
 use Exception;
 
 class ElasticsearchClientErrorStub implements ElasticsearchClientContract

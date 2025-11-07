@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Dto\User\IndexDto;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\IndexRequest;
 use App\Http\Resources\User\IndexResource;
-use App\Services\UserService;
+use App\Services\User\Dto\IndexDto;
+use App\Services\User\UserService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class UserController extends Controller

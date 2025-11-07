@@ -6,7 +6,8 @@ namespace App\Clients\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Entities\User\Contracts\SearchableSourceContract;
-use App\Exceptions\SearchIndexException;
+use App\Models\Contracts\SearchableContract;
+use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use Faker\Factory;
 
 class ElasticsearchClientStub implements ElasticsearchClientContract
@@ -88,7 +89,9 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
             ->where('id', '>', $body['from'])
             ->limit($body['size'])
             ->get()
-            ->map(static fn ($element) => app($service)->enrich($element));
+            ->map(static function (SearchableContract $element) use ($service): SearchableSourceContract {
+                return app($service)->enrich($element);
+            });
 
         $maxScore = Factory::create()->randomFloat(6, 20, 70);
 
@@ -121,10 +124,35 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
     /**
      * @param  array<string, mixed>  $body
      * @return array<string, mixed>
+     *
+     * @throws SearchIndexException
      */
     public function clearIndex(array $body, string $indexName): array
     {
-        // TODO kpstya реализовать
-        return [];
+        $modelName = config('elasticsearch.search_index_models.'.$indexName);
+
+        if ($modelName === null) {
+            throw SearchIndexException::doesNotExist($indexName);
+        }
+
+        $elementsCount = $modelName::query()->count();
+
+        return [
+            'took' => $elementsCount + rand(1, 5),
+            'timed_out' => false,
+            'total' => $elementsCount,
+            'deleted' => $elementsCount,
+            'batches' => 1,
+            'version_conflicts' => 0,
+            'noops' => 0,
+            'retries' => [
+                'bulk' => 0,
+                'search' => 0,
+            ],
+            'throttled_millis' => 0,
+            'requests_per_second' => -1,
+            'throttled_until_millis' => 0,
+            'failures' => [],
+        ];
     }
 }

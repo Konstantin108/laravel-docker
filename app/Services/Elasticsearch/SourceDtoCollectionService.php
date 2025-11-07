@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Services;
+namespace App\Services\Elasticsearch;
 
 use App\Entities\User\Contracts\SearchableSourceContract;
-use App\Exceptions\SearchIndexException;
 use App\Factories\Contracts\SourceDtoFactoryContract;
+use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use Illuminate\Support\Collection;
 
 class SourceDtoCollectionService
