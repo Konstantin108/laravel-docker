@@ -9,7 +9,7 @@ use App\Entities\User\UserEnriched;
 use App\EntityFactories\Elasticsearch\UserDocElementFactory;
 use App\Events\Search\UsersSearchIndexFilledEvent;
 use App\Services\Elasticsearch\Abstract\ElasticsearchService;
-use App\Services\UserService;
+use App\Services\User\UserService;
 use Illuminate\Support\HigherOrderTapProxy;
 
 class UsersIndexElasticsearchService extends ElasticsearchService

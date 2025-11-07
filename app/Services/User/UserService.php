@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Services;
+namespace App\Services\User;
 
-use App\Dto\Elasticsearch\PaginationRequestDto;
-use App\Dto\User\IndexDto;
 use App\Entities\User\UserEnriched;
 use App\Models\User;
 use App\Repositories\User\UserRepository;
+use App\Services\Elasticsearch\Dto\PaginationRequestDto;
 use App\Services\Elasticsearch\PaginationService;
+use App\Services\User\Dto\IndexDto;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 

@@ -6,7 +6,7 @@ namespace Tests\Feature\Console\Commands\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
-use App\Exceptions\ElasticsearchApiException;
+use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
 use ReflectionException;
 use Tests\TestCase;
 

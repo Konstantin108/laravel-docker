@@ -4,8 +4,8 @@ namespace Tests\Feature\Console\Commands\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
+use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
 use App\Events\Search\UsersSearchIndexFilledEvent;
-use App\Exceptions\ElasticsearchApiException;
 use App\Jobs\SendUsersSearchIndexDataJob;
 use App\Listeners\UsersSearchIndexFilledListener;
 use App\Mail\UsersSearchIndexDataMail;

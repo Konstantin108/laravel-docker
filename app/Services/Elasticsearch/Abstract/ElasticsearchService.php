@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Services\Elasticsearch\Abstract;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
-use App\Dto\Elasticsearch\PaginationRequestDto;
-use App\Services\UserService;
+use App\Services\Elasticsearch\Dto\PaginationRequestDto;
+use App\Services\User\UserService;
 use stdClass;
 
 // TODO kpstya наверное лучше сделать это через интерфейс

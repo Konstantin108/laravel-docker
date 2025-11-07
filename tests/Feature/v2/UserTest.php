@@ -4,7 +4,7 @@ namespace Tests\Feature\v2;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
-use App\Exceptions\ElasticsearchApiException;
+use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Client\RequestException;

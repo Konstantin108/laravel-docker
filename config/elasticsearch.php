@@ -24,6 +24,6 @@ return [
     ],
 
     'model_services' => [
-        'users' => \App\Services\UserService::class,
+        'users' => \app\Services\User\UserService::class,
     ],
 ];
