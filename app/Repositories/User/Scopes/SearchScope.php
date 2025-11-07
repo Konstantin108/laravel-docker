@@ -23,18 +23,16 @@ final readonly class SearchScope
      */
     public function __invoke(Builder $builder): void
     {
-        if ($this->search === null) {
-            return;
-        }
-
-        $builder->where(function (Builder $builder): void {
-            $builder->where('name', 'like', $this->search)
-                ->orWhere('email', 'like', $this->search)
-                ->orWhereHas('contact', function (Builder $builder): void {
-                    $builder->where('email', 'like', $this->search)
-                        ->orWhere('phone', 'like', $this->search)
-                        ->orWhere('telegram', 'like', $this->search);
-                });
+        $builder->when($this->search !== null, function (Builder $builder): void {
+            $builder->where(function (Builder $builder): void {
+                $builder->where('name', 'like', $this->search)
+                    ->orWhere('email', 'like', $this->search)
+                    ->orWhereHas('contact', function (Builder $builder): void {
+                        $builder->where('email', 'like', $this->search)
+                            ->orWhere('phone', 'like', $this->search)
+                            ->orWhere('telegram', 'like', $this->search);
+                    });
+            });
         });
     }
 }
