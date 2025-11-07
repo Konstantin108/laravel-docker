@@ -36,7 +36,7 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/",
-            "Utils\\PHPStan\\": "Utils/PHPStan/"
+            "Utils\\PHPStan\\": "utils/PHPStan/"
         }
     },
     "scripts": {
