@@ -34,14 +34,14 @@ final class JsonResourceStaticPropertyRule implements Rule
 
         $varName = $node->var->name;
 
-        if ((string) $varName === 'wrap') {
-            return [
-                RuleErrorBuilder::message(sprintf('Assigning static $%s property outside class is prohibited', $varName))
-                    ->identifier('customRules.propertyAssignment')
-                    ->build(),
-            ];
+        if ((string) $varName !== 'wrap') {
+            return [];
         }
 
-        return [];
+        return [
+            RuleErrorBuilder::message(sprintf('Assigning static $%s property outside class is prohibited', $varName))
+                ->identifier('customRules.propertyAssignment')
+                ->build(),
+        ];
     }
 }

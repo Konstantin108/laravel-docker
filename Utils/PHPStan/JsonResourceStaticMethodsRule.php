@@ -33,23 +33,23 @@ final class JsonResourceStaticMethodsRule implements Rule
 
         $reflector = new ReflectionClass($node->class->toString());
 
-        if (!$reflector->isSubclassOf(JsonResource::class)) {
+        if (! $reflector->isSubclassOf(JsonResource::class)) {
             return [];
         }
 
         $methodName = $node->name->toString();
 
-        if (in_array($methodName, $notAllowedMethods)) {
-            return [
-                RuleErrorBuilder::message(sprintf(
-                    '%s static calls to JsonResource are not allowed. Modification of static properties from outside the class is prohibited',
-                    $methodName
-                ))
-                    ->identifier(sprintf('customRules.%s', $methodName))
-                    ->build(),
-            ];
+        if (! in_array($methodName, $notAllowedMethods)) {
+            return [];
         }
 
-        return [];
+        return [
+            RuleErrorBuilder::message(sprintf(
+                '%s static calls to JsonResource are not allowed. Modification of static properties from outside the class is prohibited',
+                $methodName
+            ))
+                ->identifier(sprintf('customRules.%s', $methodName))
+                ->build(),
+        ];
     }
 }
