@@ -12,7 +12,7 @@ class ContactSeeder extends Seeder
 
     public function run(): void
     {
-        $users = User::query()->get();
+        $users = User::all();
 
         if ($users->count() < self::CONTACTS_COUNT) {
             $users->merge(

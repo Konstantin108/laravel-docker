@@ -124,10 +124,35 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
     /**
      * @param  array<string, mixed>  $body
      * @return array<string, mixed>
+     *
+     * @throws SearchIndexException
      */
     public function clearIndex(array $body, string $indexName): array
     {
-        // TODO kpstya реализовать
-        return [];
+        $modelName = config('elasticsearch.search_index_models.'.$indexName);
+
+        if ($modelName === null) {
+            throw SearchIndexException::doesNotExist($indexName);
+        }
+
+        $elementsCount = $modelName::query()->count();
+
+        return [
+            'took' => $elementsCount + rand(1, 5),
+            'timed_out' => false,
+            'total' => $elementsCount,
+            'deleted' => $elementsCount,
+            'batches' => 1,
+            'version_conflicts' => 0,
+            'noops' => 0,
+            'retries' => [
+                'bulk' => 0,
+                'search' => 0,
+            ],
+            'throttled_millis' => 0,
+            'requests_per_second' => -1,
+            'throttled_until_millis' => 0,
+            'failures' => [],
+        ];
     }
 }

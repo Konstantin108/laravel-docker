@@ -11,7 +11,6 @@ use GuzzleHttp\Psr7\Utils;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
-use stdClass;
 use Throwable;
 
 class ElasticsearchClient implements ElasticsearchClientContract
@@ -96,13 +95,6 @@ class ElasticsearchClient implements ElasticsearchClientContract
      */
     public function clearIndex(array $body, string $indexName): array
     {
-        // TODO kpstya вынести в сервис и написать тесты
-        $body = [
-            'query' => [
-                'match_all' => new stdClass,
-            ],
-        ];
-
         return $this->execute(fn (): Response => $this->baseHttpRequest()
             ->post($indexName.'/_delete_by_query', $body)
         );
