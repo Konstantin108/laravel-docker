@@ -7,7 +7,11 @@ namespace App\Console\Commands\Elasticsearch\User;
 use App\Services\Elasticsearch\UsersIndexElasticsearchService;
 use Illuminate\Console\Command;
 
-class ClearUsersSearchIndexCommand extends Command
+/* TODO kpstya
+    команды и весь код должен быть универсальным для всех индексов,
+    так же надо будет переработать тесты */
+
+final class ClearUsersSearchIndexCommand extends Command
 {
     protected $signature = 'app:search:clear-users-search-index';
 

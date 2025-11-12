@@ -8,7 +8,7 @@ use App\Services\Elasticsearch\UsersIndexElasticsearchService;
 use Illuminate\Console\Command;
 use Psr\Log\LoggerInterface;
 
-class FillUsersSearchIndexCommand extends Command
+final class FillUsersSearchIndexCommand extends Command
 {
     private const LIMIT = 1000;
 

@@ -10,7 +10,7 @@ use App\Services\Elasticsearch\Dto\SearchIndexShardsDto;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use App\Services\Elasticsearch\SourceDtoCollectionService;
 
-class SearchResponseAction
+final class SearchResponseAction
 {
     public function __construct(
         private readonly SourceDtoCollectionService $collectionService
@@ -40,7 +40,7 @@ class SearchResponseAction
      *
      * @throws SearchIndexException
      */
-    public function execute(array $response): SearchResponse
+    public function run(array $response): SearchResponse
     {
         return new SearchResponse(
             took: $response['took'],
@@ -53,5 +53,9 @@ class SearchResponseAction
             ),
             hits: $this->collectionService->create($response['hits']['hits'])
         );
+
+        /* TODO kpstya
+            если избавиться от SourceDtoCollectionService, то можно будет просто мапой создавать массив или коллекцию
+            для ключа hits */
     }
 }

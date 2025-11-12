@@ -107,6 +107,10 @@ class UsersIndexElasticsearchService extends ElasticsearchService
             return null;
         }
 
+        /* TODO kpstya
+            так понимаю, что создавать UserDocElement больше не требуется
+            т.к. можно передавать в makeDocElement() любые сущности с контрактом SearchableSourceContract */
+
         $body = $users->map(fn (UserEnriched $user): string => $this->makeDocElement(
             $this->userDocElementFactory->make($user)->toArray(),
             static::INDEX_NAME

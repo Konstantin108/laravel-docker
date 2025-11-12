@@ -7,7 +7,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
-class ReverseStringCommand extends Command
+final class ReverseStringCommand extends Command
 {
     protected $signature = 'app:reverse-string {string:string}';
 

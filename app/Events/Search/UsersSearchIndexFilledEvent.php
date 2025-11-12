@@ -8,13 +8,13 @@ use App\Entities\User\UserEnriched;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Support\Collection;
 
-final class UsersSearchIndexFilledEvent
+final readonly class UsersSearchIndexFilledEvent
 {
     use Dispatchable;
 
     public function __construct(
         /** @var Collection<int, UserEnriched> */
-        public readonly Collection $users,
-        public readonly string $indexName
+        public Collection $users,
+        public string $indexName
     ) {}
 }

@@ -17,20 +17,19 @@ class UserController extends Controller
     public function __construct(
         private readonly UsersIndexElasticsearchService $searchService,
         private readonly UserService $userService,
-        private readonly SearchResponseAction $searchResponseAction
     ) {}
 
     /**
      * @throws SearchIndexException
      */
-    public function index(IndexRequest $request): AnonymousResourceCollection
+    public function index(IndexRequest $request, SearchResponseAction $action): AnonymousResourceCollection
     {
         $paginationRequestDto = $this->userService->getPaginationDataForSearchIndex(
             IndexDto::from($request->validated())
         );
 
         return IndexResource::collection(
-            $this->searchResponseAction->execute(
+            $action->run(
                 $this->searchService->findInSearchIndex($paginationRequestDto)
             )->hits
         );

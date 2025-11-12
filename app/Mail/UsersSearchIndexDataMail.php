@@ -8,7 +8,7 @@ use App\Entities\User\UserEnriched;
 use Illuminate\Mail\Mailable;
 use Illuminate\Support\Collection;
 
-class UsersSearchIndexDataMail extends Mailable
+final class UsersSearchIndexDataMail extends Mailable
 {
     public function __construct(
         /** @var Collection<int, UserEnriched> */

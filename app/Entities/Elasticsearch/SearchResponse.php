@@ -17,6 +17,7 @@ final class SearchResponse extends Data
         public readonly bool $timedOut,
         public readonly SearchIndexShardsDto $shardsDto,
         public readonly SearchIndexHitsDto $hitsDto,
+        // TODO kpstya тут типом должен быть контракт!
         /** @var Collection<string, UserEnriched> */
         public readonly Collection $hits
     ) {}
