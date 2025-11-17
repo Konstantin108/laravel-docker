@@ -53,9 +53,5 @@ final class SearchResponseAction
             ),
             hits: $this->collectionService->create($response['hits']['hits'])
         );
-
-        /* TODO kpstya
-            если избавиться от SourceDtoCollectionService, то можно будет просто мапой создавать массив или коллекцию
-            для ключа hits */
     }
 }

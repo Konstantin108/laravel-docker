@@ -11,10 +11,6 @@ use Illuminate\Support\Carbon;
 
 class UserSourceDtoFactory implements SourceDtoFactoryContract
 {
-    /* TODO kpstya
-        можно сильно упростить, больше не подставлять сервисы из конфига, можно просто использовать
-        сущности с контрактом SearchableSourceContract. При необходимости метод from() можно переопределить */
-
     /**
      * @param  array<string, mixed>  $source
      */

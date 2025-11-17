@@ -6,7 +6,6 @@ namespace App\Services\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Entities\User\UserEnriched;
-use App\EntityFactories\Elasticsearch\UserDocElementFactory;
 use App\Events\Search\UsersSearchIndexFilledEvent;
 use App\Services\Elasticsearch\Abstract\ElasticsearchService;
 use App\Services\User\UserService;
@@ -19,7 +18,6 @@ class UsersIndexElasticsearchService extends ElasticsearchService
     public function __construct(
         protected ElasticsearchClientContract $client,
         protected UserService $userService,
-        private readonly UserDocElementFactory $userDocElementFactory
     ) {
         parent::__construct($client, $userService);
     }
@@ -107,12 +105,8 @@ class UsersIndexElasticsearchService extends ElasticsearchService
             return null;
         }
 
-        /* TODO kpstya
-            так понимаю, что создавать UserDocElement больше не требуется
-            т.к. можно передавать в makeDocElement() любые сущности с контрактом SearchableSourceContract */
-
         $body = $users->map(fn (UserEnriched $user): string => $this->makeDocElement(
-            $this->userDocElementFactory->make($user)->toArray(),
+            $user->toArray(),
             static::INDEX_NAME
         ))
             ->implode('');
