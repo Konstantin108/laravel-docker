@@ -6,6 +6,8 @@ namespace App\Services\Elasticsearch\Exceptions;
 
 use Exception;
 
+// TODO kpstya после рефакторинга возможно это исключение уже будет не нужно
+
 final class SearchIndexException extends Exception
 {
     public static function doesNotExist(string $indexName): self

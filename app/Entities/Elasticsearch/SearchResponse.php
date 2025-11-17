@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entities\Elasticsearch;
 
-use App\Entities\User\UserEnriched;
+use App\Entities\User\Contracts\SearchableSourceContract;
 use App\Services\Elasticsearch\Dto\SearchIndexHitsDto;
 use App\Services\Elasticsearch\Dto\SearchIndexShardsDto;
 use Illuminate\Support\Collection;
@@ -17,8 +17,7 @@ final class SearchResponse extends Data
         public readonly bool $timedOut,
         public readonly SearchIndexShardsDto $shardsDto,
         public readonly SearchIndexHitsDto $hitsDto,
-        // TODO kpstya тут типом должен быть контракт!
-        /** @var Collection<string, UserEnriched> */
+        /** @var Collection<string, SearchableSourceContract> */
         public readonly Collection $hits
     ) {}
 }

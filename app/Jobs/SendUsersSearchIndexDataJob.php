@@ -15,6 +15,8 @@ use Illuminate\Support\Collection;
 
 final class SendUsersSearchIndexDataJob implements ShouldQueue
 {
+    // TODO kpstya проверить записи в jobs и failed_jobs, как бы я мог их перезапускать, если они упали
+
     use Dispatchable, InteractsWithQueue, Queueable;
 
     public function __construct(
