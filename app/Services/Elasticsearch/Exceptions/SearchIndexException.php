@@ -6,6 +6,8 @@ namespace App\Services\Elasticsearch\Exceptions;
 
 use Exception;
 
+// TODO kpstya сделать наследование от HttpException или ловить в Handler (надо наследовать от ExceptionHandler)
+
 final class SearchIndexException extends Exception
 {
     public static function doesNotExist(string $indexName): self

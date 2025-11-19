@@ -15,6 +15,8 @@ class UserFactory extends Factory
 {
     protected static ?string $password;
 
+    // TODO kpstya что-то не то со свойством password, возможно переделать это
+
     /**
      * @return array<string, mixed>
      */

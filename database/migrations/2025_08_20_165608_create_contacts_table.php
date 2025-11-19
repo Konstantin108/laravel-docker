@@ -5,6 +5,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/* TODO kpstya
+    - telegram должен быть unique
+    - user_id - кажется unique тут лишний
+    - проверить корректность остальных миграций */
+
 return new class extends Migration
 {
     public function up(): void
