@@ -38,9 +38,7 @@ final class FillUsersSearchIndexCommand extends Command
      */
     private function formattedOutput(array $result): void
     {
-        /**
-         * @var array<int, array<string, array<string, string|int|array<string, string|int>>>> $items
-         */
+        /** @var array<int, array<string, array<string, string|int|array<string, string|int>>>> $items */
         $items = $result['items'];
         $columnNames = ['_id', '_seq_no', '_type', '_version', 'result', '_primary_term', 'status'];
 

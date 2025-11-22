@@ -122,6 +122,8 @@ class UserTest extends TestCase
             'email' => 'kirill@bk.ru',
         ]);
 
+        // TODO kpstya создать testSuites в phpunit.xml
+
         $response = $this->getJson(route(self::INDEX_ROUTE, [
             'search' => $search,
         ]))

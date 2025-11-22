@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\v2;
 
-use App\Actions\SearchResponseAction;
+use App\Actions\SearchResponseTransformAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\IndexRequest;
 use App\Http\Resources\User\IndexResource;
@@ -22,16 +22,15 @@ class UserController extends Controller
     /**
      * @throws SearchIndexException
      */
-    public function index(IndexRequest $request, SearchResponseAction $action): AnonymousResourceCollection
+    public function index(IndexRequest $request, SearchResponseTransformAction $action): AnonymousResourceCollection
     {
         $paginationRequestDto = $this->userService->getPaginationDataForSearchIndex(
             IndexDto::from($request->validated())
         );
 
-        return IndexResource::collection(
-            $action->run(
-                $this->searchService->findInSearchIndex($paginationRequestDto)
-            )->hits
-        );
+        $result = $this->searchService->findInSearchIndex($paginationRequestDto);
+        $searchResponse = $action->run($result);
+
+        return IndexResource::collection($searchResponse->hits);
     }
 }

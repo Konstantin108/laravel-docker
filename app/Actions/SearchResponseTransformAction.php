@@ -10,7 +10,7 @@ use App\Services\Elasticsearch\Dto\SearchIndexShardsDto;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use App\Services\Elasticsearch\SourceDtoCollectionService;
 
-final class SearchResponseAction
+final class SearchResponseTransformAction
 {
     public function __construct(
         private readonly SourceDtoCollectionService $collectionService
@@ -51,7 +51,7 @@ final class SearchResponseAction
                 relation: $response['hits']['total']['relation'],
                 maxScore: $response['hits']['max_score'],
             ),
-            hits: $this->collectionService->create($response['hits']['hits'])
+            hits: $this->collectionService->execute($response['hits']['hits'])
         );
     }
 }
