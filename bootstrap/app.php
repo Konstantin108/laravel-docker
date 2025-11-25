@@ -1,8 +1,10 @@
 <?php
 
+use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\JsonResponse;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -16,5 +18,17 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->renderable(function (SearchIndexException $e): ?JsonResponse {
+            if (config('app.debug')) {
+                return null;
+            }
+
+            return new JsonResponse([
+                'error' => [
+                    'status' => 500,
+                    'code' => $e->getCode(),
+                    'message' => $e->getMessage(),
+                ],
+            ], 500);
+        });
     })->create();

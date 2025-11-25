@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\v2;
 
 use App\Actions\SearchResponseTransformAction;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\User\IndexRequest;
 use App\Http\Resources\User\IndexResource;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
@@ -11,6 +10,7 @@ use App\Services\Elasticsearch\UsersIndexElasticsearchService;
 use App\Services\User\Dto\IndexDto;
 use App\Services\User\UserService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Routing\Controller;
 
 class UserController extends Controller
 {

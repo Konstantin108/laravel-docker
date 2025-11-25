@@ -6,8 +6,6 @@ namespace App\Services\Elasticsearch\Exceptions;
 
 use Exception;
 
-// TODO kpstya сделать наследование от HttpException или ловить в Handler (надо наследовать от ExceptionHandler)
-
 final class SearchIndexException extends Exception
 {
     private const DOES_NOT_EXIST_CODE = 1;
