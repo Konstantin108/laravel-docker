@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\v2;
 
 use App\Actions\SearchResponseTransformAction;
-use App\Http\Requests\User\IndexRequest;
+use App\Http\Requests\v2\User\IndexRequest;
 use App\Http\Resources\User\IndexResource;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use App\Services\Elasticsearch\UsersIndexElasticsearchService;
@@ -14,21 +14,20 @@ use Illuminate\Routing\Controller;
 
 class UserController extends Controller
 {
-    public function __construct(
-        private readonly UsersIndexElasticsearchService $searchService,
-        private readonly UserService $userService,
-    ) {}
-
     /**
      * @throws SearchIndexException
      */
-    public function index(IndexRequest $request, SearchResponseTransformAction $action): AnonymousResourceCollection
-    {
-        $paginationRequestDto = $this->userService->getPaginationDataForSearchIndex(
+    public function index(
+        IndexRequest $request,
+        SearchResponseTransformAction $action,
+        UsersIndexElasticsearchService $searchService,
+        UserService $userService,
+    ): AnonymousResourceCollection {
+        $paginationRequestDto = $userService->getPaginationDataForSearchIndex(
             IndexDto::from($request->validated())
         );
 
-        $result = $this->searchService->findInSearchIndex($paginationRequestDto);
+        $result = $searchService->findInSearchIndex($paginationRequestDto);
         $searchResponse = $action->run($result);
 
         return IndexResource::collection($searchResponse->hits);

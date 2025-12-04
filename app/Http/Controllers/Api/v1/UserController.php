@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Http\Requests\User\IndexRequest;
+use App\Http\Requests\v1\User\IndexRequest;
 use App\Http\Resources\User\IndexResource;
 use App\Services\User\Dto\IndexDto;
 use App\Services\User\UserService;
@@ -11,17 +11,12 @@ use Illuminate\Routing\Controller;
 
 class UserController extends Controller
 {
-    public function __construct(
-        private readonly UserService $userService
-    ) {}
-
-    public function index(IndexRequest $request): AnonymousResourceCollection
+    public function index(IndexRequest $request, UserService $userService): AnonymousResourceCollection
     {
         $data = $request->validated();
 
         return IndexResource::collection(
-            $this->userService->getPagination(IndexDto::from($data))
-                ->appends($data)
+            $userService->getPagination(IndexDto::from($data))->appends($data)
         );
     }
 }

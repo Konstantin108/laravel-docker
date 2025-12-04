@@ -111,6 +111,10 @@ class UsersIndexElasticsearchService extends ElasticsearchService
         ))
             ->implode('');
 
+        /* TODO kpstya
+            - на сколько правильно отправлять на почту эти данные
+            - возможно надо создать сервис, который будет преобразовывать данные в модель после их получения */
+
         return tap(
             $this->client->bulkIndex($body, static::INDEX_NAME),
             static fn (): ?array => UsersSearchIndexFilledEvent::dispatch($users, static::INDEX_NAME)

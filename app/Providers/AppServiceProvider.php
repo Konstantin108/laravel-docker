@@ -39,6 +39,8 @@ class AppServiceProvider extends ServiceProvider
                 config('elasticsearch.source_dto_factories')
             ));
         });
+
+        // TODO kpstya надо будет биндить реализации абстрактного класса ElasticsearchService
     }
 
     /**
