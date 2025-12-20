@@ -61,6 +61,8 @@ class User extends Authenticatable implements SearchableContract
         'remember_token',
     ];
 
+    // TODO kpstya должно быть $casts, а не casts() - исправить (возможно в Laravel 12 это работает - проверить)
+
     /**
      * @return array<string, string>
      */

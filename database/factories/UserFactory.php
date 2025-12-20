@@ -31,6 +31,8 @@ class UserFactory extends Factory
         ];
     }
 
+    // TODO kpstya возможно убрать из User всё, что связано с авторизацией, тут это не нужно
+
     public function unverified(): UserFactory
     {
         return $this->state(static fn (): array => [

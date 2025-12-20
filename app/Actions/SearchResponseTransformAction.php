@@ -12,6 +12,8 @@ use App\Services\Elasticsearch\SourceDtoCollectionService;
 
 final class SearchResponseTransformAction
 {
+    // TODO kpstya тут тоже можно сделать __invoke
+
     public function __construct(
         private readonly SourceDtoCollectionService $collectionService
     ) {}

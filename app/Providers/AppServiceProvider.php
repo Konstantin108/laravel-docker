@@ -8,6 +8,7 @@ use App\Clients\Elasticsearch\ElasticsearchClientStub;
 use App\Factories\Contracts\SourceDtoFactoryContract;
 use App\Services\Elasticsearch\Dto\SettingsDto;
 use App\Services\Elasticsearch\SourceDtoCollectionService;
+use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
@@ -21,6 +22,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        // TODO kpstya как лучше использовать $app или $this->app
+
+        if ($this->app->isLocal()) {
+            $this->app->register(IdeHelperServiceProvider::class);
+        }
+
         $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
             return match (config('app.env')) {
                 'testing' => new ElasticsearchClientStub,

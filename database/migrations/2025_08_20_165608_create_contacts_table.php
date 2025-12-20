@@ -27,6 +27,8 @@ return new class extends Migration
         });
     }
 
+    // TODO kpstya - assertDispatchedTimes() добавить в тесты
+
     public function down(): void
     {
         Schema::dropIfExists(TableDictionary::CONTACTS);

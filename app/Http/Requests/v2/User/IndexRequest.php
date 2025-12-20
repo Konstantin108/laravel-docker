@@ -11,6 +11,8 @@ class IndexRequest extends FormRequest
         return true;
     }
 
+    // TODO kpstya возможно тут создавать Dto
+
     /**
      * @return array<string, list<string>>
      */

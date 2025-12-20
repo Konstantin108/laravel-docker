@@ -100,8 +100,8 @@ class ElasticsearchClient implements ElasticsearchClientContract
     {
         try {
             return $request()->json();
-        } catch (Throwable $e) {
-            throw ElasticsearchApiException::buildMessage($e);
+        } catch (Throwable $exception) {
+            throw ElasticsearchApiException::buildMessage($exception);
         }
     }
 
@@ -117,4 +117,6 @@ class ElasticsearchClient implements ElasticsearchClientContract
                 $this->settings->retrySleepMilliseconds
             );
     }
+
+    // TODO kpstya надо указать схему для миграций либо указать в конфиге путь до схемы
 }

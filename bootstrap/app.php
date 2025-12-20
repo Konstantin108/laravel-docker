@@ -6,6 +6,8 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\JsonResponse;
 
+// TODO kpstya можно ли тут сразу настроить префиксы для роутов
+
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         api: [
@@ -18,16 +20,18 @@ return Application::configure(basePath: dirname(__DIR__))
         //
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        $exceptions->renderable(function (SearchIndexException $e): ?JsonResponse {
+        $exceptions->renderable(function (SearchIndexException $exception): ?JsonResponse {
             if (config('app.debug')) {
                 return null;
             }
 
+            // TODO kpstya проверить работу
+
             return new JsonResponse([
                 'error' => [
                     'status' => 500,
-                    'code' => $e->getCode(),
-                    'message' => $e->getMessage(),
+                    'code' => $exception->getCode(),
+                    'message' => $exception->getMessage(),
                 ],
             ], 500);
         });
