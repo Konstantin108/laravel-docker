@@ -2,6 +2,17 @@
 
 declare(strict_types=1);
 
+/* TODO kpstya
+    - создать класс, в котором будут общие методы для всех реализаций ElasticsearchService
+    - создать интерфейс, который будут реализовывать все эти классы
+    - создать фабрику
+    - биндить в AppServiceProvider::register() как SourceDtoCollectionService
+    - передавать в команды аргументом имя индекса в Elasticsearch
+    - надо доабвить опции для команд, соответственно переименовать команды
+    - доработать тесты, так же с учетом неверного имени индекса
+    - возможно эвенты и слушатели тоже надо будет сделать универсальными
+    - удалить абстрактный класс */
+
 namespace App\Services\Elasticsearch\Abstract;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
@@ -33,7 +44,7 @@ abstract class ElasticsearchService
     /**
      * @return array<string, mixed>
      */
-    public function createSearchIndex(): array
+    final public function createSearchIndex(): array
     {
         return $this->client->createIndex($this->bodyIndexCreate(), $this->indexName());
     }
@@ -41,7 +52,7 @@ abstract class ElasticsearchService
     /**
      * @return array<string, bool>
      */
-    public function deleteSearchIndex(): array
+    final public function deleteSearchIndex(): array
     {
         return $this->client->deleteIndex($this->indexName());
     }
@@ -49,7 +60,7 @@ abstract class ElasticsearchService
     /**
      * @return array<string, mixed>
      */
-    public function findInSearchIndex(PaginationRequestDto $requestDto): array
+    final public function findInSearchIndex(PaginationRequestDto $requestDto): array
     {
         $body = $requestDto->search !== null && mb_strlen($requestDto->search) > 2
             ? $this->searchMultiMatch($requestDto)
@@ -61,7 +72,7 @@ abstract class ElasticsearchService
     /**
      * @return array<string, mixed>
      */
-    public function clearSearchIndex(): array
+    final public function clearSearchIndex(): array
     {
         $body = [
             'query' => [
@@ -75,7 +86,7 @@ abstract class ElasticsearchService
     /**
      * @param  array<string, int|string>  $data
      */
-    protected function makeDocElement(array $data, string $indexName): string
+    final protected function makeDocElement(array $data, string $indexName): string
     {
         return sprintf(
             "%s\n%s\n",
