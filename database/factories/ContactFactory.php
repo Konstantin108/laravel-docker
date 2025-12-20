@@ -24,8 +24,6 @@ class ContactFactory extends Factory
         ];
     }
 
-    // TODO kpstya - telegram должен быть unique, проверить остальные фабрики
-
     public function user(int $userId): ContactFactory
     {
         return $this->state(fn (): array => [

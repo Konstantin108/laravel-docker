@@ -5,11 +5,6 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/* TODO kpstya
-    - telegram должен быть unique
-    - user_id - кажется unique тут лишний
-    - проверить корректность остальных миграций */
-
 return new class extends Migration
 {
     public function up(): void
@@ -19,15 +14,13 @@ return new class extends Migration
             $table->foreignId('user_id')
                 ->unique()
                 ->constrained(TableDictionary::USERS)
-                ->onDelete('cascade');
+                ->cascadeOnDelete();
             $table->string('email')->unique();
             $table->string('phone')->unique();
             $table->string('telegram')->nullable();
             $table->timestamps();
         });
     }
-
-    // TODO kpstya - assertDispatchedTimes() добавить в тесты
 
     public function down(): void
     {
