@@ -7,7 +7,7 @@ use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
 use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
 use App\Events\Search\UsersSearchIndexFilledEvent;
 use App\Jobs\SendUsersSearchIndexDataJob;
-use App\Listeners\UsersSearchIndexFilledListener;
+use App\Listeners\NotifyAboutSearchIndexFilledListener;
 use App\Mail\UsersSearchIndexDataMail;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -26,7 +26,7 @@ class FillUsersSearchIndexTest extends TestCase
 
     private const COMMAND = 'app:search:fill-users-search-index';
 
-    private UsersSearchIndexFilledListener $listener;
+    private NotifyAboutSearchIndexFilledListener $listener;
 
     /**
      * @throws ContainerExceptionInterface
@@ -39,7 +39,7 @@ class FillUsersSearchIndexTest extends TestCase
         Event::fake();
         Queue::fake();
         Mail::fake();
-        $this->listener = $this->app->get(UsersSearchIndexFilledListener::class);
+        $this->listener = $this->app->get(NotifyAboutSearchIndexFilledListener::class);
     }
 
     public function test_fill_users_search_index_success(): void
@@ -71,32 +71,34 @@ class FillUsersSearchIndexTest extends TestCase
             ->expectsOutput(sprintf('updated: %d', 0))
             ->expectsOutput(sprintf('total: %d', $count));
 
-        $event = Event::dispatched(UsersSearchIndexFilledEvent::class)->first()[0];
-        $this->assertNotNull($event);
+        $events = Event::dispatched(UsersSearchIndexFilledEvent::class);
+        $this->assertCount(1, $events);
 
-        Event::assertDispatched($event::class, static function (UsersSearchIndexFilledEvent $event) use ($users, $indexName): bool {
-            return $event->users->count() === $users->count()
-                && $event->indexName === $indexName;
-        });
+        $event = $events->first()[0];
+        $this->assertNotNull($event);
+        $this->assertSame($indexName, $event->indexName);
+        $this->assertSame($users->count(), $event->users->count());
 
         $this->listener->handle($event);
 
         /** @var SendUsersSearchIndexDataJob $job */
-        $job = Queue::pushed(SendUsersSearchIndexDataJob::class)->first();
-        $this->assertNotNull($job);
+        $jobs = Queue::pushed(SendUsersSearchIndexDataJob::class);
+        $this->assertCount(1, $jobs);
 
-        Queue::assertPushed($job::class, static function (SendUsersSearchIndexDataJob $job) use ($users, $indexName): bool {
-            return $job->users->count() === $users->count()
-                && $job->indexName === $indexName;
-        });
+        $job = $jobs->first();
+        $this->assertNotNull($job);
+        $this->assertSame($indexName, $job->indexName);
+        $this->assertSame($users->count(), $job->users->count());
 
         $job->handle(app(Mailer::class));
 
-        Mail::assertSent(UsersSearchIndexDataMail::class, static function (UsersSearchIndexDataMail $mail) use ($users, $indexName): bool {
-            return $mail->usersCount === $users->count()
-                && $mail->indexName === $indexName;
-        }
-        );
+        $sentMails = Mail::sent(UsersSearchIndexDataMail::class);
+        $this->assertCount(1, $sentMails);
+
+        $mail = $sentMails->first();
+        $this->assertNotNull($mail);
+        $this->assertSame($indexName, $mail->indexName);
+        $this->assertSame($users->count(), $mail->usersCount);
     }
 
     public function test_fill_users_search_index_with_argument_limit(): void

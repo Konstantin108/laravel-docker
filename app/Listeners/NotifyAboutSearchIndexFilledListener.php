@@ -7,7 +7,7 @@ namespace App\Listeners;
 use App\Events\Search\UsersSearchIndexFilledEvent;
 use App\Jobs\SendUsersSearchIndexDataJob;
 
-class UsersSearchIndexFilledListener
+final readonly class NotifyAboutSearchIndexFilledListener
 {
     public function handle(UsersSearchIndexFilledEvent $event): void
     {

@@ -15,6 +15,8 @@ class UserFactory extends Factory
 {
     protected static ?string $password;
 
+    // TODO kpstya что-то не то со свойством password, возможно переделать это
+
     /**
      * @return array<string, mixed>
      */
@@ -28,6 +30,8 @@ class UserFactory extends Factory
             'remember_token' => Str::random(10),
         ];
     }
+
+    // TODO kpstya возможно убрать из User всё, что связано с авторизацией, тут это не нужно
 
     public function unverified(): UserFactory
     {

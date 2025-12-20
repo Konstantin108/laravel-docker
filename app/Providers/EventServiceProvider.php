@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Events\Search\UsersSearchIndexFilledEvent;
-use App\Listeners\UsersSearchIndexFilledListener;
+use App\Listeners\NotifyAboutSearchIndexFilledListener;
 use Carbon\Laravel\ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -15,7 +15,7 @@ class EventServiceProvider extends ServiceProvider
      */
     protected array $listen = [
         UsersSearchIndexFilledEvent::class => [
-            UsersSearchIndexFilledListener::class,
+            NotifyAboutSearchIndexFilledListener::class,
         ],
     ];
 

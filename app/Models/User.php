@@ -7,7 +7,6 @@ use App\Models\Contracts\SearchableContract;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\DatabaseNotification;
@@ -32,16 +31,8 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|User newModelQuery()
  * @method static Builder<static>|User newQuery()
  * @method static Builder<static>|User query()
- * @method static Builder<static>|User whereCreatedAt($value)
- * @method static Builder<static>|User whereEmail($value)
- * @method static Builder<static>|User whereEmailVerifiedAt($value)
- * @method static Builder<static>|User whereId($value)
- * @method static Builder<static>|User whereName($value)
- * @method static Builder<static>|User wherePassword($value)
- * @method static Builder<static>|User whereRememberToken($value)
- * @method static Builder<static>|User whereUpdatedAt($value)
  *
- * @mixin Model
+ * @mixin \Eloquent
  */
 class User extends Authenticatable implements SearchableContract
 {

@@ -14,7 +14,7 @@ return new class extends Migration
             $table->foreignId('user_id')
                 ->unique()
                 ->constrained(TableDictionary::USERS)
-                ->onDelete('cascade');
+                ->cascadeOnDelete();
             $table->string('email')->unique();
             $table->string('phone')->unique();
             $table->string('telegram')->nullable();

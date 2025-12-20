@@ -17,22 +17,13 @@ class ElasticsearchClient implements ElasticsearchClientContract
 {
     private readonly string $url;
 
-    private readonly string $user;
-
-    private readonly string $password;
-
-    private readonly SettingsDto $settings;
-
     public function __construct(
         string $url,
-        string $user,
-        string $password,
-        SettingsDto $settings
+        private readonly string $user,
+        private readonly string $password,
+        private readonly SettingsDto $settings
     ) {
         $this->url = rtrim($url, '/');
-        $this->user = $user;
-        $this->password = $password;
-        $this->settings = $settings;
     }
 
     /**
@@ -109,8 +100,8 @@ class ElasticsearchClient implements ElasticsearchClientContract
     {
         try {
             return $request()->json();
-        } catch (Throwable $e) {
-            throw ElasticsearchApiException::buildMessage($e);
+        } catch (Throwable $exception) {
+            throw ElasticsearchApiException::buildMessage($exception);
         }
     }
 

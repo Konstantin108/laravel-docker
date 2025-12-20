@@ -27,7 +27,7 @@ class SourceDtoCollectionService
      *
      * @throws SearchIndexException
      */
-    public function create(array $hits): Collection
+    public function execute(array $hits): Collection
     {
         return new Collection(array_map(function (array $hit): SearchableSourceContract {
             $indexName = $hit['_index'];

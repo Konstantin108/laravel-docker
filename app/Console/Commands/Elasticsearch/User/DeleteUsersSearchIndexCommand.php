@@ -7,7 +7,7 @@ namespace App\Console\Commands\Elasticsearch\User;
 use App\Services\Elasticsearch\UsersIndexElasticsearchService;
 use Illuminate\Console\Command;
 
-class DeleteUsersSearchIndexCommand extends Command
+final class DeleteUsersSearchIndexCommand extends Command
 {
     protected $signature = 'app:search:delete-users-search-index';
 

@@ -14,3 +14,5 @@ stan:
 	docker-compose exec php ./vendor/bin/phpstan analyse --memory-limit=512M
 test:
 	docker-compose exec php php artisan test
+optimize:
+	docker-compose exec php php artisan optimize:clear

@@ -6,7 +6,6 @@ namespace App\Services\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Entities\User\UserEnriched;
-use App\EntityFactories\Elasticsearch\UserDocElementFactory;
 use App\Events\Search\UsersSearchIndexFilledEvent;
 use App\Services\Elasticsearch\Abstract\ElasticsearchService;
 use App\Services\User\UserService;
@@ -19,7 +18,6 @@ class UsersIndexElasticsearchService extends ElasticsearchService
     public function __construct(
         protected ElasticsearchClientContract $client,
         protected UserService $userService,
-        private readonly UserDocElementFactory $userDocElementFactory
     ) {
         parent::__construct($client, $userService);
     }
@@ -108,10 +106,14 @@ class UsersIndexElasticsearchService extends ElasticsearchService
         }
 
         $body = $users->map(fn (UserEnriched $user): string => $this->makeDocElement(
-            $this->userDocElementFactory->make($user)->toArray(),
+            $user->toArray(),
             static::INDEX_NAME
         ))
             ->implode('');
+
+        /* TODO kpstya
+            - на сколько правильно отправлять на почту эти данные
+            - возможно надо создать сервис, который будет преобразовывать данные в модель после их получения */
 
         return tap(
             $this->client->bulkIndex($body, static::INDEX_NAME),

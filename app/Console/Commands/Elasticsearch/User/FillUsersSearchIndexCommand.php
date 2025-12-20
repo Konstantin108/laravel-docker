@@ -8,7 +8,7 @@ use App\Services\Elasticsearch\UsersIndexElasticsearchService;
 use Illuminate\Console\Command;
 use Psr\Log\LoggerInterface;
 
-class FillUsersSearchIndexCommand extends Command
+final class FillUsersSearchIndexCommand extends Command
 {
     private const LIMIT = 1000;
 
@@ -38,9 +38,7 @@ class FillUsersSearchIndexCommand extends Command
      */
     private function formattedOutput(array $result): void
     {
-        /**
-         * @var array<int, array<string, array<string, string|int|array<string, string|int>>>> $items
-         */
+        /** @var array<int, array<string, array<string, string|int|array<string, string|int>>>> $items */
         $items = $result['items'];
         $columnNames = ['_id', '_seq_no', '_type', '_version', 'result', '_primary_term', 'status'];
 

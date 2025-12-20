@@ -13,7 +13,7 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use ReflectionClass;
 
-final class JsonResourceStaticMethodsRule implements Rule
+final readonly class JsonResourceStaticMethodsRule implements Rule
 {
     public function getNodeType(): string
     {

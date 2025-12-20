@@ -7,7 +7,7 @@ namespace App\Console\Commands\Elasticsearch\User;
 use App\Services\Elasticsearch\UsersIndexElasticsearchService;
 use Illuminate\Console\Command;
 
-class CreateUsersSearchIndexCommand extends Command
+final class CreateUsersSearchIndexCommand extends Command
 {
     protected $signature = 'app:search:create-users-search-index';
 

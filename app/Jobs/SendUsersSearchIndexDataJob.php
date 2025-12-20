@@ -13,9 +13,11 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
 
-class SendUsersSearchIndexDataJob implements ShouldQueue
+final class SendUsersSearchIndexDataJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable;
+
+    public int $tries = 3;
 
     public function __construct(
         /** @var Collection<int, UserEnriched> */

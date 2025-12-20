@@ -11,6 +11,8 @@ class UserSeeder extends Seeder
 
     public function run(): void
     {
+        // TODO kpstya возможно переделать это
+
         $existingUsersCount = User::query()->count();
 
         if ($existingUsersCount < self::USERS_COUNT) {
