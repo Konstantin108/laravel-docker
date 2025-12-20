@@ -22,8 +22,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // TODO kpstya как лучше использовать $app или $this->app
-
         if ($this->app->isLocal()) {
             $this->app->register(IdeHelperServiceProvider::class);
         }

@@ -7,7 +7,7 @@ use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
 use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
 use App\Events\Search\UsersSearchIndexFilledEvent;
 use App\Jobs\SendUsersSearchIndexDataJob;
-use App\Listeners\UsersSearchIndexFilledListener;
+use App\Listeners\NotifyAboutSearchIndexFilledListener;
 use App\Mail\UsersSearchIndexDataMail;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -26,7 +26,7 @@ class FillUsersSearchIndexTest extends TestCase
 
     private const COMMAND = 'app:search:fill-users-search-index';
 
-    private UsersSearchIndexFilledListener $listener;
+    private NotifyAboutSearchIndexFilledListener $listener;
 
     /**
      * @throws ContainerExceptionInterface
@@ -39,7 +39,7 @@ class FillUsersSearchIndexTest extends TestCase
         Event::fake();
         Queue::fake();
         Mail::fake();
-        $this->listener = $this->app->get(UsersSearchIndexFilledListener::class);
+        $this->listener = $this->app->get(NotifyAboutSearchIndexFilledListener::class);
     }
 
     public function test_fill_users_search_index_success(): void

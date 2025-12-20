@@ -6,8 +6,6 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\JsonResponse;
 
-// TODO kpstya можно ли тут сразу настроить префиксы для роутов
-
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         api: [
@@ -24,8 +22,6 @@ return Application::configure(basePath: dirname(__DIR__))
             if (config('app.debug')) {
                 return null;
             }
-
-            // TODO kpstya проверить работу
 
             return new JsonResponse([
                 'error' => [

@@ -24,15 +24,8 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Contact newModelQuery()
  * @method static Builder<static>|Contact newQuery()
  * @method static Builder<static>|Contact query()
- * @method static Builder<static>|Contact whereCreatedAt($value)
- * @method static Builder<static>|Contact whereEmail($value)
- * @method static Builder<static>|Contact whereId($value)
- * @method static Builder<static>|Contact wherePhone($value)
- * @method static Builder<static>|Contact whereTelegram($value)
- * @method static Builder<static>|Contact whereUpdatedAt($value)
- * @method static Builder<static>|Contact whereUserId($value)
  *
- * @mixin Model
+ * @mixin \Eloquent
  */
 class Contact extends Model implements SearchableContract
 {

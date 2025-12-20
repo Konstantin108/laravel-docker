@@ -4,3 +4,8 @@ parameters:
 			message: "#^PHPDoc tag @var for variable \\$paginator contains generic class Illuminate\\\\Pagination\\\\LengthAwarePaginator but does not specify its types\\: TKey, TValue$#"
 			count: 1
 			path: app/Services/User/UserService.php
+
+		-
+			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Foundation\\\\Application\\:\\:isLocal\\(\\).$#"
+			count: 1
+			path: app/Providers/AppServiceProvider.php

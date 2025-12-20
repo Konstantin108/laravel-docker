@@ -10,12 +10,10 @@ use App\Services\Elasticsearch\Dto\SearchIndexShardsDto;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use App\Services\Elasticsearch\SourceDtoCollectionService;
 
-final class SearchResponseTransformAction
+final readonly class SearchResponseTransformAction
 {
-    // TODO kpstya тут тоже можно сделать __invoke
-
     public function __construct(
-        private readonly SourceDtoCollectionService $collectionService
+        private SourceDtoCollectionService $collectionService
     ) {}
 
     /**

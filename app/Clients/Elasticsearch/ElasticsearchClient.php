@@ -117,6 +117,4 @@ class ElasticsearchClient implements ElasticsearchClientContract
                 $this->settings->retrySleepMilliseconds
             );
     }
-
-    // TODO kpstya надо указать схему для миграций либо указать в конфиге путь до схемы
 }
