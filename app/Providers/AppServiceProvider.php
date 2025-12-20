@@ -46,8 +46,6 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-    // TODO kpstya надо собрать все заметки по проекту
-
     /**
      * Bootstrap any application services.
      */
