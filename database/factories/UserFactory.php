@@ -15,8 +15,6 @@ class UserFactory extends Factory
 {
     protected static ?string $password;
 
-    // TODO kpstya что-то не то со свойством password, возможно переделать это
-
     /**
      * @return array<string, mixed>
      */
@@ -29,15 +27,6 @@ class UserFactory extends Factory
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
         ];
-    }
-
-    // TODO kpstya возможно убрать из User всё, что связано с авторизацией, тут это не нужно
-
-    public function unverified(): UserFactory
-    {
-        return $this->state(static fn (): array => [
-            'email_verified_at' => null,
-        ]);
     }
 
     // TODO kpstya возможно нужно переделать afterCreating() на has()
