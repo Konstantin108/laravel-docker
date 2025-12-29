@@ -95,8 +95,10 @@ class FillUsersSearchIndexTest extends TestCase
         $sentMails = Mail::sent(UsersSearchIndexDataMail::class);
         $this->assertCount(1, $sentMails);
 
+        /** @var UsersSearchIndexDataMail $mail */
         $mail = $sentMails->first();
         $this->assertNotNull($mail);
+        $this->assertTrue($mail->hasTo('kv.dryakhlov@bgit.ru'));
         $this->assertSame($indexName, $mail->indexName);
         $this->assertSame($users->count(), $mail->usersCount);
     }

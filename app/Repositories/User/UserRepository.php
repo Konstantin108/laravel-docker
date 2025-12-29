@@ -23,6 +23,8 @@ class UserRepository
             ->paginate($perPage);
     }
 
+    // TODO kpstya надо создать интерфейс для репозиториев
+
     /**
      * @return Collection<int, User>
      */

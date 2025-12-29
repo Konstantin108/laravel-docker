@@ -40,7 +40,7 @@ final readonly class SearchResponseTransformAction
      *
      * @throws SearchIndexException
      */
-    public function run(array $response): SearchResponse
+    public function handle(array $response): SearchResponse
     {
         return new SearchResponse(
             took: $response['took'],
