@@ -98,7 +98,7 @@ class FillUsersSearchIndexTest extends TestCase
         /** @var UsersSearchIndexDataMail $mail */
         $mail = $sentMails->first();
         $this->assertNotNull($mail);
-        $this->assertTrue($mail->hasTo('kv.dryakhlov@bgit.ru'));
+        $this->assertTrue($mail->hasTo('admin@test.ru'));
         $this->assertSame($indexName, $mail->indexName);
         $this->assertSame($users->count(), $mail->usersCount);
     }
