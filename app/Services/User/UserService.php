@@ -6,7 +6,7 @@ namespace App\Services\User;
 
 use App\Entities\User\UserEnriched;
 use App\Models\User;
-use App\Repositories\User\UserRepository;
+use App\Repositories\User\Contracts\UserRepositoryContract;
 use App\Services\Elasticsearch\Dto\PaginationRequestDto;
 use App\Services\Elasticsearch\PaginationService;
 use App\Services\User\Dto\IndexDto;
@@ -18,7 +18,7 @@ class UserService
     private const PER_PAGE = 10;
 
     public function __construct(
-        private readonly UserRepository $userRepository,
+        private readonly UserRepositoryContract $userRepository,
         private readonly PaginationService $elasticsearchPaginationService
     ) {}
 

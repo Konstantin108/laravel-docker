@@ -6,6 +6,8 @@ use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\ElasticsearchClient;
 use App\Clients\Elasticsearch\ElasticsearchClientStub;
 use App\Factories\Contracts\SourceDtoFactoryContract;
+use App\Repositories\User\Contracts\UserRepositoryContract;
+use App\Repositories\User\UserEloquentRepository;
 use App\Services\Elasticsearch\Dto\SettingsDto;
 use App\Services\Elasticsearch\SourceDtoCollectionService;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
@@ -25,6 +27,8 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->isLocal()) {
             $this->app->register(IdeHelperServiceProvider::class);
         }
+
+        $this->app->bind(UserRepositoryContract::class, UserEloquentRepository::class);
 
         $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
             return match (config('app.env')) {
