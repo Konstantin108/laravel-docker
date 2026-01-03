@@ -15,6 +15,8 @@ interface UserRepositoryContract
      */
     public function getUsersPagination(int $perPage, ?string $search = null): LengthAwarePaginator;
 
+    // TODO kpstya возможно после переработки ElasticsearchService можно будет создать UserElasticsearchRepository
+
     /**
      * @return Collection<int, User>
      */
