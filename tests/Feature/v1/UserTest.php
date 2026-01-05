@@ -89,6 +89,9 @@ class UserTest extends TestCase
             ->assertJsonPath('meta.current_page', $page);
     }
 
+    /* TODO kpstya
+        - вынести в protected метод $data из теста test_index_v1_with_search_param  */
+
     public function test_index_v1_with_per_page_param(): void
     {
         User::factory()->count(3)->withContact()->create();

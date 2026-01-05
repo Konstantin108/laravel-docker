@@ -77,7 +77,7 @@ class FillUsersSearchIndexTest extends TestCase
         $event = $events->first()[0];
         $this->assertNotNull($event);
         $this->assertSame($indexName, $event->indexName);
-        $this->assertSame($users->count(), $event->users->count());
+        $this->assertCount($users->count(), $event->users);
 
         $this->listener->handle($event);
 
@@ -88,7 +88,7 @@ class FillUsersSearchIndexTest extends TestCase
         $job = $jobs->first();
         $this->assertNotNull($job);
         $this->assertSame($indexName, $job->indexName);
-        $this->assertSame($users->count(), $job->users->count());
+        $this->assertCount($users->count(), $job->users);
 
         $job->handle(app(Mailer::class));
 
