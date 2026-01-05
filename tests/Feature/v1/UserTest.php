@@ -107,24 +107,35 @@ class UserTest extends TestCase
     #[TestWith(['BK.RU', 2])]
     #[TestWith(['Василий', 0])]
     #[TestWith(['@iva', 1])]
+    #[TestWith(['898', 1])]
     #[TestWith(['RESERve.', 3])]
     public function test_index_v1_with_search_param(string $search, int $resultCount): void
     {
-        $userStates = [
-            ['name' => 'Иван', 'email' => 'ivan@bk.ru'],
-            ['name' => 'Сергей', 'email' => 'sergey@gmail.com'],
-            ['name' => 'Кирилл', 'email' => 'kirill@bk.ru'],
-        ];
-        $contactStates = [
-            ['email' => 'ivan@reserve.ru', 'telegram' => '@ivan'],
-            ['email' => 'sergey@reserve.com', 'telegram' => '@ss17'],
-            ['email' => 'kirill@reserve.ru', 'telegram' => '@krevetko'],
+        $data = [
+            [
+                'user' => ['name' => 'Иван', 'email' => 'ivan@bk.ru'],
+                'contact' => ['email' => 'ivan@reserve.ru', 'phone' => '79094545533', 'telegram' => '@ivan'],
+            ],
+            [
+                'user' => ['name' => 'Сергей', 'email' => 'sergey@gmail.com'],
+                'contact' => ['email' => 'sergey@reserve.com', 'phone' => '8-800-23', 'telegram' => '@ss17'],
+            ],
+            [
+                'user' => ['name' => 'Кирилл', 'email' => 'kirill@bk.ru'],
+                'contact' => ['email' => 'kirill@reserve.ru', 'phone' => '7(907)898-22', 'telegram' => '@krevetko'],
+            ],
         ];
 
         User::factory()
-            ->count(count($userStates))
-            ->state(new Sequence(...$userStates))
-            ->withContact(new Sequence(...$contactStates))
+            ->count(count($data))
+            ->state(new Sequence(...array_map(
+                static fn (array $elem): array => $elem['user'],
+                $data
+            )))
+            ->withContact(new Sequence(...array_map(
+                static fn (array $elem): array => $elem['contact'],
+                $data
+            )))
             ->create();
 
         $response = $this->getJson(route(self::INDEX_ROUTE, [
