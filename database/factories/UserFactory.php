@@ -13,6 +13,8 @@ use Illuminate\Support\Str;
  */
 class UserFactory extends Factory
 {
+    protected $model = User::class;
+
     protected static ?string $password;
 
     /**
@@ -29,12 +31,11 @@ class UserFactory extends Factory
         ];
     }
 
-    // TODO kpstya возможно нужно переделать afterCreating() на has()
-
-    public function withContact(): UserFactory
+    /**
+     * @param  array<string, int|string>  $state
+     */
+    public function withContact(array|callable $state = []): self
     {
-        return $this->afterCreating(
-            static fn (User $user): Contact => Contact::factory()->for($user)->create()
-        );
+        return $this->has(Contact::factory()->state($state));
     }
 }

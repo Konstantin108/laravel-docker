@@ -3,6 +3,7 @@
 namespace Tests\Feature\v1;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\TestWith;
 use Tests\TestCase;
@@ -105,22 +106,26 @@ class UserTest extends TestCase
     #[TestWith(['Иван', 1])]
     #[TestWith(['BK.RU', 2])]
     #[TestWith(['Василий', 0])]
+    #[TestWith(['@iva', 1])]
+    #[TestWith(['RESERve.', 3])]
     public function test_index_v1_with_search_param(string $search, int $resultCount): void
     {
-        // TODO kpstya переделать на использование sequence
+        $userStates = [
+            ['name' => 'Иван', 'email' => 'ivan@bk.ru'],
+            ['name' => 'Сергей', 'email' => 'sergey@gmail.com'],
+            ['name' => 'Кирилл', 'email' => 'kirill@bk.ru'],
+        ];
+        $contactStates = [
+            ['email' => 'ivan@reserve.ru', 'telegram' => '@ivan'],
+            ['email' => 'sergey@reserve.com', 'telegram' => '@ss17'],
+            ['email' => 'kirill@reserve.ru', 'telegram' => '@krevetko'],
+        ];
 
-        User::factory()->withContact()->create([
-            'name' => 'Иван',
-            'email' => 'ivan@bk.ru',
-        ]);
-        User::factory()->withContact()->create([
-            'name' => 'Сергей',
-            'email' => 'sergey@gmail.com',
-        ]);
-        User::factory()->withContact()->create([
-            'name' => 'Кирилл',
-            'email' => 'kirill@bk.ru',
-        ]);
+        User::factory()
+            ->count(count($userStates))
+            ->state(new Sequence(...$userStates))
+            ->withContact(new Sequence(...$contactStates))
+            ->create();
 
         $response = $this->getJson(route(self::INDEX_ROUTE, [
             'search' => $search,
