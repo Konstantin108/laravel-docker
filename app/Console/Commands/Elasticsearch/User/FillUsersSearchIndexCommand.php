@@ -33,6 +33,10 @@ final class FillUsersSearchIndexCommand extends Command
         return self::SUCCESS;
     }
 
+    /* TODO kpstya
+        наверно лучше получать и преобразовывать ответ в модели
+        (касается всех методов клиента) */
+
     /**
      * @param  array<string, int|string>  $result
      */

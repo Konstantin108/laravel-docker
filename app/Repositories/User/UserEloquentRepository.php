@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace App\Repositories\User;
 
 use App\Models\User;
+use App\Repositories\User\Contracts\UserRepositoryContract;
 use App\Repositories\User\Scopes\SearchScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class UserRepository
+class UserEloquentRepository implements UserRepositoryContract
 {
     /**
      * @return LengthAwarePaginator<int, User>

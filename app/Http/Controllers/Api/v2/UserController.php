@@ -28,7 +28,7 @@ class UserController extends Controller
         );
 
         $result = $searchService->findInSearchIndex($paginationRequestDto);
-        $searchResponse = $action->run($result);
+        $searchResponse = $action->handle($result);
 
         return IndexResource::collection($searchResponse->hits);
     }
