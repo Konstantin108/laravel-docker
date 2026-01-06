@@ -108,7 +108,7 @@
 - Format uncommitted changes according to Git
     - `vendor/bin/pint --dirty`
 - Inspect all files
-  - `vendor/bin/pint --test`
+    - `vendor/bin/pint --test`
 
 ### Rector
 - Dry Run

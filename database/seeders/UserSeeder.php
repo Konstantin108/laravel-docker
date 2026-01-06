@@ -13,11 +13,13 @@ class UserSeeder extends Seeder
     {
         $existingUsersCount = User::query()->count();
 
-        if ($existingUsersCount < self::USERS_COUNT) {
-            User::factory()
-                ->count(self::USERS_COUNT - $existingUsersCount)
-                ->withContact()
-                ->create();
+        if ($existingUsersCount >= self::USERS_COUNT) {
+            return;
         }
+
+        User::factory()
+            ->count(self::USERS_COUNT - $existingUsersCount)
+            ->withContact()
+            ->create();
     }
 }
