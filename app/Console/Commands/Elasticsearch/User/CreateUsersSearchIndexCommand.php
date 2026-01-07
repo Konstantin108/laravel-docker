@@ -16,7 +16,7 @@ final class CreateUsersSearchIndexCommand extends Command
     public function handle(UsersIndexElasticsearchService $service): int
     {
         $result = $service->createSearchIndex();
-        $this->info(json_encode($result));
+        $this->info(json_encode($result, JSON_PRETTY_PRINT));
 
         return self::SUCCESS;
     }

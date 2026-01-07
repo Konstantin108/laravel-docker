@@ -22,7 +22,7 @@ class CreateUsersSearchIndexTest extends TestCase
                 'acknowledged' => true,
                 'shards_acknowledged' => true,
                 'index' => 'users',
-            ]));
+            ], JSON_PRETTY_PRINT));
     }
 
     /**

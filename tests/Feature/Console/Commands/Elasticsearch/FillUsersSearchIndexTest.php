@@ -109,7 +109,7 @@ class FillUsersSearchIndexTest extends TestCase
         $limit = 2;
 
         $this->artisan(self::COMMAND, [
-            'limit:int' => $limit,
+            'limit' => $limit,
         ])
             ->assertSuccessful()
             ->expectsOutput(sprintf('total: %d', $limit));

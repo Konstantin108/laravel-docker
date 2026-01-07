@@ -25,7 +25,7 @@ class ClearUsersSearchIndexTest extends TestCase
 
         $this->artisan(self::COMMAND)
             ->assertSuccessful()
-            ->expectsOutputToContain(sprintf('"deleted":%d', $count));
+            ->expectsOutputToContain(sprintf('"deleted": %d', $count));
     }
 
     /**

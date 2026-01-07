@@ -6,8 +6,10 @@ use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\ElasticsearchClient;
 use App\Clients\Elasticsearch\ElasticsearchClientStub;
 use App\Factories\Contracts\SourceDtoFactoryContract;
+use App\Factories\ElasticsearchServiceFactory;
 use App\Repositories\User\Contracts\UserRepositoryContract;
 use App\Repositories\User\UserEloquentRepository;
+use App\Services\Elasticsearch\Abstract\ElasticsearchService;
 use App\Services\Elasticsearch\Dto\SettingsDto;
 use App\Services\Elasticsearch\SourceDtoCollectionService;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
@@ -46,6 +48,13 @@ class AppServiceProvider extends ServiceProvider
             return new SourceDtoCollectionService(...array_map(
                 static fn (string $className): SourceDtoFactoryContract => $app->make($className),
                 config('elasticsearch.source_dto_factories')
+            ));
+        });
+
+        $this->app->bind(ElasticsearchServiceFactory::class, static function (Application $app): ElasticsearchServiceFactory {
+            return new ElasticsearchServiceFactory(...array_map(
+                static fn (string $className): ElasticsearchService => $app->make($className),
+                config('elasticsearch.search_services')
             ));
         });
     }

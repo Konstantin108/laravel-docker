@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 class SourceDtoCollectionService
 {
     /**
-     * @var List<SourceDtoFactoryContract>
+     * @var array<string, SourceDtoFactoryContract>
      */
     private readonly array $factories;
 
@@ -31,11 +31,11 @@ class SourceDtoCollectionService
     {
         return new Collection(array_map(function (array $hit): SearchableSourceContract {
             $indexName = $hit['_index'];
-            if (! isset($this->factories[$indexName])) {
-                throw SearchIndexException::doesNotExist($indexName);
+            if (isset($this->factories[$indexName])) {
+                return $this->factories[$indexName]->createFromArray($hit['_source']);
             }
 
-            return $this->factories[$indexName]->createFromArray($hit['_source']);
+            throw SearchIndexException::doesNotExist($indexName);
         }, $hits));
     }
 }

@@ -20,7 +20,7 @@ class DeleteUsersSearchIndexTest extends TestCase
             ->assertSuccessful()
             ->expectsOutput(json_encode([
                 'acknowledged' => true,
-            ]));
+            ], JSON_PRETTY_PRINT));
     }
 
     /**

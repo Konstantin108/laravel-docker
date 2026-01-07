@@ -24,6 +24,10 @@ return [
     ],
 
     'model_services' => [
-        'users' => \app\Services\User\UserService::class,
+        'users' => \App\Services\User\UserService::class,
+    ],
+
+    'search_services' => [
+        'users' => \App\Services\Elasticsearch\UsersIndexElasticsearchService::class,
     ],
 ];
