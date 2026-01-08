@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Clients\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
-use App\Entities\User\Contracts\SearchableSourceContract;
+use App\Entities\Contracts\SearchableSourceContract;
 use App\Models\Contracts\SearchableContract;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use Faker\Factory;

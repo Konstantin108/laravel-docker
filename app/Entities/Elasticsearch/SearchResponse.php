@@ -6,7 +6,7 @@ namespace App\Entities\Elasticsearch;
 
 use App\Actions\Elasticsearch\Dto\SearchIndexHitsDto;
 use App\Actions\Elasticsearch\Dto\SearchIndexShardsDto;
-use App\Entities\User\Contracts\SearchableSourceContract;
+use App\Entities\Contracts\SearchableSourceContract;
 use Illuminate\Support\Collection;
 use Spatie\LaravelData\Data;
 

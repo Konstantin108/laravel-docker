@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Entities\User\Contracts;
+namespace App\Entities\Contracts;
 
 interface SearchableSourceContract
 {

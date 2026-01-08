@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Factories;
 
-use App\Entities\User\Contracts\SearchableSourceContract;
+use App\Entities\Contracts\SearchableSourceContract;
 use App\Entities\User\UserEnriched;
 use App\Factories\Contracts\SourceDtoFactoryContract;
 use Illuminate\Support\Carbon;

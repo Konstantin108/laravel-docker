@@ -5,10 +5,10 @@ namespace Tests\Feature\Console\Commands\Elasticsearch;
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
 use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
-use App\Events\Elasticsearch\UsersSearchIndexFilledEvent;
-use App\Jobs\SendUsersSearchIndexDataJob;
+use App\Events\Elasticsearch\SearchIndexFilledEvent;
+use App\Jobs\SendSearchIndexDataJob;
 use App\Listeners\NotifyAboutSearchIndexFilledListener;
-use App\Mail\UsersSearchIndexDataMail;
+use App\Mail\SearchIndexDataMail;
 use App\Models\Contracts\SearchableContract;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Mail\Mailer;
@@ -75,38 +75,38 @@ class FillSearchIndexTest extends SearchIndexCommandTest
             ->expectsOutput(sprintf('updated: %d', 0))
             ->expectsOutput(sprintf('total: %d', $count));
 
-        $events = Event::dispatched(UsersSearchIndexFilledEvent::class);
+        $events = Event::dispatched(SearchIndexFilledEvent::class);
         $this->assertCount(1, $events);
 
         $event = $events->first()[0];
         $this->assertNotNull($event);
         $this->assertSame($indexName, $event->indexName);
-        $this->assertCount($models->count(), $event->users);
+        $this->assertCount($models->count(), $event->items);
 
         // TODO kpstya как можно протестировать событие лога
 
         $this->listener->handle($event);
 
-        /** @var SendUsersSearchIndexDataJob $job */
-        $jobs = Queue::pushed(SendUsersSearchIndexDataJob::class);
+        /** @var SendSearchIndexDataJob $job */
+        $jobs = Queue::pushed(SendSearchIndexDataJob::class);
         $this->assertCount(1, $jobs);
 
         $job = $jobs->first();
         $this->assertNotNull($job);
         $this->assertSame($indexName, $job->indexName);
-        $this->assertCount($models->count(), $job->users);
+        $this->assertCount($models->count(), $job->items);
 
         $job->handle(app(Mailer::class));
 
-        $sentMails = Mail::sent(UsersSearchIndexDataMail::class);
+        $sentMails = Mail::sent(SearchIndexDataMail::class);
         $this->assertCount(1, $sentMails);
 
-        /** @var UsersSearchIndexDataMail $mail */
+        /** @var SearchIndexDataMail $mail */
         $mail = $sentMails->first();
         $this->assertNotNull($mail);
         $this->assertTrue($mail->hasTo('admin@test.ru'));
         $this->assertSame($indexName, $mail->indexName);
-        $this->assertSame($models->count(), $mail->usersCount);
+        $this->assertSame($models->count(), $mail->itemsCount);
     }
 
     #[DataProvider('indexNameProvider')]
@@ -133,9 +133,7 @@ class FillSearchIndexTest extends SearchIndexCommandTest
             ->assertSuccessful()
             ->expectsOutput('null');
 
-        // TODO kpstya избавиться от эвента для users
-
-        Event::assertNotDispatched(UsersSearchIndexFilledEvent::class);
+        Event::assertNotDispatched(SearchIndexFilledEvent::class);
     }
 
     /**

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entities\User;
 
-use App\Entities\User\Contracts\SearchableSourceContract;
+use App\Entities\Contracts\SearchableSourceContract;
 use Illuminate\Support\Carbon;
 use Spatie\LaravelData\Attributes\MapOutputName;
 use Spatie\LaravelData\Data;

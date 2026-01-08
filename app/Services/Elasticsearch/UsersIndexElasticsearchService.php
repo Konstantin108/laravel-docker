@@ -6,7 +6,7 @@ namespace App\Services\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Entities\User\UserEnriched;
-use App\Events\Elasticsearch\UsersSearchIndexFilledEvent;
+use App\Events\Elasticsearch\SearchIndexFilledEvent;
 use App\Services\Elasticsearch\Abstract\ElasticsearchService;
 use App\Services\User\UserService;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -113,13 +113,11 @@ class UsersIndexElasticsearchService extends ElasticsearchService
         ))
             ->implode('');
 
-        /* TODO kpstya
-            - на сколько правильно отправлять на почту эти данные
-            - возможно надо создать сервис, который будет преобразовывать данные в модель после их получения */
+        // TODO kpstya надо создать сервис, который будет преобразовывать данные в модель после их получения
 
         return tap(
             $this->client->bulkIndex($body, static::INDEX_NAME),
-            fn (): ?array => $this->dispatcher->dispatch(new UsersSearchIndexFilledEvent($users, static::INDEX_NAME))
+            fn (): ?array => $this->dispatcher->dispatch(new SearchIndexFilledEvent($users, static::INDEX_NAME))
         );
     }
 }
