@@ -21,12 +21,19 @@ final class CreateSearchIndexCommand extends Command implements PromptsForMissin
 
     protected $description = 'Создать индекс в Elasticsearch';
 
+    // TODO kpstya нужно добавить такую же проверку в остальных командах
+
     /**
      * @throws SearchIndexException
      */
     public function handle(ElasticsearchServiceFactory $factory): int
     {
-        $searchIndexEnum = SearchIndexEnum::from($this->argument('index_name'));
+        $indexName = $this->argument('index_name');
+
+        $searchIndexEnum = SearchIndexEnum::tryFrom($indexName);
+        if ($searchIndexEnum === null) {
+            throw SearchIndexException::doesNotExist($indexName);
+        }
 
         $result = $factory->make($searchIndexEnum->value)->createSearchIndex();
         $this->info(json_encode($result, JSON_PRETTY_PRINT));

@@ -11,6 +11,10 @@ use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+use function Laravel\Prompts\text;
 
 // TODO kpstya нужны тесты для этой команды
 
@@ -20,7 +24,7 @@ final class FillSearchIndexCommand extends Command implements PromptsForMissingI
 
     private const LIMIT = 1000;
 
-    protected $signature = 'app:elasticsearch:fill-index {index_name}';
+    protected $signature = 'app:elasticsearch:fill-index {index_name} {--limit=}';
 
     protected $description = 'Заполнить документами индекс в Elasticsearch';
 
@@ -31,11 +35,11 @@ final class FillSearchIndexCommand extends Command implements PromptsForMissingI
     {
         $searchIndexEnum = SearchIndexEnum::from($this->argument('index_name'));
 
-        // TODO kpstya передавать в команду limit
+        $limit = $this->option('limit') !== null
+            ? (int) $this->option('limit')
+            : self::LIMIT;
 
-        // TODO kpstya к fn надо добавить static
-
-        $result = $factory->make($searchIndexEnum->value)->fillSearchIndex(self::LIMIT);
+        $result = $factory->make($searchIndexEnum->value)->fillSearchIndex($limit);
 
         $result !== null
             ? $this->formattedOutput($result, $searchIndexEnum->value)
@@ -44,6 +48,11 @@ final class FillSearchIndexCommand extends Command implements PromptsForMissingI
         $logger->info(json_encode($result, JSON_PRETTY_PRINT));
 
         return self::SUCCESS;
+    }
+
+    protected function afterPromptingForMissingArguments(InputInterface $input, OutputInterface $output): void
+    {
+        $input->setOption('limit', text('Указать лимит отправялемых записей?'));
     }
 
     /**
