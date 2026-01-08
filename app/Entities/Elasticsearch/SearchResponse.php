@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Entities\Elasticsearch;
 
+use App\Actions\Elasticsearch\Dto\SearchIndexHitsDto;
+use App\Actions\Elasticsearch\Dto\SearchIndexShardsDto;
 use App\Entities\User\Contracts\SearchableSourceContract;
-use App\Services\Elasticsearch\Dto\SearchIndexHitsDto;
-use App\Services\Elasticsearch\Dto\SearchIndexShardsDto;
 use Illuminate\Support\Collection;
 use Spatie\LaravelData\Data;
 

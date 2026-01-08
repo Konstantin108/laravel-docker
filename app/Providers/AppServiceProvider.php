@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
+use App\Clients\Elasticsearch\Dto\SettingsDto;
 use App\Clients\Elasticsearch\ElasticsearchClient;
 use App\Clients\Elasticsearch\ElasticsearchClientStub;
 use App\Factories\Contracts\SourceDtoFactoryContract;
@@ -10,7 +11,6 @@ use App\Factories\ElasticsearchServiceFactory;
 use App\Repositories\User\Contracts\UserRepositoryContract;
 use App\Repositories\User\UserEloquentRepository;
 use App\Services\Elasticsearch\Abstract\ElasticsearchService;
-use App\Services\Elasticsearch\Dto\SettingsDto;
 use App\Services\Elasticsearch\SourceDtoCollectionService;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Database\Events\QueryExecuted;

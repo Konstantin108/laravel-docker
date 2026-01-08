@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\v2;
 
-use App\Actions\SearchResponseTransformAction;
+use App\Actions\Elasticsearch\SearchResponseTransformAction;
 use App\Http\Requests\v2\User\IndexRequest;
 use App\Http\Resources\User\IndexResource;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;

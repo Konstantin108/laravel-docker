@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Clients\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
+use App\Clients\Elasticsearch\Dto\SettingsDto;
 use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
-use App\Services\Elasticsearch\Dto\SettingsDto;
 use GuzzleHttp\Psr7\Utils;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
