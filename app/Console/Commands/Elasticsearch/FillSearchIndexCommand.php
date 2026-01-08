@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Console\Commands\Elasticsearch;
 
 use App\Console\Commands\Elasticsearch\Concerns\PromptForSearchIndexTrait;
+use App\Console\Commands\Elasticsearch\Entities\SearchIndexResolver;
 use App\Factories\ElasticsearchServiceFactory;
-use App\Services\Elasticsearch\Enums\SearchIndexEnum;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
@@ -31,9 +31,12 @@ final class FillSearchIndexCommand extends Command implements PromptsForMissingI
     /**
      * @throws SearchIndexException
      */
-    public function handle(ElasticsearchServiceFactory $factory, LoggerInterface $logger): int
-    {
-        $searchIndexEnum = SearchIndexEnum::from($this->argument('index_name'));
+    public function handle(
+        ElasticsearchServiceFactory $factory,
+        SearchIndexResolver $resolver,
+        LoggerInterface $logger
+    ): int {
+        $searchIndexEnum = $resolver->fromString($this->argument('index_name'));
 
         $limit = $this->option('limit') !== null
             ? (int) $this->option('limit')

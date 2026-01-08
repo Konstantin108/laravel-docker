@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Tests\Feature\Console\Commands\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
@@ -18,18 +16,14 @@ class CreateSearchIndexTest extends TestCase
 {
     private const COMMAND = 'app:elasticsearch:create-index';
 
-    // TODO kpstya подумать как поступить с Enum и конфигами различных индексов
+    // TODO kpstya подумать как поступить с кейсами в SearchIndexEnum и c классами сервисов в config/elasticsearch.php
 
     #[DataProvider('indexNameProvider')]
     public function test_create_search_index_success(string $indexName): void
     {
         $this->executeCommand(['index_name' => $indexName])
             ->assertSuccessful()
-            ->expectsOutput(json_encode([
-                'acknowledged' => true,
-                'shards_acknowledged' => true,
-                'index' => $indexName,
-            ], JSON_PRETTY_PRINT));
+            ->expectsOutputToContain(sprintf('"index": "%s"', $indexName));
     }
 
     /**

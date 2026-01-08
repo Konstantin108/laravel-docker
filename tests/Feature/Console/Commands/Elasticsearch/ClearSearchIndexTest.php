@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Tests\Feature\Console\Commands\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
@@ -12,11 +10,11 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use ReflectionException;
 use Tests\TestCase;
 
-class ClearUsersSearchIndexTest extends TestCase
+class ClearSearchIndexTest extends TestCase
 {
     use RefreshDatabase;
 
-    private const COMMAND = 'app:search:clear-users-search-index';
+    private const COMMAND = 'app:elasticsearch:clear-index';
 
     public function test_clear_users_search_index_success(): void
     {

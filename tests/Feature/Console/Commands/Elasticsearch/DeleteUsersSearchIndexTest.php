@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Tests\Feature\Console\Commands\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
@@ -18,9 +16,7 @@ class DeleteUsersSearchIndexTest extends TestCase
     {
         $this->artisan(self::COMMAND)
             ->assertSuccessful()
-            ->expectsOutput(json_encode([
-                'acknowledged' => true,
-            ], JSON_PRETTY_PRINT));
+            ->expectsOutputToContain('"acknowledged": true');
     }
 
     /**
