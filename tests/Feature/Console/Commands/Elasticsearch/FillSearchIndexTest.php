@@ -5,7 +5,7 @@ namespace Tests\Feature\Console\Commands\Elasticsearch;
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
 use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
-use App\Events\Search\UsersSearchIndexFilledEvent;
+use App\Events\Elasticsearch\UsersSearchIndexFilledEvent;
 use App\Jobs\SendUsersSearchIndexDataJob;
 use App\Listeners\NotifyAboutSearchIndexFilledListener;
 use App\Mail\UsersSearchIndexDataMail;
@@ -82,6 +82,8 @@ class FillSearchIndexTest extends SearchIndexCommandTest
         $this->assertNotNull($event);
         $this->assertSame($indexName, $event->indexName);
         $this->assertCount($models->count(), $event->users);
+
+        // TODO kpstya как можно протестировать событие лога
 
         $this->listener->handle($event);
 

@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Events\Search\UsersSearchIndexFilledEvent;
+use App\Events\Elasticsearch\UsersSearchIndexFilledEvent;
 use App\Listeners\NotifyAboutSearchIndexFilledListener;
 use Carbon\Laravel\ServiceProvider;
 

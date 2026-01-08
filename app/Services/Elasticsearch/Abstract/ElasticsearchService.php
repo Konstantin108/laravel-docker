@@ -10,14 +10,12 @@ namespace App\Services\Elasticsearch\Abstract;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Services\Elasticsearch\Dto\PaginationRequestDto;
-use App\Services\User\UserService;
 use stdClass;
 
 abstract class ElasticsearchService
 {
     public function __construct(
-        protected ElasticsearchClientContract $client,
-        protected UserService $userService
+        protected ElasticsearchClientContract $client
     ) {}
 
     abstract protected function indexName(): string;

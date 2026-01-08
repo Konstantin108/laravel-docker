@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Listeners;
 
-use App\Events\Search\UsersSearchIndexFilledEvent;
+use App\Events\Elasticsearch\UsersSearchIndexFilledEvent;
 use App\Jobs\SendUsersSearchIndexDataJob;
 
 final readonly class NotifyAboutSearchIndexFilledListener
 {
+    // TODO kpstya это наверное тоже можно отдельно проверить
+
     public function handle(UsersSearchIndexFilledEvent $event): void
     {
         SendUsersSearchIndexDataJob::dispatchIf(
