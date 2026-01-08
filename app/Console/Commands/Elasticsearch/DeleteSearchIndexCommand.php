@@ -11,8 +11,6 @@ use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
 
-// TODO kpstya нужны тесты для этой команды
-
 final class DeleteSearchIndexCommand extends Command implements PromptsForMissingInput
 {
     use PromptForSearchIndexTrait;

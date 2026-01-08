@@ -5,23 +5,28 @@ namespace Tests\Feature\Console\Commands\Elasticsearch;
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
 use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
-use App\Models\User;
+use App\Models\Contracts\SearchableContract;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionException;
-use Tests\TestCase;
+use Tests\Feature\Console\Commands\Elasticsearch\Abstract\SearchIndexCommandTest;
 
-class ClearSearchIndexTest extends TestCase
+class ClearSearchIndexTest extends SearchIndexCommandTest
 {
     use RefreshDatabase;
 
     private const COMMAND = 'app:elasticsearch:clear-index';
 
-    public function test_clear_users_search_index_success(): void
+    #[DataProvider('indexNameProvider')]
+    public function test_clear_search_index_success(string $indexName): void
     {
-        $count = 2;
-        User::factory()->count($count)->create();
+        /** @var SearchableContract $modelName */
+        $modelName = config('elasticsearch.search_index_models.'.$indexName);
 
-        $this->artisan(self::COMMAND)
+        $count = 2;
+        $modelName::factory()->count($count)->create();
+
+        $this->executeCommand(['index_name' => $indexName])
             ->assertSuccessful()
             ->expectsOutputToContain(sprintf('"deleted": %d', $count));
     }
@@ -29,7 +34,8 @@ class ClearSearchIndexTest extends TestCase
     /**
      * @throws ReflectionException
      */
-    public function test_clear_users_search_index_failed(): void
+    #[DataProvider('indexNameProvider')]
+    public function test_clear_search_index_failed(string $indexName): void
     {
         $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
             return new ElasticsearchClientErrorStub;
@@ -38,6 +44,22 @@ class ClearSearchIndexTest extends TestCase
         $this->expectException(ElasticsearchApiException::class);
         $this->expectExceptionMessage('Index clearing error.');
 
-        $this->artisan(self::COMMAND);
+        $this->executeCommand(['index_name' => $indexName]);
+    }
+
+    public function test_invalid_search_index_name(): void
+    {
+        $this->exceptInvalidSearchIndexName('usdrs');
+    }
+
+    #[DataProvider('indexNameProvider')]
+    public function test_expects_questions(string $indexName): void
+    {
+        $this->expectsPrompts($indexName);
+    }
+
+    protected function command(): string
+    {
+        return self::COMMAND;
     }
 }

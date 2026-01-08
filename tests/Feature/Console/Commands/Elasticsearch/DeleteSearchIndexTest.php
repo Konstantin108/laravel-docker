@@ -9,32 +9,30 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionException;
 use Tests\Feature\Console\Commands\Elasticsearch\Abstract\SearchIndexCommandTest;
 
-class CreateSearchIndexTest extends SearchIndexCommandTest
+class DeleteSearchIndexTest extends SearchIndexCommandTest
 {
-    private const COMMAND = 'app:elasticsearch:create-index';
-
-    // TODO kpstya подумать как поступить с кейсами в SearchIndexEnum и c классами сервисов в config/elasticsearch.php
+    private const COMMAND = 'app:elasticsearch:delete-index';
 
     #[DataProvider('indexNameProvider')]
-    public function test_create_search_index_success(string $indexName): void
+    public function test_delete_search_index_success(string $indexName): void
     {
         $this->executeCommand(['index_name' => $indexName])
             ->assertSuccessful()
-            ->expectsOutputToContain(sprintf('"index": "%s"', $indexName));
+            ->expectsOutputToContain('"acknowledged": true');
     }
 
     /**
      * @throws ReflectionException
      */
     #[DataProvider('indexNameProvider')]
-    public function test_create_search_index_failed(string $indexName): void
+    public function test_delete_search_index_failed(string $indexName): void
     {
         $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
             return new ElasticsearchClientErrorStub;
         });
 
         $this->expectException(ElasticsearchApiException::class);
-        $this->expectExceptionMessage('An error occurred while creating the index.');
+        $this->expectExceptionMessage('Index deleting error.');
 
         $this->executeCommand(['index_name' => $indexName]);
     }
