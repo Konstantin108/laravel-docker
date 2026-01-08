@@ -16,7 +16,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use function Laravel\Prompts\text;
 
-// TODO kpstya нужны тесты для этой команды
+/* TODO kpstya
+    - наверное лучше получать и преобразовывать ответ в модели (касается всех методов клиента)
+    - возможно заполнение индекса должно быть асинхронным и никаких таблиц в терминале делать не нужно */
 
 final class FillSearchIndexCommand extends Command implements PromptsForMissingInput
 {

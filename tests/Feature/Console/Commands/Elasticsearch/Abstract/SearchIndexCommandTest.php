@@ -34,15 +34,14 @@ abstract class SearchIndexCommandTest extends TestCase
         $this->executeCommand(['index_name' => $indexName]);
     }
 
-    protected function expectsPrompts(string $indexName): void
+    protected function expectsPrompts(string $indexName): PendingCommand
     {
-        $this->executeCommand()
+        return $this->executeCommand()
             ->expectsChoice(
                 'Имя индекса в Elasticsearch',
                 $indexName,
                 array_column(SearchIndexEnum::cases(), 'value')
-            )
-            ->assertSuccessful();
+            );
     }
 
     /**

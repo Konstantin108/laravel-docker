@@ -45,7 +45,7 @@ class DeleteSearchIndexTest extends SearchIndexCommandTest
     #[DataProvider('indexNameProvider')]
     public function test_expects_questions(string $indexName): void
     {
-        $this->expectsPrompts($indexName);
+        $this->expectsPrompts($indexName)->assertSuccessful();
     }
 
     protected function command(): string
