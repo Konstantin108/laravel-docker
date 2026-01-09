@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Jobs;
 
-use App\Entities\Contracts\SearchableSourceContract;
 use App\Mail\SearchIndexDataMail;
+use App\Services\Contracts\SearchableSourceContract;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Contracts\Queue\ShouldQueue;

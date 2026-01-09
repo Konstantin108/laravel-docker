@@ -6,7 +6,7 @@ namespace App\Actions\Elasticsearch;
 
 use App\Actions\Elasticsearch\Dto\SearchIndexHitsDto;
 use App\Actions\Elasticsearch\Dto\SearchIndexShardsDto;
-use App\Entities\Elasticsearch\SearchResponse;
+use App\Actions\Elasticsearch\Entities\SearchResponse;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use App\Services\Elasticsearch\SourceDtoCollectionService;
 

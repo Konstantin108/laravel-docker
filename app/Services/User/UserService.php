@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Services\User;
 
-use App\Entities\User\UserEnriched;
 use App\Models\User;
 use App\Repositories\User\Contracts\UserRepositoryContract;
 use App\Services\Elasticsearch\Dto\PaginationRequestDto;
 use App\Services\Elasticsearch\PaginationService;
 use App\Services\User\Dto\IndexDto;
+use App\Services\User\Entities\UserEnriched;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 

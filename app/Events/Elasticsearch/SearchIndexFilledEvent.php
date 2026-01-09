@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Events\Elasticsearch;
 
-use App\Entities\Contracts\SearchableSourceContract;
+use App\Services\Contracts\SearchableSourceContract;
 use Illuminate\Support\Collection;
 
 final readonly class SearchIndexFilledEvent

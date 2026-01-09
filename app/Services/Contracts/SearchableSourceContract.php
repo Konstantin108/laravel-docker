@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Entities\Contracts;
+namespace App\Services\Contracts;
 
 interface SearchableSourceContract
 {
     public function getId(): int;
+
+    // TODO kpstya - products, product_categories - добавить таблицы и эндпоинты v1 и v2
 
     /**
      * @return array<string, mixed>

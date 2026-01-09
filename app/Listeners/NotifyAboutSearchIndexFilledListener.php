@@ -9,8 +9,6 @@ use App\Jobs\SendSearchIndexDataJob;
 
 final readonly class NotifyAboutSearchIndexFilledListener
 {
-    // TODO kpstya это наверное тоже можно отдельно проверить
-
     public function handle(SearchIndexFilledEvent $event): void
     {
         SendSearchIndexDataJob::dispatchIf(

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Entities\User;
+namespace App\Services\User\Entities;
 
-use App\Entities\Contracts\SearchableSourceContract;
+use App\Services\Contracts\SearchableSourceContract;
 use Illuminate\Support\Carbon;
 use Spatie\LaravelData\Attributes\MapOutputName;
 use Spatie\LaravelData\Data;

@@ -13,8 +13,11 @@ use App\Models\Contracts\SearchableContract;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Mail\Mailer;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
+use Mockery\Expectation;
+use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -29,6 +32,8 @@ class FillSearchIndexTest extends SearchIndexCommandTest
 
     private NotifyAboutSearchIndexFilledListener $listener;
 
+    private MockInterface $logger;
+
     /**
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
@@ -41,6 +46,7 @@ class FillSearchIndexTest extends SearchIndexCommandTest
         Queue::fake();
         Mail::fake();
         $this->listener = $this->app->get(NotifyAboutSearchIndexFilledListener::class);
+        $this->logger = Log::spy();
     }
 
     #[DataProvider('indexNameProvider')]
@@ -83,8 +89,6 @@ class FillSearchIndexTest extends SearchIndexCommandTest
         $this->assertSame($indexName, $event->indexName);
         $this->assertCount($models->count(), $event->items);
 
-        // TODO kpstya как можно протестировать событие лога
-
         $this->listener->handle($event);
 
         /** @var SendSearchIndexDataJob $job */
@@ -107,6 +111,16 @@ class FillSearchIndexTest extends SearchIndexCommandTest
         $this->assertTrue($mail->hasTo('admin@test.ru'));
         $this->assertSame($indexName, $mail->indexName);
         $this->assertSame($models->count(), $mail->itemsCount);
+    }
+
+    #[DataProvider('indexNameProvider')]
+    public function test_command_logs_result(string $indexName): void
+    {
+        $this->executeCommand(['index_name' => $indexName]);
+
+        /** @var Expectation $expectation */
+        $expectation = $this->logger->shouldHaveReceived('info');
+        $expectation->once();
     }
 
     #[DataProvider('indexNameProvider')]

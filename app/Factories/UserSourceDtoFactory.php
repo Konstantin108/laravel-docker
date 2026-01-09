@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Factories;
 
-use App\Entities\Contracts\SearchableSourceContract;
-use App\Entities\User\UserEnriched;
 use App\Factories\Contracts\SourceDtoFactoryContract;
+use App\Services\Contracts\SearchableSourceContract;
+use App\Services\User\Entities\UserEnriched;
 use Illuminate\Support\Carbon;
 
 class UserSourceDtoFactory implements SourceDtoFactoryContract

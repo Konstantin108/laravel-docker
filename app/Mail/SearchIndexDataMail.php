@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Mail;
 
-use App\Entities\Contracts\SearchableSourceContract;
+use App\Services\Contracts\SearchableSourceContract;
 use Illuminate\Mail\Mailable;
 use Illuminate\Support\Collection;
 

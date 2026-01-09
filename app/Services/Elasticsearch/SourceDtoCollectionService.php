@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\Elasticsearch;
 
-use App\Entities\Contracts\SearchableSourceContract;
 use App\Factories\Contracts\SourceDtoFactoryContract;
+use App\Services\Contracts\SearchableSourceContract;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use Illuminate\Support\Collection;
 

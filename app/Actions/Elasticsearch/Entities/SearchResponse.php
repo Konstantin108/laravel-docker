@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Entities\Elasticsearch;
+namespace App\Actions\Elasticsearch\Entities;
 
 use App\Actions\Elasticsearch\Dto\SearchIndexHitsDto;
 use App\Actions\Elasticsearch\Dto\SearchIndexShardsDto;
-use App\Entities\Contracts\SearchableSourceContract;
+use App\Services\Contracts\SearchableSourceContract;
 use Illuminate\Support\Collection;
 use Spatie\LaravelData\Data;
 

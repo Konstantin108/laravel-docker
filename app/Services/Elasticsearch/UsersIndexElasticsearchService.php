@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Services\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
-use App\Entities\User\UserEnriched;
 use App\Events\Elasticsearch\SearchIndexFilledEvent;
 use App\Services\Elasticsearch\Abstract\ElasticsearchService;
+use App\Services\User\Entities\UserEnriched;
 use App\Services\User\UserService;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\HigherOrderTapProxy;

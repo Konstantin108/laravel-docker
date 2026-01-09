@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Jobs;
 
-use App\Entities\Contracts\SearchableSourceContract;
 use App\Jobs\SendSearchIndexDataJob;
 use App\Mail\SearchIndexDataMail;
+use App\Services\Contracts\SearchableSourceContract;
 use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Mail\Mailable;
 use Illuminate\Support\Collection;
