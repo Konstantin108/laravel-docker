@@ -18,7 +18,7 @@ class BulkIndexResultFactory
         return new BulkIndexResult(
             took: $data['took'],
             errors: $data['errors'],
-            items: (new Collection($data['items']))
+            items: new Collection($data['items'])
                 ->map(static fn (array $item): BulkIndexItem => BulkIndexItem::fromArray($item['index']))
         );
     }
