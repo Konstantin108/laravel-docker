@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-// TODO kpstya проверить работу поиска в elasticsearch
-
 namespace App\Services\Elasticsearch\Abstract;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;

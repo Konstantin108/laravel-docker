@@ -10,8 +10,6 @@ use App\Services\User\UserService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
 
-// TODO kpstya получится ли использовать абстракцию в DI
-
 class UserController extends Controller
 {
     public function index(

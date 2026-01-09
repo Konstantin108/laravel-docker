@@ -15,8 +15,6 @@ final class DeleteSearchIndexCommand extends Command implements PromptsForMissin
 {
     use PromptForSearchIndexTrait;
 
-    // TODO kpstya разобраться с поиском в elasticsearch, там нужно подкидывать класс расширяющий абстракцию
-
     protected $signature = 'app:elasticsearch:delete-index {index_name}';
 
     protected $description = 'Удалить индекс в Elasticsearch';
