@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace App\Services\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
-use App\Entities\User\UserEnriched;
-use App\Events\Search\UsersSearchIndexFilledEvent;
+use App\Events\Elasticsearch\SearchIndexFilledEvent;
+use App\Factories\BulkIndexResultFactory;
 use App\Services\Elasticsearch\Abstract\ElasticsearchService;
+use App\Services\Elasticsearch\Entities\BulkIndexResult;
+use App\Services\User\Entities\UserEnriched;
 use App\Services\User\UserService;
-use Illuminate\Support\HigherOrderTapProxy;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class UsersIndexElasticsearchService extends ElasticsearchService
 {
@@ -17,9 +19,11 @@ class UsersIndexElasticsearchService extends ElasticsearchService
 
     public function __construct(
         protected ElasticsearchClientContract $client,
-        protected UserService $userService,
+        private readonly Dispatcher $dispatcher,
+        private readonly UserService $userService,
+        private readonly BulkIndexResultFactory $bulkIndexResultFactory,
     ) {
-        parent::__construct($client, $userService);
+        parent::__construct($client);
     }
 
     protected function indexName(): string
@@ -95,10 +99,7 @@ class UsersIndexElasticsearchService extends ElasticsearchService
         ];
     }
 
-    /**
-     * @return HigherOrderTapProxy|array<string, mixed>|null
-     */
-    public function fillSearchIndex(?int $count = null): HigherOrderTapProxy|array|null
+    public function fillSearchIndex(?int $count = null): ?BulkIndexResult
     {
         $users = $this->userService->getUsers($count);
         if ($users->isEmpty()) {
@@ -111,13 +112,11 @@ class UsersIndexElasticsearchService extends ElasticsearchService
         ))
             ->implode('');
 
-        /* TODO kpstya
-            - на сколько правильно отправлять на почту эти данные
-            - возможно надо создать сервис, который будет преобразовывать данные в модель после их получения */
+        $result = $this->client->bulkIndex($body, static::INDEX_NAME);
 
         return tap(
-            $this->client->bulkIndex($body, static::INDEX_NAME),
-            static fn (): ?array => UsersSearchIndexFilledEvent::dispatch($users, static::INDEX_NAME)
+            $this->bulkIndexResultFactory->createFromArray($result),
+            fn (): ?array => $this->dispatcher->dispatch(new SearchIndexFilledEvent($users, static::INDEX_NAME))
         );
     }
 }

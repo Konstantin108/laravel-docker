@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Listeners;
 
-use App\Events\Search\UsersSearchIndexFilledEvent;
-use App\Jobs\SendUsersSearchIndexDataJob;
+use App\Events\Elasticsearch\SearchIndexFilledEvent;
+use App\Jobs\SendSearchIndexDataJob;
 
 final readonly class NotifyAboutSearchIndexFilledListener
 {
-    public function handle(UsersSearchIndexFilledEvent $event): void
+    public function handle(SearchIndexFilledEvent $event): void
     {
-        SendUsersSearchIndexDataJob::dispatchIf(
+        SendSearchIndexDataJob::dispatchIf(
             config('elasticsearch.send_report_to_email'),
-            $event->users,
+            $event->items,
             $event->indexName
         );
     }

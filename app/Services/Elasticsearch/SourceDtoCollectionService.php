@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Services\Elasticsearch;
 
-use App\Entities\User\Contracts\SearchableSourceContract;
 use App\Factories\Contracts\SourceDtoFactoryContract;
+use App\Services\Contracts\SearchableSourceContract;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use Illuminate\Support\Collection;
 
 class SourceDtoCollectionService
 {
     /**
-     * @var List<SourceDtoFactoryContract>
+     * @var array<string, SourceDtoFactoryContract>
      */
     private readonly array $factories;
 
@@ -24,18 +24,16 @@ class SourceDtoCollectionService
     /**
      * @param  array<string, mixed>  $hits
      * @return Collection<string, SearchableSourceContract>
-     *
-     * @throws SearchIndexException
      */
     public function execute(array $hits): Collection
     {
-        return new Collection(array_map(function (array $hit): SearchableSourceContract {
+        return (new Collection($hits))->map(function (array $hit): SearchableSourceContract {
             $indexName = $hit['_index'];
-            if (! isset($this->factories[$indexName])) {
-                throw SearchIndexException::doesNotExist($indexName);
+            if (isset($this->factories[$indexName])) {
+                return $this->factories[$indexName]->createFromArray($hit['_source']);
             }
 
-            return $this->factories[$indexName]->createFromArray($hit['_source']);
-        }, $hits));
+            throw SearchIndexException::doesNotExist($indexName);
+        });
     }
 }

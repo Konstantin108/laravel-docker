@@ -2,29 +2,18 @@
 
 declare(strict_types=1);
 
-/* TODO kpstya
-    - создать класс, в котором будут общие методы для всех реализаций ElasticsearchService
-    - создать интерфейс, который будут реализовывать все эти классы
-    - создать фабрику
-    - биндить в AppServiceProvider::register() как SourceDtoCollectionService
-    - передавать в команды аргументом имя индекса в Elasticsearch
-    - надо доабвить опции для команд, соответственно переименовать команды
-    - доработать тесты, так же с учетом неверного имени индекса
-    - возможно эвенты и слушатели тоже надо будет сделать универсальными
-    - удалить абстрактный класс */
+// TODO kpstya проверить работу поиска в elasticsearch
 
 namespace App\Services\Elasticsearch\Abstract;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Services\Elasticsearch\Dto\PaginationRequestDto;
-use App\Services\User\UserService;
 use stdClass;
 
 abstract class ElasticsearchService
 {
     public function __construct(
-        protected ElasticsearchClientContract $client,
-        protected UserService $userService
+        protected ElasticsearchClientContract $client
     ) {}
 
     abstract protected function indexName(): string;
@@ -39,7 +28,7 @@ abstract class ElasticsearchService
      */
     abstract protected function multiMatchFieldsSettings(): array;
 
-    abstract public function fillSearchIndex(): mixed;
+    abstract public function fillSearchIndex(?int $count = null): mixed;
 
     /**
      * @return array<string, mixed>

@@ -1,0 +1,36 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Console\Commands\Elasticsearch;
+
+use App\Console\Commands\Elasticsearch\Concerns\PromptForSearchIndexTrait;
+use App\Console\Commands\Elasticsearch\Entities\SearchIndexResolver;
+use App\Factories\ElasticsearchServiceFactory;
+use App\Services\Elasticsearch\Exceptions\SearchIndexException;
+use Illuminate\Console\Command;
+use Illuminate\Contracts\Console\PromptsForMissingInput;
+
+final class DeleteSearchIndexCommand extends Command implements PromptsForMissingInput
+{
+    use PromptForSearchIndexTrait;
+
+    // TODO kpstya разобраться с поиском в elasticsearch, там нужно подкидывать класс расширяющий абстракцию
+
+    protected $signature = 'app:elasticsearch:delete-index {index_name}';
+
+    protected $description = 'Удалить индекс в Elasticsearch';
+
+    /**
+     * @throws SearchIndexException
+     */
+    public function handle(ElasticsearchServiceFactory $factory, SearchIndexResolver $resolver): int
+    {
+        $searchIndexEnum = $resolver->fromString($this->argument('index_name'));
+
+        $result = $factory->make($searchIndexEnum->value)->deleteSearchIndex();
+        $this->info(json_encode($result, JSON_PRETTY_PRINT));
+
+        return self::SUCCESS;
+    }
+}
