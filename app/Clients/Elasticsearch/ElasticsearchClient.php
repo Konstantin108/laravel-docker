@@ -73,10 +73,6 @@ class ElasticsearchClient implements ElasticsearchClientContract
      */
     public function search(array $body, string $indexName): array
     {
-        // TODO kpstya результат надо будет преобразовывать модели
-
-        // TODO kpstya проверка
-
         return $this->execute(fn (): Response => $this->baseHttpRequest()
             ->post($indexName.'/_search', $body)
         );

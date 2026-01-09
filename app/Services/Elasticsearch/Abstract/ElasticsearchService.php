@@ -2,18 +2,19 @@
 
 declare(strict_types=1);
 
-// TODO kpstya проверить работу поиска в elasticsearch
-
 namespace App\Services\Elasticsearch\Abstract;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
+use App\Factories\SearchResultFactory;
 use App\Services\Elasticsearch\Dto\PaginationRequestDto;
+use App\Services\Elasticsearch\Entities\SearchResult;
 use stdClass;
 
 abstract class ElasticsearchService
 {
     public function __construct(
-        protected ElasticsearchClientContract $client
+        protected ElasticsearchClientContract $client,
+        protected SearchResultFactory $searchResultFactory,
     ) {}
 
     abstract protected function indexName(): string;
@@ -46,16 +47,15 @@ abstract class ElasticsearchService
         return $this->client->deleteIndex($this->indexName());
     }
 
-    /**
-     * @return array<string, mixed>
-     */
-    final public function findInSearchIndex(PaginationRequestDto $requestDto): array
+    final public function findInSearchIndex(PaginationRequestDto $requestDto): SearchResult
     {
         $body = $requestDto->search !== null && mb_strlen($requestDto->search) > 2
             ? $this->searchMultiMatch($requestDto)
             : $this->searchMatchAll($requestDto);
 
-        return $this->client->search($body, $this->indexName());
+        $result = $this->client->search($body, $this->indexName());
+
+        return $this->searchResultFactory->createFromArray($result);
     }
 
     /**
