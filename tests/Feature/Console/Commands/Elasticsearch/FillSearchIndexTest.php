@@ -62,6 +62,7 @@ class FillSearchIndexTest extends SearchIndexCommandTest
             $model->id,
             --$model->id,
             '_doc',
+            $indexName,
             1,
             'created',
             1,
@@ -71,7 +72,7 @@ class FillSearchIndexTest extends SearchIndexCommandTest
         $this->executeCommand(['index_name' => $indexName])
             ->assertSuccessful()
             ->expectsTable(
-                ['_id', '_seq_no', '_type', '_version', 'result', '_primary_term', 'status'],
+                ['_id', '_seq_no', '_type', '_index', '_version', 'result', '_primary_term', 'status'],
                 $expectedRows
             )
             ->expectsOutput(sprintf('index: %s', $indexName))

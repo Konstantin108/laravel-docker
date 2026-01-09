@@ -7,6 +7,8 @@ namespace App\Console\Commands\Elasticsearch;
 use App\Console\Commands\Elasticsearch\Concerns\PromptForSearchIndexTrait;
 use App\Console\Commands\Elasticsearch\Entities\SearchIndexResolver;
 use App\Factories\ElasticsearchServiceFactory;
+use App\Services\Elasticsearch\Entities\BulkIndexItem;
+use App\Services\Elasticsearch\Entities\BulkIndexResult;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
@@ -15,8 +17,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use function Laravel\Prompts\text;
-
-// TODO kpstya таблицу нужно будет создавать из класса BulkIndexResult
 
 final class FillSearchIndexCommand extends Command implements PromptsForMissingInput
 {
@@ -45,7 +45,7 @@ final class FillSearchIndexCommand extends Command implements PromptsForMissingI
         $result = $factory->make($searchIndexEnum->value)->fillSearchIndex($limit);
 
         $result !== null
-            ? $this->formattedOutput($result, $searchIndexEnum->value)
+            ? $this->formattedOutput($result)
             : $this->info(json_encode($result, JSON_PRETTY_PRINT));
 
         $logger->info(json_encode($result, JSON_PRETTY_PRINT));
@@ -58,38 +58,36 @@ final class FillSearchIndexCommand extends Command implements PromptsForMissingI
         $input->setOption('limit', text('Указать лимит отправялемых записей?'));
     }
 
-    /**
-     * @param  array<string, int|string>  $result
-     */
-    private function formattedOutput(array $result, string $indexName): void
+    private function formattedOutput(BulkIndexResult $result): void
     {
-        /** @var array<int, array<string, array<string, string|int|array<string, string|int>>>> $items */
-        $items = $result['items'];
-        $columnNames = ['_id', '_seq_no', '_type', '_version', 'result', '_primary_term', 'status'];
+        $item = $result->items->first();
 
-        $rows = array_map(static function (array $item) use ($columnNames): array {
-            return array_map(
-                static fn (string $columnName): int|string => $item['index'][$columnName],
-                $columnNames
-            );
-        }, $items);
+        $columnNames = array_keys($item->toArray());
+        $rows = $result->items->map(static fn (BulkIndexItem $item): array => [
+            $item->id,
+            $item->seqNumber,
+            $item->type,
+            $item->index,
+            $item->version,
+            $item->result,
+            $item->primaryTerm,
+            $item->status,
+        ]);
 
-        $createdDocsCount = $updatedDocsCount = 0;
-        foreach ($items as $item) {
-            if ($item['index']['status'] === 201) {
-                $createdDocsCount++;
-            }
-            if ($item['index']['status'] === 200) {
-                $updatedDocsCount++;
-            }
-        }
+        $createdDocsCount = $result->items
+            ->where(static fn (BulkIndexItem $item): bool => $item->isCreated())
+            ->count();
+
+        $updatedDocsCount = $result->items
+            ->where(static fn (BulkIndexItem $item): bool => $item->isUpdated())
+            ->count();
 
         $this->table($columnNames, $rows);
-        $this->info(sprintf('index: %s', $indexName));
-        $this->info(sprintf('took: %d', $result['took']));
-        $this->info(sprintf('errors: %s', json_encode($result['errors'])));
+        $this->info(sprintf('index: %s', $item->index));
+        $this->info(sprintf('took: %d', $result->took));
+        $this->info(sprintf('errors: %s', json_encode($result->errors)));
         $this->info(sprintf('created: %d', $createdDocsCount));
         $this->info(sprintf('updated: %d', $updatedDocsCount));
-        $this->info(sprintf('total: %d', count($items)));
+        $this->info(sprintf('total: %d', $result->items->count()));
     }
 }

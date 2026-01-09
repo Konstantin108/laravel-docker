@@ -6,11 +6,12 @@ namespace App\Services\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Events\Elasticsearch\SearchIndexFilledEvent;
+use App\Factories\BulkIndexResultFactory;
 use App\Services\Elasticsearch\Abstract\ElasticsearchService;
+use App\Services\Elasticsearch\Entities\BulkIndexResult;
 use App\Services\User\Entities\UserEnriched;
 use App\Services\User\UserService;
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Support\HigherOrderTapProxy;
 
 class UsersIndexElasticsearchService extends ElasticsearchService
 {
@@ -20,6 +21,7 @@ class UsersIndexElasticsearchService extends ElasticsearchService
         protected ElasticsearchClientContract $client,
         private readonly Dispatcher $dispatcher,
         private readonly UserService $userService,
+        private readonly BulkIndexResultFactory $bulkIndexResultFactory,
     ) {
         parent::__construct($client);
     }
@@ -97,10 +99,7 @@ class UsersIndexElasticsearchService extends ElasticsearchService
         ];
     }
 
-    /**
-     * @return HigherOrderTapProxy|array<string, mixed>|null
-     */
-    public function fillSearchIndex(?int $count = null): HigherOrderTapProxy|array|null
+    public function fillSearchIndex(?int $count = null): ?BulkIndexResult
     {
         $users = $this->userService->getUsers($count);
         if ($users->isEmpty()) {
@@ -113,10 +112,10 @@ class UsersIndexElasticsearchService extends ElasticsearchService
         ))
             ->implode('');
 
-        // TODO kpstya надо создать сервис, который будет преобразовывать данные в модель после их получения
+        $result = $this->client->bulkIndex($body, static::INDEX_NAME);
 
         return tap(
-            $this->client->bulkIndex($body, static::INDEX_NAME),
+            $this->bulkIndexResultFactory->createFromArray($result),
             fn (): ?array => $this->dispatcher->dispatch(new SearchIndexFilledEvent($users, static::INDEX_NAME))
         );
     }

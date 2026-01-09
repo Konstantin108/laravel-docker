@@ -46,8 +46,6 @@ class ElasticsearchClient implements ElasticsearchClientContract
      */
     public function bulkIndex(string $body, string $indexName): array
     {
-        // TODO kpstya результат надо будет преобразовывать в BulkIndexResult
-
         return $this->execute(fn (): Response => $this->baseHttpRequest()
             ->send('POST', $indexName.'/_bulk', [
                 'body' => Utils::streamFor($body),
