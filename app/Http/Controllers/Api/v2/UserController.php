@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api\v2;
 
-use App\Actions\Elasticsearch\SearchResponseTransformAction;
 use App\Http\Requests\v2\User\IndexRequest;
 use App\Http\Resources\User\IndexResource;
 use App\Services\Elasticsearch\UsersIndexElasticsearchService;
@@ -11,11 +10,12 @@ use App\Services\User\UserService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
 
+// TODO kpstya получится ли использовать абстракцию в DI
+
 class UserController extends Controller
 {
     public function index(
         IndexRequest $request,
-        SearchResponseTransformAction $action,
         UsersIndexElasticsearchService $searchService,
         UserService $userService,
     ): AnonymousResourceCollection {
@@ -23,9 +23,8 @@ class UserController extends Controller
             IndexDto::from($request->validated())
         );
 
-        $result = $searchService->findInSearchIndex($paginationRequestDto);
-        $searchResponse = $action->handle($result);
+        $searchResult = $searchService->findInSearchIndex($paginationRequestDto);
 
-        return IndexResource::collection($searchResponse->hits);
+        return IndexResource::collection($searchResult->hits);
     }
 }

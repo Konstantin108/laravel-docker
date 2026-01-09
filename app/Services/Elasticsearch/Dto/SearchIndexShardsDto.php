@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Actions\Elasticsearch\Dto;
+namespace App\Services\Elasticsearch\Dto;
 
 use Spatie\LaravelData\Data;
 

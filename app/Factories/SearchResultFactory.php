@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Actions\Elasticsearch;
+namespace App\Factories;
 
-use App\Actions\Elasticsearch\Dto\SearchIndexHitsDto;
-use App\Actions\Elasticsearch\Dto\SearchIndexShardsDto;
-use App\Actions\Elasticsearch\Entities\SearchResponse;
+use App\Services\Elasticsearch\Dto\SearchIndexHitsDto;
+use App\Services\Elasticsearch\Dto\SearchIndexShardsDto;
+use App\Services\Elasticsearch\Entities\SearchResult;
 use App\Services\Elasticsearch\SourceDtoCollectionService;
 
-final readonly class SearchResponseTransformAction
+final readonly class SearchResultFactory
 {
     public function __construct(
         private SourceDtoCollectionService $collectionService
@@ -37,9 +37,9 @@ final readonly class SearchResponseTransformAction
      *     }
      * } $response
      */
-    public function handle(array $response): SearchResponse
+    public function createFromArray(array $response): SearchResult
     {
-        return new SearchResponse(
+        return new SearchResult(
             took: $response['took'],
             timedOut: $response['timed_out'],
             shardsDto: SearchIndexShardsDto::from($response['_shards']),

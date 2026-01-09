@@ -7,6 +7,7 @@ namespace App\Services\Elasticsearch;
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Events\Elasticsearch\SearchIndexFilledEvent;
 use App\Factories\BulkIndexResultFactory;
+use App\Factories\SearchResultFactory;
 use App\Services\Elasticsearch\Abstract\ElasticsearchService;
 use App\Services\Elasticsearch\Entities\BulkIndexResult;
 use App\Services\User\Entities\UserEnriched;
@@ -19,11 +20,12 @@ class UsersIndexElasticsearchService extends ElasticsearchService
 
     public function __construct(
         protected ElasticsearchClientContract $client,
+        protected SearchResultFactory $searchResultFactory,
         private readonly Dispatcher $dispatcher,
         private readonly UserService $userService,
         private readonly BulkIndexResultFactory $bulkIndexResultFactory,
     ) {
-        parent::__construct($client);
+        parent::__construct($client, $searchResultFactory);
     }
 
     protected function indexName(): string
