@@ -7,7 +7,6 @@ namespace App\Actions\Elasticsearch;
 use App\Actions\Elasticsearch\Dto\SearchIndexHitsDto;
 use App\Actions\Elasticsearch\Dto\SearchIndexShardsDto;
 use App\Actions\Elasticsearch\Entities\SearchResponse;
-use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use App\Services\Elasticsearch\SourceDtoCollectionService;
 
 final readonly class SearchResponseTransformAction
@@ -37,8 +36,6 @@ final readonly class SearchResponseTransformAction
      *          }
      *     }
      * } $response
-     *
-     * @throws SearchIndexException
      */
     public function handle(array $response): SearchResponse
     {
