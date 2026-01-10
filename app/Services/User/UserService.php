@@ -6,20 +6,17 @@ namespace App\Services\User;
 
 use App\Models\User;
 use App\Repositories\User\Contracts\UserRepositoryContract;
-use App\Services\Elasticsearch\Dto\PaginationRequestDto;
-use App\Services\Elasticsearch\PaginationService;
-use App\Services\User\Dto\IndexDto;
+use App\Services\Dto\IndexDto;
 use App\Services\User\Entities\UserEnriched;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 class UserService
 {
-    private const PER_PAGE = 10;
+    private const DEFAULT_PER_PAGE = 10;
 
     public function __construct(
-        private readonly UserRepositoryContract $userRepository,
-        private readonly PaginationService $elasticsearchPaginationService
+        private readonly UserRepositoryContract $userRepository
     ) {}
 
     /**
@@ -29,7 +26,7 @@ class UserService
     {
         /** @var LengthAwarePaginator<User> $paginator */
         $paginator = $this->userRepository->getUsersPagination(
-            $indexDto->perPage ?? self::PER_PAGE,
+            $indexDto->perPage ?? self::DEFAULT_PER_PAGE,
             $indexDto->search
         );
 
@@ -46,14 +43,6 @@ class UserService
     {
         return $this->userRepository->getAllUsers($count)
             ->map(fn (User $user): UserEnriched => $this->enrich($user));
-    }
-
-    public function getPaginationDataForSearchIndex(IndexDto $indexDto): PaginationRequestDto
-    {
-        return $this->elasticsearchPaginationService->makePaginationData(
-            $indexDto->toArray(),
-            self::PER_PAGE
-        );
     }
 
     public function enrich(User $user): UserEnriched

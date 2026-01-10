@@ -21,6 +21,7 @@ return [
 
     'search_index_models' => [
         'users' => \App\Models\User::class,
+        //        'products' => \App\Models\Product::class,
     ],
 
     'model_services' => [
