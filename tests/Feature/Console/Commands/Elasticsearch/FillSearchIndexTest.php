@@ -61,18 +61,18 @@ class FillSearchIndexTest extends SearchIndexCommandTest
         $expectedRows = $models->map(static fn (SearchableContract $model): array => [
             $model->id,
             --$model->id,
-            '_doc',
             $indexName,
             1,
             'created',
             1,
             201,
+            '_doc',
         ]);
 
         $this->executeCommand(['index_name' => $indexName])
             ->assertSuccessful()
             ->expectsTable(
-                ['_id', '_seq_no', '_type', '_index', '_version', 'result', '_primary_term', 'status'],
+                ['_id', '_seq_no', '_index', '_version', 'result', '_primary_term', 'status', '_type'],
                 $expectedRows
             )
             ->expectsOutput(sprintf('index: %s', $indexName))

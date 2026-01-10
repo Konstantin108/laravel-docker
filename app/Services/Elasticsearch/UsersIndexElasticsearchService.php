@@ -101,8 +101,6 @@ class UsersIndexElasticsearchService extends ElasticsearchService
         ];
     }
 
-    // TODO kpstya правильно ли выбрасывать исключения в методах стабов
-
     public function fillSearchIndex(?int $count = null): ?BulkIndexResult
     {
         $users = $this->userService->getUsers($count);

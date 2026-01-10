@@ -66,20 +66,20 @@ final class FillSearchIndexCommand extends Command implements PromptsForMissingI
         $rows = $result->items->map(static fn (BulkIndexItem $item): array => [
             $item->id,
             $item->seqNumber,
-            $item->type,
             $item->index,
             $item->version,
             $item->result,
             $item->primaryTerm,
-            $item->status,
+            $item->status->value,
+            $item->type,
         ]);
 
         $createdDocsCount = $result->items
-            ->where(static fn (BulkIndexItem $item): bool => $item->isCreated())
+            ->where(static fn (BulkIndexItem $item): bool => $item->status->isCreated())
             ->count();
 
         $updatedDocsCount = $result->items
-            ->where(static fn (BulkIndexItem $item): bool => $item->isUpdated())
+            ->where(static fn (BulkIndexItem $item): bool => $item->status->isUpdated())
             ->count();
 
         $this->table($columnNames, $rows);

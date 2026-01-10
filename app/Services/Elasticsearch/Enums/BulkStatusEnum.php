@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Elasticsearch\Enums;
 
-enum StatusCodeEnum: int
+enum BulkStatusEnum: int
 {
     case CREATED = 201;
 

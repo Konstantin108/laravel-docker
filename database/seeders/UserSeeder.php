@@ -5,8 +5,6 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
-// TODO kpstya добавить enum для кодов ответов
-
 class UserSeeder extends Seeder
 {
     private const USERS_COUNT = 40;
