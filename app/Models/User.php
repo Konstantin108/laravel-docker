@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Contracts\SearchableContract;
 use Database\Factories\UserFactory;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -32,12 +32,14 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|User newQuery()
  * @method static Builder<static>|User query()
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class User extends Authenticatable implements SearchableContract
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+
+    // TODO kpstya - исправить pagination для larastan
 
     /**
      * @var list<string>
@@ -53,17 +55,12 @@ class User extends Authenticatable implements SearchableContract
     ];
 
     /**
-     * @return array<string, string>
+     * @var string[]
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
 
     /**
      * @return HasOne<Contact, $this>

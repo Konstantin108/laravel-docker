@@ -42,7 +42,7 @@ final class FillSearchIndexCommand extends Command implements PromptsForMissingI
             ? (int) $this->option('limit')
             : self::LIMIT;
 
-        $result = $factory->make($searchIndexEnum->value)->fillSearchIndex($limit);
+        $result = $factory->make($searchIndexEnum)->fillSearchIndex($limit);
 
         $result !== null
             ? $this->formattedOutput($result)

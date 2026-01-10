@@ -8,7 +8,7 @@ interface SearchableSourceContract
 {
     public function getId(): int;
 
-    // TODO kpstya - products, product_categories - добавить таблицы и эндпоинты v1 и v2
+    // TODO kpstya - products, product_categories - добавить эндпоинты v1 и v2
 
     /**
      * @return array<string, mixed>
