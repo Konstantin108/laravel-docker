@@ -39,8 +39,6 @@ class User extends Authenticatable implements SearchableContract
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    // TODO kpstya - исправить pagination для larastan
-
     /**
      * @var list<string>
      */
