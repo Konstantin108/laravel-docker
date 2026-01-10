@@ -13,19 +13,12 @@ class ProductSeeder extends Seeder
     public function run(): void
     {
         $categories = ProductCategory::all();
-
         if ($categories->isEmpty()) {
             return;
         }
 
-        $existingProductsCount = Product::query()->count();
-
-        if ($existingProductsCount >= self::PRODUCTS_COUNT) {
-            return;
-        }
-
         Product::factory()
-            ->count(self::PRODUCTS_COUNT - $existingProductsCount)
+            ->count(self::PRODUCTS_COUNT)
             ->recycle($categories)
             ->create();
     }

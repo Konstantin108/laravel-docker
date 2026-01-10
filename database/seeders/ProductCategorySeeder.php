@@ -11,14 +11,8 @@ class ProductCategorySeeder extends Seeder
 
     public function run(): void
     {
-        $existingProductCategoriesCount = ProductCategory::query()->count();
-
-        if ($existingProductCategoriesCount >= self::PRODUCT_CATEGORIES_COUNT) {
-            return;
-        }
-
         ProductCategory::factory()
-            ->count(self::PRODUCT_CATEGORIES_COUNT - $existingProductCategoriesCount)
+            ->count(self::PRODUCT_CATEGORIES_COUNT)
             ->create();
     }
 }

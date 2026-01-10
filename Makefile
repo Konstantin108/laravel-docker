@@ -5,7 +5,7 @@ install:
 env:
 	docker-compose exec php cp .env.example .env
 migrate:
-	docker-compose exec php php artisan migrate --seed
+	docker-compose exec php php artisan migrate:fresh --seed
 seed:
 	docker-compose exec php php artisan db:seed
 lint:
