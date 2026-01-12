@@ -15,13 +15,15 @@ return [
 
     'send_report_to_email' => env('ELASTICSEARCH_SEND_REPORT_TO_EMAIL', false),
 
+    // TODO kpstya надо подумать, возможно упростить и избавиться от лишних фабрик
+
     'source_dto_factories' => [
         'users' => \App\Factories\UserSourceDtoFactory::class,
     ],
 
     'search_index_models' => [
         'users' => \App\Models\User::class,
-        //        'products' => \App\Models\Product::class,
+        // 'products' => \App\Models\Product::class,
     ],
 
     'model_services' => [

@@ -11,7 +11,7 @@ use Illuminate\Support\Carbon;
 
 class UserSourceDtoFactory implements SourceDtoFactoryContract
 {
-    // TODO kpstya указать все типы значений в массиве $source
+    // TODO kpstya указать типы всех значений в массиве $source
 
     /**
      * @param  array<string, mixed>  $source

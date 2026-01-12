@@ -6,8 +6,8 @@ namespace App\Console\Commands\Elasticsearch;
 
 use App\Console\Commands\Elasticsearch\Concerns\PromptForSearchIndexTrait;
 use App\Console\Commands\Elasticsearch\Entities\SearchIndexResolver;
-use App\Factories\ElasticsearchServiceFactory;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
+use App\Services\Elasticsearch\Factories\ElasticsearchServiceFactory;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
 

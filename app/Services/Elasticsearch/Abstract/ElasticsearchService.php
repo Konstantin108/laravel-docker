@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Services\Elasticsearch\Abstract;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
-use App\Factories\SearchResultFactory;
 use App\Services\Elasticsearch\Dto\PaginationRequestDto;
 use App\Services\Elasticsearch\Entities\SearchResult;
+use App\Services\Elasticsearch\Factories\SearchResultFactory;
 use stdClass;
 
 abstract class ElasticsearchService

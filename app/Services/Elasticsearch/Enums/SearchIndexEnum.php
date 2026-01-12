@@ -8,5 +8,5 @@ enum SearchIndexEnum: string
 {
     case USERS = 'users';
 
-    //    case PRODUCTS = 'products';
+    // case PRODUCTS = 'products';
 }

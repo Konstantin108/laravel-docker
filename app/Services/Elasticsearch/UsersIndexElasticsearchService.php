@@ -6,10 +6,10 @@ namespace App\Services\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Events\Elasticsearch\SearchIndexFilledEvent;
-use App\Factories\BulkIndexResultFactory;
-use App\Factories\SearchResultFactory;
 use App\Services\Elasticsearch\Abstract\ElasticsearchService;
 use App\Services\Elasticsearch\Entities\BulkIndexResult;
+use App\Services\Elasticsearch\Factories\BulkIndexResultFactory;
+use App\Services\Elasticsearch\Factories\SearchResultFactory;
 use App\Services\User\Entities\UserEnriched;
 use App\Services\User\UserService;
 use Illuminate\Contracts\Events\Dispatcher;

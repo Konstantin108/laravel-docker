@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Factories;
+namespace App\Services\Elasticsearch\Factories;
 
 use App\Services\Elasticsearch\Abstract\ElasticsearchService;
 use App\Services\Elasticsearch\Enums\SearchIndexEnum;
@@ -19,6 +19,11 @@ class ElasticsearchServiceFactory
     {
         $this->services = $services;
     }
+
+    /* TODO kpstya
+        - перенести заметки из сообщений
+        - возможно в SearchIndexEnum добавить методы getModel() или getService() и типо того,
+        это может многое упростить (будет один источник истины) */
 
     /**
      * @throws SearchIndexException
