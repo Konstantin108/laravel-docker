@@ -7,7 +7,7 @@ namespace App\Listeners;
 use App\Events\Elasticsearch\SearchIndexFilledEvent;
 use App\Jobs\SendSearchIndexDataJob;
 
-final readonly class NotifyAboutSearchIndexFilledListener
+final class NotifyAboutSearchIndexFilledListener
 {
     public function handle(SearchIndexFilledEvent $event): void
     {

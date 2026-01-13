@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Elasticsearch\Abstract;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
+use App\Conditions\SearchCondition;
 use App\Services\Elasticsearch\Dto\PaginationRequestDto;
 use App\Services\Elasticsearch\Entities\SearchResult;
 use App\Services\Elasticsearch\Factories\SearchResultFactory;
@@ -53,7 +54,7 @@ abstract class ElasticsearchService
 
     final public function findInSearchIndex(PaginationRequestDto $requestDto): SearchResult
     {
-        $body = $requestDto->search !== null && mb_strlen($requestDto->search) > 2
+        $body = SearchCondition::isSatisfiedBy($requestDto->search)
             ? $this->searchMultiMatch($requestDto)
             : $this->searchMatchAll($requestDto);
 

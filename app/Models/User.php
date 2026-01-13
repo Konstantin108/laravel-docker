@@ -52,6 +52,8 @@ class User extends Authenticatable implements SearchableContract
         'remember_token',
     ];
 
+    // TODO kpstya поменять в моделях $guarded на $fillable и проверить
+
     /**
      * @var string[]
      */

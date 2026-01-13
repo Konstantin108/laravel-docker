@@ -7,7 +7,7 @@ namespace App\Console\Commands\Elasticsearch\Entities;
 use App\Services\Elasticsearch\Enums\SearchIndexEnum;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 
-final readonly class SearchIndexResolver
+final class SearchIndexResolver
 {
     /**
      * @throws SearchIndexException
