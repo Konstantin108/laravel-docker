@@ -26,11 +26,9 @@ final readonly class SearchScope
         $builder->where(function (Builder $builder) use ($search): void {
             $builder->where('name', 'like', $search)
                 ->orWhere('email', 'like', $search)
-                ->orWhereHas('contact', function (Builder $builder) use ($search): void {
-                    $builder->where('email', 'like', $search)
-                        ->orWhere('phone', 'like', $search)
-                        ->orWhere('telegram', 'like', $search);
-                });
+                ->orWhereRelation('contact', 'email', 'like', $search)
+                ->orWhereRelation('contact', 'phone', 'like', $search)
+                ->orWhereRelation('contact', 'telegram', 'like', $search);
         });
     }
 }

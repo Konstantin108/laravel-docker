@@ -15,8 +15,6 @@ class UserController extends Controller
     {
         $data = $request->validated();
 
-        // TODO kpstya тут возможно не нужен appends()
-
         return IndexResource::collection(
             $userService->getPagination(IndexDto::from($data))->appends($data)
         );

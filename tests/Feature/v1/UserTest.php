@@ -14,7 +14,7 @@ class UserTest extends TestCase
 
     private const INDEX_ROUTE = 'api.v1.user.index';
 
-    public function test_index_v1_without_params()
+    public function test_users_index_v1_without_params()
     {
         $count = 3;
         User::factory()->count($count)->withContact()->create();
@@ -66,7 +66,7 @@ class UserTest extends TestCase
 
     #[TestWith(['page', 'two'])]
     #[TestWith(['per_page', 'one'])]
-    public function test_index_v1_with_params_failed(string $param, string $value): void
+    public function test_users_index_v1_with_params_failed(string $param, string $value): void
     {
         User::factory()->count(3)->withContact()->create();
 
@@ -77,7 +77,7 @@ class UserTest extends TestCase
             ->assertJsonValidationErrors([$param]);
     }
 
-    public function test_index_v1_with_page_param(): void
+    public function test_users_index_v1_with_page_param(): void
     {
         User::factory()->count(3)->withContact()->create();
         $page = 2;
@@ -89,7 +89,7 @@ class UserTest extends TestCase
             ->assertJsonPath('meta.current_page', $page);
     }
 
-    public function test_index_v1_with_per_page_param(): void
+    public function test_users_index_v1_with_per_page_param(): void
     {
         User::factory()->count(3)->withContact()->create();
         $perPage = 1;
@@ -109,7 +109,7 @@ class UserTest extends TestCase
     #[TestWith(['@iva', 1])]
     #[TestWith(['898', 1])]
     #[TestWith(['RESERve.', 3])]
-    public function test_index_v1_with_search_param(string $search, int $resultCount): void
+    public function test_users_index_v1_with_search_param(string $search, int $resultCount): void
     {
         $data = [
             [

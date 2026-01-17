@@ -135,6 +135,8 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
             throw SearchIndexException::doesNotExist($indexName);
         }
 
+        // TODO kpstya возможно нужен репозиторий и интерфейс
+
         $elementsCount = $modelName::query()->count();
 
         return [

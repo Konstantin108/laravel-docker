@@ -11,10 +11,18 @@ use Illuminate\Support\Carbon;
 
 class UserSourceDtoFactory implements SourceDtoFactoryContract
 {
-    // TODO kpstya указать типы всех значений в массиве $source
-
     /**
-     * @param  array<string, mixed>  $source
+     * @param array{
+     *     id: int,
+     *     name: string,
+     *     email: string,
+     *     reserve_email: string,
+     *     phone: string,
+     *     telegram: string,
+     *     email_verified_at: string,
+     *     created_at: string,
+     *     updated_at: string,
+     * } $source
      */
     public function createFromArray(array $source): SearchableSourceContract
     {

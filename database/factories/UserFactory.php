@@ -31,6 +31,8 @@ class UserFactory extends Factory
         ];
     }
 
+    // TODO kpstya разобраться почему так странно сделано присвоение password
+
     /**
      * @param  array<string, int|string>  $state
      */
