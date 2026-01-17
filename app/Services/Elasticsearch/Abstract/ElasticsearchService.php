@@ -48,10 +48,6 @@ abstract class ElasticsearchService
         return $this->client->deleteIndex($this->indexName());
     }
 
-    /* TODO kpstya
-        - дорабоать state и фабрику UserFactory, с учетом того, что почта может быть неверифицирована
-        - доработать тесты для user/v1 и user/v2 для неверифицированных пользователей */
-
     final public function findInSearchIndex(PaginationRequestDto $requestDto): SearchResult
     {
         $body = SearchCondition::isSatisfiedBy($requestDto->search)

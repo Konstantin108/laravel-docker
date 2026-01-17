@@ -7,7 +7,6 @@ use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
 use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\Client\RequestException;
 use PHPUnit\Framework\Attributes\TestWith;
 use ReflectionException;
 use Tests\TestCase;
@@ -93,14 +92,12 @@ class UserTest extends TestCase
         $this->assertCount($perPage, $response->json('data'));
     }
 
-    // TODO kpstya добавить параметр APP_ENV в .env.testing и изменить тест test_index_v2_elasticsearch_failed
-
     // TODO kpstya проверить работу copy env.example в .env
 
     /**
      * @throws ReflectionException
      */
-    public function test_users_index_v2_elasticsearch_failed(): void
+    public function test_users_index_v2_elasticsearch_failed_in_development_environment(): void
     {
         $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
             return new ElasticsearchClientErrorStub;
@@ -114,7 +111,25 @@ class UserTest extends TestCase
         $this->withoutExceptionHandling()
             ->getJson(route(self::INDEX_ROUTE))
             ->assertInternalServerError();
+    }
 
-        $this->expectException(RequestException::class);
+    /**
+     * @throws ReflectionException
+     */
+    public function test_users_index_v2_elasticsearch_failed_in_production_environment(): void
+    {
+        config()->set('app.debug', false);
+
+        $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
+            return new ElasticsearchClientErrorStub;
+        });
+
+        User::factory()->count(3)->withContact()->create();
+
+        $this->getJson(route(self::INDEX_ROUTE))
+            ->assertInternalServerError()
+            ->assertJson([
+                'message' => 'Server Error',
+            ]);
     }
 }
