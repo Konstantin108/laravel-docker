@@ -6,7 +6,7 @@ namespace App\Services\User;
 
 use App\Models\User;
 use App\Repositories\User\Contracts\UserRepositoryContract;
-use App\Services\Dto\IndexDto;
+use App\Services\User\Dto\IndexDto;
 use App\Services\User\Entities\UserEnriched;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;

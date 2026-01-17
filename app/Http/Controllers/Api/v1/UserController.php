@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Requests\v1\User\IndexRequest;
 use App\Http\Resources\User\IndexResource;
-use App\Services\Dto\IndexDto;
+use App\Services\User\Dto\IndexDto;
 use App\Services\User\UserService;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;

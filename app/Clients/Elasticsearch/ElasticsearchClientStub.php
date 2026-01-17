@@ -33,7 +33,8 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
         $lines = array_filter(explode("\n", $body));
 
         $seqNumber = 0;
-        for ($i = 0; $i < count($lines); $i += 2) {
+        $linesCount = count($lines);
+        for ($i = 0; $i < $linesCount; $i += 2) {
             $operation = json_decode($lines[$i], true);
             $items[] = [
                 'index' => [
@@ -56,7 +57,7 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
         }
 
         return [
-            'took' => count($lines) * rand(1, 2),
+            'took' => $linesCount * rand(1, 2),
             'errors' => false,
             'items' => $items ?? [],
         ];

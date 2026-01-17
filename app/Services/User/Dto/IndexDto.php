@@ -2,11 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Dto;
-
-/* TODO kpstya
-    наверное я зря убирал toArray(), скорее всего IndexDto должен быть для index запроса
-    каждой модели, а уже для elasticsearch надо будет просто черз new создавать свой dto */
+namespace App\Services\User\Dto;
 
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Data;
