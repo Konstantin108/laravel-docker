@@ -17,7 +17,7 @@ class UserTest extends TestCase
 
     private const INDEX_ROUTE = 'api.v2.user.index';
 
-    public function test_users_index_v2_without_params(): void
+    public function test_user_index_v2_without_params(): void
     {
         $count = 3;
         User::factory()->count($count)->withContact()->create();
@@ -45,7 +45,7 @@ class UserTest extends TestCase
 
     #[TestWith(['page', '2s'])]
     #[TestWith(['per_page', 's'])]
-    public function test_users_index_v2_with_params_failed(string $param, string $value): void
+    public function test_user_index_v2_with_params_failed(string $param, string $value): void
     {
         User::factory()->count(3)->withContact()->create();
 
@@ -56,7 +56,7 @@ class UserTest extends TestCase
             ->assertJsonValidationErrors([$param]);
     }
 
-    public function test_users_index_v2_with_page_param(): void
+    public function test_user_index_v2_with_page_param(): void
     {
         $count = 13;
         User::factory()->count($count)->withContact()->create();
@@ -79,7 +79,7 @@ class UserTest extends TestCase
         $this->assertCount($count - $perPage, $data);
     }
 
-    public function test_users_index_v2_with_per_page_param(): void
+    public function test_user_index_v2_with_per_page_param(): void
     {
         User::factory()->count(3)->withContact()->create();
         $perPage = 1;
@@ -95,7 +95,7 @@ class UserTest extends TestCase
     /**
      * @throws ReflectionException
      */
-    public function test_users_index_v2_elasticsearch_failed_in_development_environment(): void
+    public function test_user_index_v2_elasticsearch_failed_in_development_environment(): void
     {
         $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
             return new ElasticsearchClientErrorStub;
@@ -114,7 +114,7 @@ class UserTest extends TestCase
     /**
      * @throws ReflectionException
      */
-    public function test_users_index_v2_elasticsearch_failed_in_production_environment(): void
+    public function test_user_index_v2_elasticsearch_failed_in_production_environment(): void
     {
         config()->set('app.debug', false);
 
