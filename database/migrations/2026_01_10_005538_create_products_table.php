@@ -22,8 +22,6 @@ return new class extends Migration
         });
     }
 
-    // TODO kpstya отправка письма должна быть отказоустойчивой, чтобы не падал весь код, если письмо не отправилось
-
     public function down(): void
     {
         Schema::dropIfExists(TableDictionary::PRODUCTS);

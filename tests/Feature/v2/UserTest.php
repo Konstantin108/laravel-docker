@@ -92,8 +92,6 @@ class UserTest extends TestCase
         $this->assertCount($perPage, $response->json('data'));
     }
 
-    // TODO kpstya проверить работу copy env.example в .env
-
     /**
      * @throws ReflectionException
      */
