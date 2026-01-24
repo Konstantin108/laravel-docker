@@ -8,6 +8,8 @@ use App\Services\Elasticsearch\Dto\PaginationRequestDto;
 
 class PaginationRequestMapper
 {
+    private const FIRST_PAGE = 1;
+
     private const DEFAULT_PER_PAGE = 10;
 
     public function map(
@@ -15,7 +17,7 @@ class PaginationRequestMapper
         ?int $perPage = null,
         ?int $page = null
     ): PaginationRequestDto {
-        $page = $page ?? 1;
+        $page = $page ?? self::FIRST_PAGE;
         $size = $perPage ?? self::DEFAULT_PER_PAGE;
         $from = --$page * $size;
 

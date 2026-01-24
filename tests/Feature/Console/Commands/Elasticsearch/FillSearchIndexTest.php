@@ -115,8 +115,17 @@ class FillSearchIndexTest extends SearchIndexCommandTest
     }
 
     #[DataProvider('indexNameProvider')]
-    public function test_command_logs_result(string $indexName): void
+    public function test_fill_index_log_disabled(string $indexName): void
     {
+        $this->executeCommand(['index_name' => $indexName]);
+        $this->logger->shouldNotHaveReceived('info');
+    }
+
+    #[DataProvider('indexNameProvider')]
+    public function test_fill_index_log_enabled(string $indexName): void
+    {
+        config()->set('elasticsearch.fill_index_log', true);
+
         $this->executeCommand(['index_name' => $indexName]);
 
         /** @var Expectation $expectation */

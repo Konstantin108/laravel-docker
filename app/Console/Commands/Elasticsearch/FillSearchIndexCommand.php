@@ -48,7 +48,9 @@ final class FillSearchIndexCommand extends Command implements PromptsForMissingI
             ? $this->formattedOutput($result)
             : $this->info(json_encode($result, JSON_PRETTY_PRINT));
 
-        $logger->info(json_encode($result, JSON_PRETTY_PRINT));
+        if (config('elasticsearch.fill_index_log')) {
+            $logger->info(json_encode($result, JSON_PRETTY_PRINT));
+        }
 
         return self::SUCCESS;
     }
