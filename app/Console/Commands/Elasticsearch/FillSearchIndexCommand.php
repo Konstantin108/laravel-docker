@@ -37,10 +37,7 @@ final class FillSearchIndexCommand extends Command implements PromptsForMissingI
         LoggerInterface $logger
     ): int {
         $searchIndexEnum = $resolver->fromString($this->argument('index_name'));
-
-        $limit = $this->option('limit') !== null
-            ? (int) $this->option('limit')
-            : self::LIMIT;
+        $limit = (int) $this->option('limit') ?: self::LIMIT;
 
         $result = $factory->make($searchIndexEnum)->fillSearchIndex($limit);
 

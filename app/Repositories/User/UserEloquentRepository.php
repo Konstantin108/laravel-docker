@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Repositories\User;
 
 use App\Models\User;
+use App\Repositories\Scopes\LimitScope;
 use App\Repositories\User\Contracts\UserRepositoryContract;
 use App\Repositories\User\Scopes\SearchScope;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -31,7 +31,7 @@ class UserEloquentRepository implements UserRepositoryContract
     {
         return User::query()
             ->with('contact')
-            ->when($limit, fn (Builder $builder, int $limit) => $builder->limit($limit))
+            ->tap(new LimitScope($limit))
             ->get();
     }
 }

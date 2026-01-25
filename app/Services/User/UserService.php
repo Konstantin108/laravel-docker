@@ -16,7 +16,7 @@ class UserService
     private const DEFAULT_PER_PAGE = 10;
 
     public function __construct(
-        private readonly UserRepositoryContract $userRepository
+        private readonly UserRepositoryContract $repository
     ) {}
 
     /**
@@ -25,7 +25,7 @@ class UserService
     public function getPagination(IndexDto $indexDto): LengthAwarePaginator
     {
         /** @var LengthAwarePaginator<User> $paginator */
-        $paginator = $this->userRepository->getUsersPagination(
+        $paginator = $this->repository->getUsersPagination(
             $indexDto->perPage ?? self::DEFAULT_PER_PAGE,
             $indexDto->search
         );
@@ -41,7 +41,7 @@ class UserService
      */
     public function getUsers(?int $count = null): Collection
     {
-        return $this->userRepository->getAllUsers($count)
+        return $this->repository->getAllUsers($count)
             ->map(fn (User $user): UserEnriched => $this->enrich($user));
     }
 
