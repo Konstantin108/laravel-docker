@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Services\Elasticsearch\Abstract;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
-use App\Factories\SearchResultFactory;
+use App\Conditions\SearchCondition;
 use App\Services\Elasticsearch\Dto\PaginationRequestDto;
 use App\Services\Elasticsearch\Entities\SearchResult;
+use App\Services\Elasticsearch\Factories\SearchResultFactory;
 use stdClass;
 
 abstract class ElasticsearchService
@@ -29,7 +30,7 @@ abstract class ElasticsearchService
      */
     abstract protected function multiMatchFieldsSettings(): array;
 
-    abstract public function fillSearchIndex(?int $count = null): mixed;
+    abstract public function fillSearchIndex(?int $limit = null): mixed;
 
     /**
      * @return array<string, mixed>
@@ -49,7 +50,7 @@ abstract class ElasticsearchService
 
     final public function findInSearchIndex(PaginationRequestDto $requestDto): SearchResult
     {
-        $body = $requestDto->search !== null && mb_strlen($requestDto->search) > 2
+        $body = SearchCondition::isSatisfiedBy($requestDto->search)
             ? $this->searchMultiMatch($requestDto)
             : $this->searchMatchAll($requestDto);
 

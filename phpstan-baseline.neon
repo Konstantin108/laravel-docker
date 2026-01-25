@@ -9,3 +9,8 @@ parameters:
 			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Foundation\\\\Application\\:\\:isLocal\\(\\).$#"
 			count: 1
 			path: app/Providers/AppServiceProvider.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<int,stdClass\\>\\:\\:map\\(\\) expects callable\\(stdClass, int\\)\\: App\\\\Services\\\\Contracts\\\\SearchableSourceContract, Closure\\(App\\\\Models\\\\Contracts\\\\SearchableContract\\)\\: App\\\\Services\\\\Contracts\\\\SearchableSourceContract given.$#"
+			count: 1
+			path: app/Clients/Elasticsearch/ElasticsearchClientStub.php

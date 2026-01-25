@@ -6,8 +6,8 @@ namespace App\Console\Commands\Elasticsearch;
 
 use App\Console\Commands\Elasticsearch\Concerns\PromptForSearchIndexTrait;
 use App\Console\Commands\Elasticsearch\Entities\SearchIndexResolver;
-use App\Factories\ElasticsearchServiceFactory;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
+use App\Services\Elasticsearch\Factories\ElasticsearchServiceFactory;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
 
@@ -26,7 +26,7 @@ final class ClearSearchIndexCommand extends Command implements PromptsForMissing
     {
         $searchIndexEnum = $resolver->fromString($this->argument('index_name'));
 
-        $result = $factory->make($searchIndexEnum->value)->clearSearchIndex();
+        $result = $factory->make($searchIndexEnum)->clearSearchIndex();
         $this->info(json_encode($result, JSON_PRETTY_PRINT));
 
         return self::SUCCESS;

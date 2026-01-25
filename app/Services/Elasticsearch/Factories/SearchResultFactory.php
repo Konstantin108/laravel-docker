@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Factories;
+namespace App\Services\Elasticsearch\Factories;
 
 use App\Services\Elasticsearch\Dto\SearchIndexHitsDto;
 use App\Services\Elasticsearch\Dto\SearchIndexShardsDto;

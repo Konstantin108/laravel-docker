@@ -11,14 +11,8 @@ class UserSeeder extends Seeder
 
     public function run(): void
     {
-        $existingUsersCount = User::query()->count();
-
-        if ($existingUsersCount >= self::USERS_COUNT) {
-            return;
-        }
-
         User::factory()
-            ->count(self::USERS_COUNT - $existingUsersCount)
+            ->count(self::USERS_COUNT)
             ->withContact()
             ->create();
     }

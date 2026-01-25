@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Factories;
+namespace App\Services\Elasticsearch\Factories;
 
 use App\Services\Elasticsearch\Entities\BulkIndexItem;
 use App\Services\Elasticsearch\Entities\BulkIndexResult;

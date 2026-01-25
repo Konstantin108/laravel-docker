@@ -5,7 +5,8 @@ namespace Tests\Feature\Console\Commands\Elasticsearch;
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
 use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
-use App\Models\Contracts\SearchableContract;
+use App\Services\Elasticsearch\Enums\SearchIndexEnum;
+use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionException;
@@ -17,14 +18,16 @@ class ClearSearchIndexTest extends SearchIndexCommandTest
 
     private const COMMAND = 'app:elasticsearch:clear-index';
 
+    /**
+     * @throws SearchIndexException
+     */
     #[DataProvider('indexNameProvider')]
     public function test_clear_search_index_success(string $indexName): void
     {
-        /** @var SearchableContract $modelName */
-        $modelName = config('elasticsearch.search_index_models.'.$indexName);
+        $model = SearchIndexEnum::from($indexName)->getModel();
 
         $count = 2;
-        $modelName::factory()->count($count)->create();
+        $model::factory()->count($count)->create();
 
         $this->executeCommand(['index_name' => $indexName])
             ->assertSuccessful()

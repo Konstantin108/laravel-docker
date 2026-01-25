@@ -7,10 +7,12 @@ use App\Clients\Elasticsearch\Dto\SettingsDto;
 use App\Clients\Elasticsearch\ElasticsearchClient;
 use App\Clients\Elasticsearch\ElasticsearchClientStub;
 use App\Factories\Contracts\SourceDtoFactoryContract;
-use App\Factories\ElasticsearchServiceFactory;
+use App\Repositories\Product\Contracts\ProductRepositoryContract;
+use App\Repositories\Product\ProductEloquentRepository;
 use App\Repositories\User\Contracts\UserRepositoryContract;
 use App\Repositories\User\UserEloquentRepository;
 use App\Services\Elasticsearch\Abstract\ElasticsearchService;
+use App\Services\Elasticsearch\Factories\ElasticsearchServiceFactory;
 use App\Services\Elasticsearch\SourceDtoCollectionService;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Database\Events\QueryExecuted;
@@ -31,6 +33,7 @@ class AppServiceProvider extends ServiceProvider
         }
 
         $this->app->bind(UserRepositoryContract::class, UserEloquentRepository::class);
+        $this->app->bind(ProductRepositoryContract::class, ProductEloquentRepository::class);
 
         $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
             return match (config('app.env')) {

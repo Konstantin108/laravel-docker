@@ -6,10 +6,10 @@ namespace App\Console\Commands\Elasticsearch;
 
 use App\Console\Commands\Elasticsearch\Concerns\PromptForSearchIndexTrait;
 use App\Console\Commands\Elasticsearch\Entities\SearchIndexResolver;
-use App\Factories\ElasticsearchServiceFactory;
 use App\Services\Elasticsearch\Entities\BulkIndexItem;
 use App\Services\Elasticsearch\Entities\BulkIndexResult;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
+use App\Services\Elasticsearch\Factories\ElasticsearchServiceFactory;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Psr\Log\LoggerInterface;
@@ -37,18 +37,17 @@ final class FillSearchIndexCommand extends Command implements PromptsForMissingI
         LoggerInterface $logger
     ): int {
         $searchIndexEnum = $resolver->fromString($this->argument('index_name'));
+        $limit = (int) $this->option('limit') ?: self::LIMIT;
 
-        $limit = $this->option('limit') !== null
-            ? (int) $this->option('limit')
-            : self::LIMIT;
-
-        $result = $factory->make($searchIndexEnum->value)->fillSearchIndex($limit);
+        $result = $factory->make($searchIndexEnum)->fillSearchIndex($limit);
 
         $result !== null
             ? $this->formattedOutput($result)
             : $this->info(json_encode($result, JSON_PRETTY_PRINT));
 
-        $logger->info(json_encode($result, JSON_PRETTY_PRINT));
+        if (config('elasticsearch.fill_index_log')) {
+            $logger->info(json_encode($result, JSON_PRETTY_PRINT));
+        }
 
         return self::SUCCESS;
     }
@@ -66,20 +65,20 @@ final class FillSearchIndexCommand extends Command implements PromptsForMissingI
         $rows = $result->items->map(static fn (BulkIndexItem $item): array => [
             $item->id,
             $item->seqNumber,
-            $item->type,
             $item->index,
             $item->version,
             $item->result,
             $item->primaryTerm,
-            $item->status,
+            $item->status->value,
+            $item->type,
         ]);
 
         $createdDocsCount = $result->items
-            ->where(static fn (BulkIndexItem $item): bool => $item->isCreated())
+            ->where(static fn (BulkIndexItem $item): bool => $item->status->isCreated())
             ->count();
 
         $updatedDocsCount = $result->items
-            ->where(static fn (BulkIndexItem $item): bool => $item->isUpdated())
+            ->where(static fn (BulkIndexItem $item): bool => $item->status->isUpdated())
             ->count();
 
         $this->table($columnNames, $rows);

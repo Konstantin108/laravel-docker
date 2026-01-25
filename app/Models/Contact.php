@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Models\Contracts\SearchableContract;
 use Database\Factories\ContactFactory;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,9 +25,9 @@ use Illuminate\Support\Carbon;
  * @method static Builder<static>|Contact newQuery()
  * @method static Builder<static>|Contact query()
  *
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
-class Contact extends Model implements SearchableContract
+class Contact extends Model
 {
     /** @use HasFactory<ContactFactory> */
     use HasFactory;

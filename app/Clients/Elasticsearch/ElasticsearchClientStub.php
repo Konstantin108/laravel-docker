@@ -7,6 +7,7 @@ namespace App\Clients\Elasticsearch;
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Models\Contracts\SearchableContract;
 use App\Services\Contracts\SearchableSourceContract;
+use App\Services\Elasticsearch\Enums\SearchIndexEnum;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use Faker\Factory;
 
@@ -33,7 +34,8 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
         $lines = array_filter(explode("\n", $body));
 
         $seqNumber = 0;
-        for ($i = 0; $i < count($lines); $i += 2) {
+        $linesCount = count($lines);
+        for ($i = 0; $i < $linesCount; $i += 2) {
             $operation = json_decode($lines[$i], true);
             $items[] = [
                 'index' => [
@@ -56,7 +58,7 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
         }
 
         return [
-            'took' => count($lines) * rand(1, 2),
+            'took' => $linesCount * rand(1, 2),
             'errors' => false,
             'items' => $items ?? [],
         ];
@@ -78,14 +80,10 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
      */
     public function search(array $body, string $indexName): array
     {
-        $modelName = config('elasticsearch.search_index_models.'.$indexName);
-        $service = config('elasticsearch.model_services.'.$indexName);
+        $model = SearchIndexEnum::from($indexName)->getModel();
+        $service = SearchIndexEnum::from($indexName)->getModelService();
 
-        if ($modelName === null || $service === null) {
-            throw SearchIndexException::doesNotExist($indexName);
-        }
-
-        $elements = $modelName::query()
+        $elements = $model::query()
             ->where('id', '>', $body['from'])
             ->limit($body['size'])
             ->get()
@@ -129,13 +127,8 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
      */
     public function clearIndex(array $body, string $indexName): array
     {
-        $modelName = config('elasticsearch.search_index_models.'.$indexName);
-
-        if ($modelName === null) {
-            throw SearchIndexException::doesNotExist($indexName);
-        }
-
-        $elementsCount = $modelName::query()->count();
+        $model = SearchIndexEnum::from($indexName)->getModel();
+        $elementsCount = $model::query()->count();
 
         return [
             'took' => $elementsCount + rand(1, 5),

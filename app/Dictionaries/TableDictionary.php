@@ -23,4 +23,8 @@ final class TableDictionary
     public const USERS = 'users';
 
     public const CONTACTS = 'contacts';
+
+    public const PRODUCT_CATEGORIES = 'product_categories';
+
+    public const PRODUCTS = 'products';
 }

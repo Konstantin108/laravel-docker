@@ -12,7 +12,17 @@ use Illuminate\Support\Carbon;
 class UserSourceDtoFactory implements SourceDtoFactoryContract
 {
     /**
-     * @param  array<string, mixed>  $source
+     * @param array{
+     *     id: int,
+     *     name: string,
+     *     email: string,
+     *     reserve_email: string,
+     *     phone: string,
+     *     telegram: string,
+     *     email_verified_at: string,
+     *     created_at: string,
+     *     updated_at: string,
+     * } $source
      */
     public function createFromArray(array $source): SearchableSourceContract
     {
@@ -23,9 +33,15 @@ class UserSourceDtoFactory implements SourceDtoFactoryContract
             reserveEmail: $source['reserve_email'],
             phone: $source['phone'],
             telegram: $source['telegram'],
-            emailVerifiedAt: Carbon::parse($source['email_verified_at']),
-            createdAt: Carbon::parse($source['created_at']),
-            updatedAt: Carbon::parse($source['updated_at'])
+            emailVerifiedAt: ! empty($source['email_verified_at'])
+                ? Carbon::parse($source['email_verified_at'])
+                : null,
+            createdAt: ! empty($source['created_at'])
+                ? Carbon::parse($source['created_at'])
+                : null,
+            updatedAt: ! empty($source['updated_at'])
+                ? Carbon::parse($source['updated_at'])
+                : null
         );
     }
 }

@@ -14,6 +14,7 @@ return [
     ],
 
     'send_report_to_email' => env('ELASTICSEARCH_SEND_REPORT_TO_EMAIL', false),
+    'fill_index_log' => env('ELASTICSEARCH_FILL_INDEX_LOG', false),
 
     'source_dto_factories' => [
         'users' => \App\Factories\UserSourceDtoFactory::class,
@@ -21,6 +22,7 @@ return [
 
     'search_index_models' => [
         'users' => \App\Models\User::class,
+        // 'products' => \App\Models\Product::class,
     ],
 
     'model_services' => [

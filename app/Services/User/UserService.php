@@ -6,8 +6,6 @@ namespace App\Services\User;
 
 use App\Models\User;
 use App\Repositories\User\Contracts\UserRepositoryContract;
-use App\Services\Elasticsearch\Dto\PaginationRequestDto;
-use App\Services\Elasticsearch\PaginationService;
 use App\Services\User\Dto\IndexDto;
 use App\Services\User\Entities\UserEnriched;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -15,11 +13,10 @@ use Illuminate\Support\Collection;
 
 class UserService
 {
-    private const PER_PAGE = 10;
+    private const DEFAULT_PER_PAGE = 10;
 
     public function __construct(
-        private readonly UserRepositoryContract $userRepository,
-        private readonly PaginationService $elasticsearchPaginationService
+        private readonly UserRepositoryContract $repository
     ) {}
 
     /**
@@ -27,12 +24,12 @@ class UserService
      */
     public function getPagination(IndexDto $indexDto): LengthAwarePaginator
     {
-        $paginator = $this->userRepository->getUsersPagination(
-            $indexDto->perPage ?? self::PER_PAGE,
+        /** @var LengthAwarePaginator<User> $paginator */
+        $paginator = $this->repository->getUsersPagination(
+            $indexDto->perPage ?? self::DEFAULT_PER_PAGE,
             $indexDto->search
         );
 
-        /** @var LengthAwarePaginator<User> $paginator */
         $userEnrichedCollection = $paginator->getCollection()
             ->map(fn (User $user): UserEnriched => $this->enrich($user));
 
@@ -42,18 +39,10 @@ class UserService
     /**
      * @return Collection<int, UserEnriched>
      */
-    public function getUsers(?int $count = null): Collection
+    public function getUsers(?int $limit = null): Collection
     {
-        return $this->userRepository->getAllUsers($count)
+        return $this->repository->getAllUsers($limit)
             ->map(fn (User $user): UserEnriched => $this->enrich($user));
-    }
-
-    public function getPaginationDataForSearchIndex(IndexDto $indexDto): PaginationRequestDto
-    {
-        return $this->elasticsearchPaginationService->makePaginationData(
-            $indexDto->toArray(),
-            self::PER_PAGE
-        );
     }
 
     public function enrich(User $user): UserEnriched

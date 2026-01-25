@@ -10,6 +10,8 @@ use App\Jobs\SendSearchIndexDataJob;
 use App\Listeners\NotifyAboutSearchIndexFilledListener;
 use App\Mail\SearchIndexDataMail;
 use App\Models\Contracts\SearchableContract;
+use App\Services\Elasticsearch\Enums\SearchIndexEnum;
+use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Mail\Mailer;
 use Illuminate\Support\Facades\Event;
@@ -49,30 +51,32 @@ class FillSearchIndexTest extends SearchIndexCommandTest
         $this->logger = Log::spy();
     }
 
+    /**
+     * @throws SearchIndexException
+     */
     #[DataProvider('indexNameProvider')]
     public function test_fill_search_index_success(string $indexName): void
     {
-        /** @var SearchableContract $modelName */
-        $modelName = config('elasticsearch.search_index_models.'.$indexName);
+        $model = SearchIndexEnum::from($indexName)->getModel();
 
         $count = 2;
-        $models = $modelName::factory()->count($count)->withContact()->create();
+        $models = $model::factory()->count($count)->withContact()->create();
 
         $expectedRows = $models->map(static fn (SearchableContract $model): array => [
             $model->id,
             --$model->id,
-            '_doc',
             $indexName,
             1,
             'created',
             1,
             201,
+            '_doc',
         ]);
 
         $this->executeCommand(['index_name' => $indexName])
             ->assertSuccessful()
             ->expectsTable(
-                ['_id', '_seq_no', '_type', '_index', '_version', 'result', '_primary_term', 'status'],
+                ['_id', '_seq_no', '_index', '_version', 'result', '_primary_term', 'status', '_type'],
                 $expectedRows
             )
             ->expectsOutput(sprintf('index: %s', $indexName))
@@ -115,8 +119,17 @@ class FillSearchIndexTest extends SearchIndexCommandTest
     }
 
     #[DataProvider('indexNameProvider')]
-    public function test_command_logs_result(string $indexName): void
+    public function test_fill_index_log_disabled(string $indexName): void
     {
+        $this->executeCommand(['index_name' => $indexName]);
+        $this->logger->shouldNotHaveReceived('info');
+    }
+
+    #[DataProvider('indexNameProvider')]
+    public function test_fill_index_log_enabled(string $indexName): void
+    {
+        config()->set('elasticsearch.fill_index_log', true);
+
         $this->executeCommand(['index_name' => $indexName]);
 
         /** @var Expectation $expectation */
@@ -124,13 +137,14 @@ class FillSearchIndexTest extends SearchIndexCommandTest
         $expectation->once();
     }
 
+    /**
+     * @throws SearchIndexException
+     */
     #[DataProvider('indexNameProvider')]
     public function test_fill_search_index_with_argument_limit(string $indexName): void
     {
-        /** @var SearchableContract $modelName */
-        $modelName = config('elasticsearch.search_index_models.'.$indexName);
-
-        $modelName::factory()->count(3)->withContact()->create();
+        $model = SearchIndexEnum::from($indexName)->getModel();
+        $model::factory()->count(3)->withContact()->create();
         $limit = 2;
 
         $this->artisan(self::COMMAND, [
@@ -153,6 +167,7 @@ class FillSearchIndexTest extends SearchIndexCommandTest
 
     /**
      * @throws ReflectionException
+     * @throws SearchIndexException
      */
     #[DataProvider('indexNameProvider')]
     public function test_fill_search_index_failed(string $indexName): void
@@ -161,10 +176,8 @@ class FillSearchIndexTest extends SearchIndexCommandTest
             return new ElasticsearchClientErrorStub;
         });
 
-        /** @var SearchableContract $modelName */
-        $modelName = config('elasticsearch.search_index_models.'.$indexName);
-
-        $modelName::factory()->count(2)->withContact()->create();
+        $model = SearchIndexEnum::from($indexName)->getModel();
+        $model::factory()->count(2)->withContact()->create();
 
         $this->expectException(ElasticsearchApiException::class);
         $this->expectExceptionMessage('Index filling error.');
