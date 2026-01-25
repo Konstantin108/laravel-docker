@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Elasticsearch\Entities;
 
-// TODO kpstya возможно для elasticsearch надо добавить Getaway
+// TODO kpstya возможно для Elasticsearch надо добавить Getaway
 
 use App\Services\Contracts\SearchableSourceContract;
 use App\Services\Elasticsearch\Dto\SearchIndexHitsDto;

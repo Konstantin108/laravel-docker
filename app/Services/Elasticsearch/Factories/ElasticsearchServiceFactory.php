@@ -20,10 +20,6 @@ class ElasticsearchServiceFactory
         $this->services = $services;
     }
 
-    /* TODO kpstya
-        - возможно в SearchIndexEnum добавить методы getModel() или getService() и типо того,
-        это может многое упростить (будет один источник истины) */
-
     /**
      * @throws SearchIndexException
      */

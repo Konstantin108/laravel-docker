@@ -16,8 +16,6 @@ return [
     'send_report_to_email' => env('ELASTICSEARCH_SEND_REPORT_TO_EMAIL', false),
     'fill_index_log' => env('ELASTICSEARCH_FILL_INDEX_LOG', false),
 
-    // TODO kpstya надо подумать, возможно упростить и избавиться от лишних фабрик
-
     'source_dto_factories' => [
         'users' => \App\Factories\UserSourceDtoFactory::class,
     ],

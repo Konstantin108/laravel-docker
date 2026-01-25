@@ -10,6 +10,8 @@ use App\Jobs\SendSearchIndexDataJob;
 use App\Listeners\NotifyAboutSearchIndexFilledListener;
 use App\Mail\SearchIndexDataMail;
 use App\Models\Contracts\SearchableContract;
+use App\Services\Elasticsearch\Enums\SearchIndexEnum;
+use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Mail\Mailer;
 use Illuminate\Support\Facades\Event;
@@ -49,14 +51,16 @@ class FillSearchIndexTest extends SearchIndexCommandTest
         $this->logger = Log::spy();
     }
 
+    /**
+     * @throws SearchIndexException
+     */
     #[DataProvider('indexNameProvider')]
     public function test_fill_search_index_success(string $indexName): void
     {
-        /** @var SearchableContract $modelName */
-        $modelName = config('elasticsearch.search_index_models.'.$indexName);
+        $model = SearchIndexEnum::from($indexName)->getModel();
 
         $count = 2;
-        $models = $modelName::factory()->count($count)->withContact()->create();
+        $models = $model::factory()->count($count)->withContact()->create();
 
         $expectedRows = $models->map(static fn (SearchableContract $model): array => [
             $model->id,
@@ -133,13 +137,14 @@ class FillSearchIndexTest extends SearchIndexCommandTest
         $expectation->once();
     }
 
+    /**
+     * @throws SearchIndexException
+     */
     #[DataProvider('indexNameProvider')]
     public function test_fill_search_index_with_argument_limit(string $indexName): void
     {
-        /** @var SearchableContract $modelName */
-        $modelName = config('elasticsearch.search_index_models.'.$indexName);
-
-        $modelName::factory()->count(3)->withContact()->create();
+        $model = SearchIndexEnum::from($indexName)->getModel();
+        $model::factory()->count(3)->withContact()->create();
         $limit = 2;
 
         $this->artisan(self::COMMAND, [
@@ -162,6 +167,7 @@ class FillSearchIndexTest extends SearchIndexCommandTest
 
     /**
      * @throws ReflectionException
+     * @throws SearchIndexException
      */
     #[DataProvider('indexNameProvider')]
     public function test_fill_search_index_failed(string $indexName): void
@@ -170,10 +176,8 @@ class FillSearchIndexTest extends SearchIndexCommandTest
             return new ElasticsearchClientErrorStub;
         });
 
-        /** @var SearchableContract $modelName */
-        $modelName = config('elasticsearch.search_index_models.'.$indexName);
-
-        $modelName::factory()->count(2)->withContact()->create();
+        $model = SearchIndexEnum::from($indexName)->getModel();
+        $model::factory()->count(2)->withContact()->create();
 
         $this->expectException(ElasticsearchApiException::class);
         $this->expectExceptionMessage('Index filling error.');

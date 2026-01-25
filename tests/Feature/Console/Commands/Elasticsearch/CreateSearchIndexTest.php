@@ -13,8 +13,6 @@ class CreateSearchIndexTest extends SearchIndexCommandTest
 {
     private const COMMAND = 'app:elasticsearch:create-index';
 
-    // TODO kpstya подумать как поступить с кейсами в SearchIndexEnum и c классами сервисов в config/elasticsearch.php
-
     #[DataProvider('indexNameProvider')]
     public function test_create_search_index_success(string $indexName): void
     {
