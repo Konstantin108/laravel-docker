@@ -130,8 +130,6 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
         $model = SearchIndexEnum::from($indexName)->getModel();
         $elementsCount = $model::query()->count();
 
-        // TODO kpstya возможно нужен репозиторий и интерфейс
-
         return [
             'took' => $elementsCount + rand(1, 5),
             'timed_out' => false,
