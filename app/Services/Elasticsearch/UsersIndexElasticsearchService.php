@@ -103,9 +103,9 @@ class UsersIndexElasticsearchService extends ElasticsearchService
 
     // TODO kpstya либо везде limit либо count
 
-    public function fillSearchIndex(?int $count = null): ?BulkIndexResult
+    public function fillSearchIndex(?int $limit = null): ?BulkIndexResult
     {
-        $users = $this->userService->getUsers($count);
+        $users = $this->userService->getUsers($limit);
         if ($users->isEmpty()) {
             return null;
         }

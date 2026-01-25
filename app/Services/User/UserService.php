@@ -39,9 +39,9 @@ class UserService
     /**
      * @return Collection<int, UserEnriched>
      */
-    public function getUsers(?int $count = null): Collection
+    public function getUsers(?int $limit = null): Collection
     {
-        return $this->repository->getAllUsers($count)
+        return $this->repository->getAllUsers($limit)
             ->map(fn (User $user): UserEnriched => $this->enrich($user));
     }
 

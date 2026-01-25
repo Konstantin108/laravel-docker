@@ -30,7 +30,7 @@ abstract class ElasticsearchService
      */
     abstract protected function multiMatchFieldsSettings(): array;
 
-    abstract public function fillSearchIndex(?int $count = null): mixed;
+    abstract public function fillSearchIndex(?int $limit = null): mixed;
 
     /**
      * @return array<string, mixed>
