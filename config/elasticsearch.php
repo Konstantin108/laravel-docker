@@ -18,6 +18,7 @@ return [
 
     'source_dto_factories' => [
         'users' => \App\Factories\UserSourceDtoFactory::class,
+        'products' => \App\Factories\ProductSourceDtoFactory::class,
     ],
 
     'search_index_models' => [
