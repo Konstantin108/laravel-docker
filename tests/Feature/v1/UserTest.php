@@ -109,7 +109,9 @@ class UserTest extends TestCase
     #[TestWith(['@iva', 1])]
     #[TestWith(['898', 1])]
     #[TestWith(['RESERve.', 3])]
-    public function test_user_index_v1_with_search_param(string $search, int $resultCount): void
+    #[TestWith(['Ив', 3])]
+    #[TestWith([null, 3])]
+    public function test_user_index_v1_with_search_param(?string $search, int $resultCount): void
     {
         $data = [
             [

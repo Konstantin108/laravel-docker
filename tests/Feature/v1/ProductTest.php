@@ -44,7 +44,9 @@ class ProductTest extends TestCase
     #[TestWith(['автоваз', 0])]
     #[TestWith(['0000', 2])]
     #[TestWith(['цена', 1])]
-    public function test_product_index_v1_with_search_param(string $search, int $resultCount): void
+    #[TestWith(['sa', 3])]
+    #[TestWith([null, 3])]
+    public function test_product_index_v1_with_search_param(?string $search, int $resultCount): void
     {
         $data = [
             ['name' => 'Xiaomi', 'description' => 'лучшая цена на рынке', 'price' => 1500000],
