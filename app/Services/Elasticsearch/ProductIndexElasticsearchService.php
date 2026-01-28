@@ -10,19 +10,20 @@ use App\Services\Elasticsearch\Abstract\ElasticsearchService;
 use App\Services\Elasticsearch\Entities\BulkIndexResult;
 use App\Services\Elasticsearch\Factories\BulkIndexResultFactory;
 use App\Services\Elasticsearch\Factories\SearchResultFactory;
-use App\Services\User\Entities\UserEnriched;
-use App\Services\User\UserService;
+use App\Services\Product\Dto\IndexDto;
+use App\Services\Product\Entities\ProductEnriched;
+use App\Services\Product\ProductService;
 use Illuminate\Contracts\Events\Dispatcher;
 
-class UsersIndexElasticsearchService extends ElasticsearchService
+class ProductIndexElasticsearchService extends ElasticsearchService
 {
-    protected const INDEX_NAME = 'users';
+    protected const INDEX_NAME = 'products';
 
     public function __construct(
         protected ElasticsearchClientContract $client,
         protected SearchResultFactory $searchResultFactory,
         private readonly Dispatcher $dispatcher,
-        private readonly UserService $userService,
+        private readonly ProductService $productService,
         private readonly BulkIndexResultFactory $bulkIndexResultFactory,
     ) {
         parent::__construct($client, $searchResultFactory);
@@ -66,19 +67,7 @@ class UsersIndexElasticsearchService extends ElasticsearchService
                         'type' => 'text',
                         'analyzer' => 'my_ngram_analyzer',
                     ],
-                    'email' => [
-                        'type' => 'text',
-                        'analyzer' => 'my_ngram_analyzer',
-                    ],
-                    'reserve_email' => [
-                        'type' => 'text',
-                        'analyzer' => 'my_ngram_analyzer',
-                    ],
-                    'phone' => [
-                        'type' => 'text',
-                        'analyzer' => 'my_ngram_analyzer',
-                    ],
-                    'telegram' => [
+                    'description' => [
                         'type' => 'text',
                         'analyzer' => 'my_ngram_analyzer',
                     ],
@@ -93,23 +82,20 @@ class UsersIndexElasticsearchService extends ElasticsearchService
     protected function multiMatchFieldsSettings(): array
     {
         return [
-            'name^5',
-            'email^4',
-            'reserve_email^3',
-            'telegram^2',
-            'phone^1',
+            'name^2',
+            'description^1',
         ];
     }
 
     public function fillSearchIndex(?int $limit = null): ?BulkIndexResult
     {
-        $users = $this->userService->getUsers($limit);
-        if ($users->isEmpty()) {
+        $products = $this->productService->getProducts(new IndexDto(limit: $limit));
+        if ($products->isEmpty()) {
             return null;
         }
 
-        $body = $users->map(fn (UserEnriched $user): string => $this->makeDocElement(
-            $user->toArray(),
+        $body = $products->map(fn (ProductEnriched $product): string => $this->makeDocElement(
+            $product->toArray(),
             static::INDEX_NAME
         ))
             ->implode('');
@@ -118,7 +104,7 @@ class UsersIndexElasticsearchService extends ElasticsearchService
 
         return tap(
             $this->bulkIndexResultFactory->createFromArray($result),
-            fn (): ?array => $this->dispatcher->dispatch(new SearchIndexFilledEvent($users, static::INDEX_NAME))
+            fn (): ?array => $this->dispatcher->dispatch(new SearchIndexFilledEvent($products, static::INDEX_NAME))
         );
     }
 }

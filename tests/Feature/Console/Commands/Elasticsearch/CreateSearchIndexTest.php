@@ -9,7 +9,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionException;
 use Tests\Feature\Console\Commands\Elasticsearch\Abstract\SearchIndexCommandTest;
 
-class CreateSearchIndexTest extends SearchIndexCommandTest
+final class CreateSearchIndexTest extends SearchIndexCommandTest
 {
     private const COMMAND = 'app:elasticsearch:create-index';
 

@@ -26,7 +26,7 @@ use Psr\Container\NotFoundExceptionInterface;
 use ReflectionException;
 use Tests\Feature\Console\Commands\Elasticsearch\Abstract\SearchIndexCommandTest;
 
-class FillSearchIndexTest extends SearchIndexCommandTest
+final class FillSearchIndexTest extends SearchIndexCommandTest
 {
     use RefreshDatabase;
 
@@ -60,7 +60,7 @@ class FillSearchIndexTest extends SearchIndexCommandTest
         $model = SearchIndexEnum::from($indexName)->getModel();
 
         $count = 2;
-        $models = $model::factory()->count($count)->withContact()->create();
+        $models = $model::factory()->count($count)->create();
 
         $expectedRows = $models->map(static fn (SearchableContract $model): array => [
             $model->id,
@@ -144,7 +144,7 @@ class FillSearchIndexTest extends SearchIndexCommandTest
     public function test_fill_search_index_with_argument_limit(string $indexName): void
     {
         $model = SearchIndexEnum::from($indexName)->getModel();
-        $model::factory()->count(3)->withContact()->create();
+        $model::factory()->count(3)->create();
         $limit = 2;
 
         $this->artisan(self::COMMAND, [
@@ -177,7 +177,7 @@ class FillSearchIndexTest extends SearchIndexCommandTest
         });
 
         $model = SearchIndexEnum::from($indexName)->getModel();
-        $model::factory()->count(2)->withContact()->create();
+        $model::factory()->count(2)->create();
 
         $this->expectException(ElasticsearchApiException::class);
         $this->expectExceptionMessage('Index filling error.');

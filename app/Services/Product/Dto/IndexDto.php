@@ -8,8 +8,6 @@ use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Mappers\SnakeCaseMapper;
 
-// TODO kpstya возможно переработать это для совместимости с командой FillSearchIndexCommand
-
 #[MapInputName(SnakeCaseMapper::class)]
 final class IndexDto extends Data
 {

@@ -18,18 +18,21 @@ return [
 
     'source_dto_factories' => [
         'users' => \App\Factories\UserSourceDtoFactory::class,
+        'products' => \App\Factories\ProductSourceDtoFactory::class,
     ],
 
     'search_index_models' => [
         'users' => \App\Models\User::class,
-        // 'products' => \App\Models\Product::class,
+        'products' => \App\Models\Product::class,
     ],
 
     'model_services' => [
         'users' => \App\Services\User\UserService::class,
+        'products' => \App\Services\Product\ProductService::class,
     ],
 
     'search_services' => [
         'users' => \App\Services\Elasticsearch\UsersIndexElasticsearchService::class,
+        'products' => \App\Services\Elasticsearch\ProductIndexElasticsearchService::class,
     ],
 ];

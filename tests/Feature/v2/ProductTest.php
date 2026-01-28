@@ -5,22 +5,22 @@ namespace Tests\Feature\v2;
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
 use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
-use App\Models\User;
+use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\TestWith;
 use ReflectionException;
 use Tests\TestCase;
 
-final class UserTest extends TestCase
+final class ProductTest extends TestCase
 {
     use RefreshDatabase;
 
-    private const INDEX_ROUTE = 'api.v2.user.index';
+    private const INDEX_ROUTE = 'api.v2.product.index';
 
-    public function test_user_index_v2_without_params(): void
+    public function test_product_index_v2_without_params(): void
     {
         $count = 3;
-        User::factory()->count($count)->withContact()->create();
+        Product::factory()->count($count)->create();
 
         $response = $this->getJson(route(self::INDEX_ROUTE))
             ->assertOk()
@@ -29,11 +29,11 @@ final class UserTest extends TestCase
                     '*' => [
                         'id',
                         'name',
-                        'email',
-                        'reserve_email',
-                        'phone',
-                        'telegram',
-                        'email_verified_at',
+                        'category_name',
+                        'price',
+                        'category_id',
+                        'description',
+                        'category_description',
                         'created_at',
                         'updated_at',
                     ],
@@ -45,9 +45,9 @@ final class UserTest extends TestCase
 
     #[TestWith(['page', '2s'])]
     #[TestWith(['per_page', 's'])]
-    public function test_user_index_v2_with_params_failed(string $param, string $value): void
+    public function test_product_index_v2_with_params_failed(string $param, string $value): void
     {
-        User::factory()->count(3)->withContact()->create();
+        Product::factory()->count(3)->create();
 
         $this->getJson(route(self::INDEX_ROUTE, [
             $param => $value,
@@ -56,10 +56,10 @@ final class UserTest extends TestCase
             ->assertJsonValidationErrors([$param]);
     }
 
-    public function test_user_index_v2_with_page_param(): void
+    public function test_product_index_v2_with_page_param(): void
     {
         $count = 13;
-        User::factory()->count($count)->withContact()->create();
+        Product::factory()->count($count)->create();
 
         $page = 2;
         $perPage = 9;
@@ -79,9 +79,9 @@ final class UserTest extends TestCase
         $this->assertCount($count - $perPage, $data);
     }
 
-    public function test_user_index_v2_with_per_page_param(): void
+    public function test_product_index_v2_with_per_page_param(): void
     {
-        User::factory()->count(3)->withContact()->create();
+        Product::factory()->count(3)->create();
         $perPage = 1;
 
         $response = $this->getJson(route(self::INDEX_ROUTE, [
@@ -95,13 +95,13 @@ final class UserTest extends TestCase
     /**
      * @throws ReflectionException
      */
-    public function test_user_index_v2_elasticsearch_failed_in_development_environment(): void
+    public function test_product_index_v2_elasticsearch_failed_in_development_environment(): void
     {
         $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
             return new ElasticsearchClientErrorStub;
         });
 
-        User::factory()->count(3)->withContact()->create();
+        Product::factory()->count(3)->create();
 
         $this->expectException(ElasticsearchApiException::class);
         $this->expectExceptionMessage('Index search error.');
@@ -114,7 +114,7 @@ final class UserTest extends TestCase
     /**
      * @throws ReflectionException
      */
-    public function test_user_index_v2_elasticsearch_failed_in_production_environment(): void
+    public function test_product_index_v2_elasticsearch_failed_in_production_environment(): void
     {
         config()->set('app.debug', false);
 
@@ -122,7 +122,7 @@ final class UserTest extends TestCase
             return new ElasticsearchClientErrorStub;
         });
 
-        User::factory()->count(3)->withContact()->create();
+        Product::factory()->count(3)->create();
 
         $this->getJson(route(self::INDEX_ROUTE))
             ->assertInternalServerError()
