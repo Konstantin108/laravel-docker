@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 use Mockery;
 use Tests\TestCase;
 
-class SendSearchIndexDataJobTest extends TestCase
+final class SendSearchIndexDataJobTest extends TestCase
 {
     public function test_handle_sends_email_with_correct_data()
     {

@@ -26,7 +26,7 @@ use Psr\Container\NotFoundExceptionInterface;
 use ReflectionException;
 use Tests\Feature\Console\Commands\Elasticsearch\Abstract\SearchIndexCommandTest;
 
-class FillSearchIndexTest extends SearchIndexCommandTest
+final class FillSearchIndexTest extends SearchIndexCommandTest
 {
     use RefreshDatabase;
 

@@ -11,7 +11,7 @@ use PHPUnit\Framework\Attributes\TestWith;
 use ReflectionException;
 use Tests\TestCase;
 
-class UserTest extends TestCase
+final class UserTest extends TestCase
 {
     use RefreshDatabase;
 

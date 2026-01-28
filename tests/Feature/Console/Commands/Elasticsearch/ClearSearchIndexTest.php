@@ -12,7 +12,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionException;
 use Tests\Feature\Console\Commands\Elasticsearch\Abstract\SearchIndexCommandTest;
 
-class ClearSearchIndexTest extends SearchIndexCommandTest
+final class ClearSearchIndexTest extends SearchIndexCommandTest
 {
     use RefreshDatabase;
 

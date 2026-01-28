@@ -9,7 +9,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionException;
 use Tests\Feature\Console\Commands\Elasticsearch\Abstract\SearchIndexCommandTest;
 
-class DeleteSearchIndexTest extends SearchIndexCommandTest
+final class DeleteSearchIndexTest extends SearchIndexCommandTest
 {
     private const COMMAND = 'app:elasticsearch:delete-index';
 

@@ -6,7 +6,7 @@ use PHPUnit\Framework\Attributes\TestWith;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Tests\TestCase;
 
-class ReverseStringTest extends TestCase
+final class ReverseStringTest extends TestCase
 {
     private const COMMAND = 'app:reverse-string';
 

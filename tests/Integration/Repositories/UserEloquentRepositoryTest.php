@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Tests\TestCase;
 
-class UserEloquentRepositoryTest extends TestCase
+final class UserEloquentRepositoryTest extends TestCase
 {
     use RefreshDatabase;
 
