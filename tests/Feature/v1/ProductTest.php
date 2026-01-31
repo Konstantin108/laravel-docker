@@ -20,7 +20,6 @@ final class ProductTest extends TestCase
         Product::factory()->count($count)->create();
 
         $response = $this->getJson(route(self::INDEX_ROUTE))
-            ->assertOk()
             ->assertJsonStructure([
                 'data' => [
                     '*' => [
@@ -35,7 +34,8 @@ final class ProductTest extends TestCase
                         'updated_at',
                     ],
                 ],
-            ]);
+            ])
+            ->assertOk();
 
         $this->assertCount($count, $response->json('data'));
     }

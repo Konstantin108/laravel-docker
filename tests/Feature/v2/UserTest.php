@@ -23,7 +23,6 @@ final class UserTest extends TestCase
         User::factory()->count($count)->withContact()->create();
 
         $response = $this->getJson(route(self::INDEX_ROUTE))
-            ->assertOk()
             ->assertJsonStructure([
                 'data' => [
                     '*' => [
@@ -38,7 +37,8 @@ final class UserTest extends TestCase
                         'updated_at',
                     ],
                 ],
-            ]);
+            ])
+            ->assertOk();
 
         $this->assertCount($count, $response->json('data'));
     }
@@ -52,8 +52,8 @@ final class UserTest extends TestCase
         $this->getJson(route(self::INDEX_ROUTE, [
             $param => $value,
         ]))
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors([$param]);
+            ->assertJsonValidationErrors([$param])
+            ->assertUnprocessable();
     }
 
     public function test_user_index_v2_with_page_param(): void
@@ -125,7 +125,7 @@ final class UserTest extends TestCase
         User::factory()->count(3)->withContact()->create();
 
         $this->getJson(route(self::INDEX_ROUTE))
-            ->assertInternalServerError()
-            ->assertJson(['message' => 'Server Error']);
+            ->assertJson(['message' => 'Server Error'])
+            ->assertInternalServerError();
     }
 }

@@ -20,7 +20,6 @@ final class UserTest extends TestCase
         User::factory()->count($count)->withContact()->create();
 
         $response = $this->getJson(route(self::INDEX_ROUTE))
-            ->assertOk()
             ->assertJsonPath('meta.total', $count)
             ->assertJsonStructure([
                 'data' => [
@@ -58,7 +57,8 @@ final class UserTest extends TestCase
                     'to',
                     'total',
                 ],
-            ]);
+            ])
+            ->assertOk();
 
         $this->assertCount($count, $response->json('data'));
         $this->assertIsInt($response->json('meta.total'));
@@ -73,8 +73,8 @@ final class UserTest extends TestCase
         $this->getJson(route(self::INDEX_ROUTE, [
             $param => $value,
         ]))
-            ->assertUnprocessable()
-            ->assertJsonValidationErrors([$param]);
+            ->assertJsonValidationErrors([$param])
+            ->assertUnprocessable();
     }
 
     public function test_user_index_v1_with_page_param(): void
@@ -85,8 +85,8 @@ final class UserTest extends TestCase
         $this->getJson(route(self::INDEX_ROUTE, [
             'page' => $page,
         ]))
-            ->assertOk()
-            ->assertJsonPath('meta.current_page', $page);
+            ->assertJsonPath('meta.current_page', $page)
+            ->assertOk();
     }
 
     public function test_user_index_v1_with_per_page_param(): void
@@ -97,8 +97,8 @@ final class UserTest extends TestCase
         $response = $this->getJson(route(self::INDEX_ROUTE, [
             'per_page' => $perPage,
         ]))
-            ->assertOk()
-            ->assertJsonPath('meta.per_page', $perPage);
+            ->assertJsonPath('meta.per_page', $perPage)
+            ->assertOk();
 
         $this->assertCount($perPage, $response->json('data'));
     }
@@ -143,8 +143,8 @@ final class UserTest extends TestCase
         $response = $this->getJson(route(self::INDEX_ROUTE, [
             'search' => $search,
         ]))
-            ->assertOk()
-            ->assertJsonPath('meta.total', $resultCount);
+            ->assertJsonPath('meta.total', $resultCount)
+            ->assertOk();
 
         $this->assertCount($resultCount, $response->json('data'));
     }

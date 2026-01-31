@@ -22,8 +22,8 @@ final class ReverseStringTest extends TestCase
         $this->artisan(self::COMMAND, [
             'string:string' => $string,
         ])
-            ->assertSuccessful()
-            ->expectsOutput($reversedString);
+            ->expectsOutput($reversedString)
+            ->assertSuccessful();
     }
 
     public function test_reverse_string_without_passed_argument(): void

@@ -30,8 +30,8 @@ final class ClearSearchIndexTest extends SearchIndexCommandTest
         $model::factory()->count($count)->create();
 
         $this->executeCommand(['index_name' => $indexName])
-            ->assertSuccessful()
-            ->expectsOutputToContain(sprintf('"deleted": %d', $count));
+            ->expectsOutputToContain(sprintf('"deleted": %d', $count))
+            ->assertSuccessful();
     }
 
     /**

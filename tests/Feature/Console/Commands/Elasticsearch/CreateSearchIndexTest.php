@@ -17,8 +17,8 @@ final class CreateSearchIndexTest extends SearchIndexCommandTest
     public function test_create_search_index_success(string $indexName): void
     {
         $this->executeCommand(['index_name' => $indexName])
-            ->assertSuccessful()
-            ->expectsOutputToContain(sprintf('"index": "%s"', $indexName));
+            ->expectsOutputToContain(sprintf('"index": "%s"', $indexName))
+            ->assertSuccessful();
     }
 
     /**

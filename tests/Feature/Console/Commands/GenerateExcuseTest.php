@@ -12,8 +12,7 @@ final class GenerateExcuseTest extends TestCase
 
     public function test_generate_excuse_success(): void
     {
-        $this->artisan(self::COMMAND)
-            ->assertSuccessful();
+        $this->artisan(self::COMMAND)->assertSuccessful();
     }
 
     public function test_generate_excuse_failed_when_json_is_invalid(): void
@@ -23,8 +22,8 @@ final class GenerateExcuseTest extends TestCase
             ->andReturn('{invalid json');
 
         $this->artisan(self::COMMAND)
-            ->assertFailed()
-            ->expectsOutputToContain('Syntax error');
+            ->expectsOutputToContain('Syntax error')
+            ->assertFailed();
     }
 
     public function test_generate_excuse_failed_when_file_does_not_exist(): void
@@ -34,7 +33,7 @@ final class GenerateExcuseTest extends TestCase
             ->andThrow(new Exception('File does not exist'));
 
         $this->artisan(self::COMMAND)
-            ->assertFailed()
-            ->expectsOutputToContain('File does not exist');
+            ->expectsOutputToContain('File does not exist')
+            ->assertFailed();
     }
 }

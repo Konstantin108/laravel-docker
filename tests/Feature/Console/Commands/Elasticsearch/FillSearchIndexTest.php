@@ -74,7 +74,6 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
         ]);
 
         $this->executeCommand(['index_name' => $indexName])
-            ->assertSuccessful()
             ->expectsTable(
                 ['_id', '_seq_no', '_index', '_version', 'result', '_primary_term', 'status', '_type'],
                 $expectedRows
@@ -84,7 +83,8 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
             ->expectsOutput('errors: false')
             ->expectsOutput(sprintf('created: %d', $count))
             ->expectsOutput(sprintf('updated: %d', 0))
-            ->expectsOutput(sprintf('total: %d', $count));
+            ->expectsOutput(sprintf('total: %d', $count))
+            ->assertSuccessful();
 
         $events = Event::dispatched(SearchIndexFilledEvent::class);
         $this->assertCount(1, $events);
@@ -151,16 +151,16 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
             'index_name' => $indexName,
             '--limit' => $limit,
         ])
-            ->assertSuccessful()
-            ->expectsOutput(sprintf('total: %d', $limit));
+            ->expectsOutput(sprintf('total: %d', $limit))
+            ->assertSuccessful();
     }
 
     #[DataProvider('indexNameProvider')]
     public function test_fill_search_index_when_table_is_empty(string $indexName): void
     {
         $this->executeCommand(['index_name' => $indexName])
-            ->assertSuccessful()
-            ->expectsOutput('null');
+            ->expectsOutput('null')
+            ->assertSuccessful();
 
         Event::assertNotDispatched(SearchIndexFilledEvent::class);
     }

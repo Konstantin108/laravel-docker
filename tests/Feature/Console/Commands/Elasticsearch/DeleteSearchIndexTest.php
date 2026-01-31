@@ -17,8 +17,8 @@ final class DeleteSearchIndexTest extends SearchIndexCommandTest
     public function test_delete_search_index_success(string $indexName): void
     {
         $this->executeCommand(['index_name' => $indexName])
-            ->assertSuccessful()
-            ->expectsOutputToContain('"acknowledged": true');
+            ->expectsOutputToContain('"acknowledged": true')
+            ->assertSuccessful();
     }
 
     /**
