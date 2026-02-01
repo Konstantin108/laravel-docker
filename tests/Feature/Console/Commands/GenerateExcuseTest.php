@@ -23,8 +23,6 @@ final class GenerateExcuseTest extends TestCase
         $this->app->instance(Filesystem::class, $this->filesystem);
     }
 
-    // TODO kpstya нужно по максимуму избавиться от использования фасадов
-
     public function test_generate_excuse_success(): void
     {
         $data = [
