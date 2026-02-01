@@ -9,3 +9,7 @@ Route::prefix('v1')->name('api.v1.')->group(function (): void {
 
     Route::get('product', [ProductController::class, 'index'])->name('product.index');
 });
+
+// TODO kpstya починить стан
+
+// TODO kpstya почитать про уровни лога

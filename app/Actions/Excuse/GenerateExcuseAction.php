@@ -8,13 +8,11 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Filesystem\Filesystem;
 use JsonException;
 
-final class GenerateExcuseAction
+final readonly class GenerateExcuseAction
 {
     private const PATH = '/data/phrases.json';
 
-    public function __construct(
-        private readonly Filesystem $filesystem,
-    ) {}
+    public function __construct(private Filesystem $filesystem) {}
 
     /**
      * @throws FileNotFoundException
