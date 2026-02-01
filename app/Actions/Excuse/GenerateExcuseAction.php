@@ -16,12 +16,6 @@ final class GenerateExcuseAction
         private readonly Filesystem $filesystem,
     ) {}
 
-    // TODO kpstya исправить stan комментарии
-
-    // TODO kpsaty тест для рандома
-
-    // TODO kpstya в тесте фасад это нормально?
-
     /**
      * @throws FileNotFoundException
      * @throws JsonException
