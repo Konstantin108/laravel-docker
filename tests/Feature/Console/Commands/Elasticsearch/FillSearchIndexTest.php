@@ -48,6 +48,7 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
         Queue::fake();
         Mail::fake();
         $this->listener = $this->app->get(NotifyAboutSearchIndexFilledListener::class);
+        // TODO kpstya наверное стоит заменить на Mockery
         $this->logger = Log::spy();
     }
 
@@ -57,6 +58,7 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
     #[DataProvider('indexNameProvider')]
     public function test_fill_search_index_success(string $indexName): void
     {
+        // TODO kpstya надо посмотреть $this-app по всем тестам
         $model = SearchIndexEnum::from($indexName)->getModel();
 
         $count = 2;
@@ -72,6 +74,8 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
             201,
             '_doc',
         ]);
+
+        // TODO kpstya где можно использовать $this->factory = new UserFactory() и чем это может быть лучше
 
         $this->executeCommand(['index_name' => $indexName])
             ->expectsTable(

@@ -13,6 +13,8 @@ use Tests\TestCase;
 
 final class SendSearchIndexDataJobTest extends TestCase
 {
+    // TODO kpstya добавить тест репозитория для Product
+
     public function test_handle_sends_email_with_correct_data()
     {
         $indexName = 'any_index_name';

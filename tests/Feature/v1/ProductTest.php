@@ -12,9 +12,9 @@ final class ProductTest extends TestCase
 {
     use RefreshDatabase;
 
-    private const INDEX_ROUTE = 'api.v1.product.index';
+    private const INDEX_ROUTE = 'api.v1.products.index';
 
-    public function test_product_index_v1_without_params()
+    public function test_products_index_v1_without_params()
     {
         $count = 3;
         Product::factory()->count($count)->create();
@@ -46,7 +46,7 @@ final class ProductTest extends TestCase
     #[TestWith(['цена', 1])]
     #[TestWith(['sa', 3])]
     #[TestWith([null, 3])]
-    public function test_product_index_v1_with_search_param(?string $search, int $resultCount): void
+    public function test_products_index_v1_with_search_param(?string $search, int $resultCount): void
     {
         $data = [
             ['name' => 'Xiaomi', 'description' => 'лучшая цена на рынке', 'price' => 1500000],

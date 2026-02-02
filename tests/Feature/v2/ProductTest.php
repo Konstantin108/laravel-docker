@@ -15,9 +15,9 @@ final class ProductTest extends TestCase
 {
     use RefreshDatabase;
 
-    private const INDEX_ROUTE = 'api.v2.product.index';
+    private const INDEX_ROUTE = 'api.v2.products.index';
 
-    public function test_product_index_v2_without_params(): void
+    public function test_products_index_v2_without_params(): void
     {
         $count = 3;
         Product::factory()->count($count)->create();
@@ -45,7 +45,7 @@ final class ProductTest extends TestCase
 
     #[TestWith(['page', '2s'])]
     #[TestWith(['per_page', 's'])]
-    public function test_product_index_v2_with_params_failed(string $param, string $value): void
+    public function test_products_index_v2_with_params_failed(string $param, string $value): void
     {
         Product::factory()->count(3)->create();
 
@@ -56,7 +56,7 @@ final class ProductTest extends TestCase
             ->assertUnprocessable();
     }
 
-    public function test_product_index_v2_with_page_param(): void
+    public function test_products_index_v2_with_page_param(): void
     {
         $count = 13;
         Product::factory()->count($count)->create();
@@ -79,7 +79,7 @@ final class ProductTest extends TestCase
         $this->assertCount($count - $perPage, $data);
     }
 
-    public function test_product_index_v2_with_per_page_param(): void
+    public function test_products_index_v2_with_per_page_param(): void
     {
         Product::factory()->count(3)->create();
         $perPage = 1;
@@ -95,7 +95,7 @@ final class ProductTest extends TestCase
     /**
      * @throws ReflectionException
      */
-    public function test_product_index_v2_elasticsearch_failed_in_development_environment(): void
+    public function test_products_index_v2_elasticsearch_failed_in_development_environment(): void
     {
         $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
             return new ElasticsearchClientErrorStub;
@@ -114,7 +114,7 @@ final class ProductTest extends TestCase
     /**
      * @throws ReflectionException
      */
-    public function test_product_index_v2_elasticsearch_failed_in_production_environment(): void
+    public function test_products_index_v2_elasticsearch_failed_in_production_environment(): void
     {
         config()->set('app.debug', false);
 

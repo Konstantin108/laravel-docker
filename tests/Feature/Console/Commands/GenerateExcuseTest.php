@@ -20,6 +20,7 @@ final class GenerateExcuseTest extends TestCase
         parent::setUp();
 
         $this->filesystem = Mockery::mock(Filesystem::class);
+        // TODO kpstya наверное здесь заменить instance() на get()
         $this->app->instance(Filesystem::class, $this->filesystem);
     }
 

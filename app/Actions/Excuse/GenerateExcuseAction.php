@@ -14,6 +14,8 @@ final readonly class GenerateExcuseAction
 
     public function __construct(private Filesystem $filesystem) {}
 
+    // TODO kpstya надо бы добавить json_validate()
+
     /**
      * @throws FileNotFoundException
      * @throws JsonException
