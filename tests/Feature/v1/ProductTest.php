@@ -14,7 +14,7 @@ final class ProductTest extends TestCase
 
     private const INDEX_ROUTE = 'api.v1.products.index';
 
-    public function test_products_index_v1_without_params()
+    public function test_it_returns_products_list_when_no_params_provided()
     {
         $count = 3;
         Product::factory()->count($count)->create();
@@ -46,7 +46,7 @@ final class ProductTest extends TestCase
     #[TestWith(['цена', 1])]
     #[TestWith(['sa', 3])]
     #[TestWith([null, 3])]
-    public function test_products_index_v1_with_search_param(?string $search, int $resultCount): void
+    public function test_it_filters_products_by_search_param(?string $search, int $resultCount): void
     {
         $data = [
             ['name' => 'Xiaomi', 'description' => 'лучшая цена на рынке', 'price' => 1500000],

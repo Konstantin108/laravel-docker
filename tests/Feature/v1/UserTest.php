@@ -14,7 +14,7 @@ final class UserTest extends TestCase
 
     private const INDEX_ROUTE = 'api.v1.users.index';
 
-    public function test_users_index_v1_without_params()
+    public function test_it_returns_users_list_when_no_params_provided()
     {
         $count = 3;
         User::factory()->count($count)->withContact()->create();
@@ -66,7 +66,7 @@ final class UserTest extends TestCase
 
     #[TestWith(['page', 'two'])]
     #[TestWith(['per_page', 'one'])]
-    public function test_users_index_v1_with_params_failed(string $param, string $value): void
+    public function test_it_returns_error_when_invalid_params_are_provided(string $param, string $value): void
     {
         User::factory()->count(3)->withContact()->create();
 
@@ -77,7 +77,7 @@ final class UserTest extends TestCase
             ->assertUnprocessable();
     }
 
-    public function test_users_index_v1_with_page_param(): void
+    public function test_it_paginates_users_when_page_param_is_given(): void
     {
         User::factory()->count(3)->withContact()->create();
         $page = 2;
@@ -89,7 +89,7 @@ final class UserTest extends TestCase
             ->assertOk();
     }
 
-    public function test_users_index_v1_with_per_page_param(): void
+    public function test_it_limits_users_per_page_when_per_page_param_is_given(): void
     {
         User::factory()->count(3)->withContact()->create();
         $perPage = 1;
@@ -111,7 +111,7 @@ final class UserTest extends TestCase
     #[TestWith(['RESERve.', 3])]
     #[TestWith(['Ив', 3])]
     #[TestWith([null, 3])]
-    public function test_users_index_v1_with_search_param(?string $search, int $resultCount): void
+    public function test_it_filters_users_by_search_param(?string $search, int $resultCount): void
     {
         $data = [
             [

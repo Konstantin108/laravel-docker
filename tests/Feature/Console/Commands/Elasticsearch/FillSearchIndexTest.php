@@ -72,8 +72,6 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
             '_doc',
         ]);
 
-        // TODO kpstya где можно использовать $this->factory = new UserFactory() и чем это может быть лучше
-
         $this->executeCommand(['index_name' => $indexName])
             ->expectsTable(
                 ['_id', '_seq_no', '_index', '_version', 'result', '_primary_term', 'status', '_type'],
