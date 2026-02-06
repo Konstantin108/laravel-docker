@@ -15,14 +15,13 @@ use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Mail\Mailer;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
-use Mockery\Expectation;
-use Mockery\MockInterface;
+use Mockery;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Psr\Log\LoggerInterface;
 use ReflectionException;
 use Tests\Feature\Console\Commands\Elasticsearch\Abstract\SearchIndexCommandTest;
 
@@ -34,7 +33,7 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
 
     private NotifyAboutSearchIndexFilledListener $listener;
 
-    private MockInterface $logger;
+    private LoggerInterface $logger;
 
     /**
      * @throws ContainerExceptionInterface
@@ -48,17 +47,15 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
         Queue::fake();
         Mail::fake();
         $this->listener = $this->app->get(NotifyAboutSearchIndexFilledListener::class);
-        // TODO kpstya наверное стоит заменить на Mockery
-        $this->logger = Log::spy();
+        $this->logger = Mockery::mock(LoggerInterface::class);
     }
 
     /**
      * @throws SearchIndexException
      */
     #[DataProvider('indexNameProvider')]
-    public function test_fill_search_index_success(string $indexName): void
+    public function test_it_successfully_fills_search_index(string $indexName): void
     {
-        // TODO kpstya надо посмотреть $this-app по всем тестам
         $model = SearchIndexEnum::from($indexName)->getModel();
 
         $count = 2;
@@ -123,29 +120,30 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
     }
 
     #[DataProvider('indexNameProvider')]
-    public function test_fill_index_log_disabled(string $indexName): void
+    public function test_it_does_not_record_info_log_when_filling_index_and_logging_disabled(string $indexName): void
     {
+        $this->logger->shouldReceive('info')->never();
+        $this->app->instance(LoggerInterface::class, $this->logger);
+
         $this->executeCommand(['index_name' => $indexName]);
-        $this->logger->shouldNotHaveReceived('info');
     }
 
     #[DataProvider('indexNameProvider')]
-    public function test_fill_index_log_enabled(string $indexName): void
+    public function test_it_records_info_log_when_filling_index_and_logging_enabled(string $indexName): void
     {
         config()->set('elasticsearch.fill_index_log', true);
 
-        $this->executeCommand(['index_name' => $indexName]);
+        $this->logger->shouldReceive('info')->once();
+        $this->app->instance(LoggerInterface::class, $this->logger);
 
-        /** @var Expectation $expectation */
-        $expectation = $this->logger->shouldHaveReceived('info');
-        $expectation->once();
+        $this->executeCommand(['index_name' => $indexName]);
     }
 
     /**
      * @throws SearchIndexException
      */
     #[DataProvider('indexNameProvider')]
-    public function test_fill_search_index_with_argument_limit(string $indexName): void
+    public function test_it_fills_search_index_with_argument_limit(string $indexName): void
     {
         $model = SearchIndexEnum::from($indexName)->getModel();
         $model::factory()->count(3)->create();
@@ -160,7 +158,7 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
     }
 
     #[DataProvider('indexNameProvider')]
-    public function test_fill_search_index_when_table_is_empty(string $indexName): void
+    public function test_it_fills_search_index_when_table_is_empty(string $indexName): void
     {
         $this->executeCommand(['index_name' => $indexName])
             ->expectsOutput('null')
@@ -174,7 +172,7 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
      * @throws SearchIndexException
      */
     #[DataProvider('indexNameProvider')]
-    public function test_fill_search_index_failed(string $indexName): void
+    public function test_it_returns_error_when_filling_search_index_fails(string $indexName): void
     {
         $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
             return new ElasticsearchClientErrorStub;
@@ -189,13 +187,13 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
         $this->executeCommand(['index_name' => $indexName]);
     }
 
-    public function test_invalid_search_index_name(): void
+    public function test_it_returns_error_when_invalid_search_index_name_is_given(): void
     {
         $this->exceptInvalidSearchIndexName('usdrs');
     }
 
     #[DataProvider('indexNameProvider')]
-    public function test_expects_questions(string $indexName): void
+    public function test_it_returns_questions_for_given_index(string $indexName): void
     {
         $this->expectsPrompts($indexName)
             ->expectsQuestion('Указать лимит отправялемых записей?', '')

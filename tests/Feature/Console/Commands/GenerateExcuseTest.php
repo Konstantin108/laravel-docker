@@ -20,11 +20,10 @@ final class GenerateExcuseTest extends TestCase
         parent::setUp();
 
         $this->filesystem = Mockery::mock(Filesystem::class);
-        // TODO kpstya наверное здесь заменить instance() на get()
         $this->app->instance(Filesystem::class, $this->filesystem);
     }
 
-    public function test_generate_excuse_success(): void
+    public function test_it_successfully_generates_excuse(): void
     {
         $data = [
             'greeting' => ['привет,'],
@@ -50,7 +49,7 @@ final class GenerateExcuseTest extends TestCase
             ->assertSuccessful();
     }
 
-    public function test_generate_excuse_failed_when_json_is_invalid(): void
+    public function test_it_returns_error_when_generating_excuse_with_invalid_json(): void
     {
         $this->filesystem
             ->shouldReceive('get')
@@ -63,7 +62,7 @@ final class GenerateExcuseTest extends TestCase
             ->assertFailed();
     }
 
-    public function test_generate_excuse_failed_when_file_does_not_exist(): void
+    public function test_it_returns_error_when_generating_excuse_for_for_missing_file(): void
     {
         $this->filesystem
             ->shouldReceive('get')
