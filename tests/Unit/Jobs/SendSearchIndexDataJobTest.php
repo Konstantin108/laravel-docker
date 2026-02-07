@@ -13,7 +13,7 @@ use Tests\TestCase;
 
 final class SendSearchIndexDataJobTest extends TestCase
 {
-    public function test_handle_sends_email_with_correct_data()
+    public function test_it_sends_email_with_search_index_data()
     {
         $indexName = 'any_index_name';
 

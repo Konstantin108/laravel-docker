@@ -15,18 +15,18 @@ final class ReverseStringTest extends TestCase
     #[TestWith(['hello', 'olleh'])]
     #[TestWith(['こんにちは', 'はちにんこ'])]
     #[TestWith(['안녕하세요', '요세하녕안'])]
-    public function test_reverse_string_with_passed_argument(
+    public function test_it_reverses_string_successfully_when_argument_passed(
         string $string,
         string $reversedString
     ): void {
         $this->artisan(self::COMMAND, [
             'string:string' => $string,
         ])
-            ->assertSuccessful()
-            ->expectsOutput($reversedString);
+            ->expectsOutput($reversedString)
+            ->assertSuccessful();
     }
 
-    public function test_reverse_string_without_passed_argument(): void
+    public function test_it_returns_error_when_reversing_string_without_argument(): void
     {
         $this->expectException(RuntimeException::class);
 

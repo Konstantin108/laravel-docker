@@ -10,6 +10,7 @@ use App\Services\Contracts\SearchableSourceContract;
 use App\Services\Elasticsearch\Enums\SearchIndexEnum;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use Faker\Factory;
+use JsonException;
 
 class ElasticsearchClientStub implements ElasticsearchClientContract
 {
@@ -28,6 +29,8 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
 
     /**
      * @return array<string, mixed>
+     *
+     * @throws JsonException
      */
     public function bulkIndex(string $body, string $indexName): array
     {
@@ -36,7 +39,7 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
         $seqNumber = 0;
         $linesCount = count($lines);
         for ($i = 0; $i < $linesCount; $i += 2) {
-            $operation = json_decode($lines[$i], true);
+            $operation = json_decode($lines[$i], true, flags: JSON_THROW_ON_ERROR);
             $items[] = [
                 'index' => [
                     '_index' => $operation['index']['_index'],

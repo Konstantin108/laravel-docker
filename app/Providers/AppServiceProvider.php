@@ -18,7 +18,7 @@ use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -67,12 +67,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (config('app.query_log')) {
+        if ($this->app->isLocal() && config('app.query_log')) {
             DB::listen(static function (QueryExecuted $query): void {
-                File::append(
-                    storage_path('/logs/query.log'),
-                    $query->sql.' ['.implode(', ', $query->bindings).']'.' time-'.$query->time.PHP_EOL
-                );
+                Log::channel('query_log')->debug($query->sql, [
+                    'bindings' => $query->bindings,
+                    'time_ms' => $query->time,
+                ]);
             });
         }
     }

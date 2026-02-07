@@ -21,7 +21,7 @@ final class UserEloquentRepositoryTest extends TestCase
         $this->repository = new UserEloquentRepository;
     }
 
-    public function test_get_user_pagination_with_per_page_param(): void
+    public function test_it_returns_paginated_users_when_per_page_param_is_given(): void
     {
         User::factory()->count(3)->withContact()->create();
         $perPage = 2;
@@ -36,7 +36,7 @@ final class UserEloquentRepositoryTest extends TestCase
         }
     }
 
-    public function test_get_all_users(): void
+    public function test_it_returns_all_users_with_contact_relation(): void
     {
         $count = 2;
         User::factory()->count($count)->withContact()->create();
@@ -50,7 +50,7 @@ final class UserEloquentRepositoryTest extends TestCase
         }
     }
 
-    public function test_get_all_users_with_limit_param(): void
+    public function test_it_returns_all_users_when_limit_param_is_given(): void
     {
         User::factory()->count(5)->withContact()->create();
         $limit = 3;

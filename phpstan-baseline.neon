@@ -7,7 +7,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Foundation\\\\Application\\:\\:isLocal\\(\\).$#"
-			count: 1
+			count: 2
 			path: app/Providers/AppServiceProvider.php
 
 		-
