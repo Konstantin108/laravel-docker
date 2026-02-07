@@ -43,6 +43,8 @@ RUN apt-get install -y nodejs
 RUN npm install npm@latest -g
 RUN npm install yarn -g
 
+RUN apt-get update && apt-get install -y ca-certificates
+
 # Composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 RUN php composer-setup.php
