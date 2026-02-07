@@ -24,7 +24,7 @@ class UserService
      */
     public function getPagination(IndexDto $indexDto): LengthAwarePaginator
     {
-        /** @var LengthAwarePaginator<User> $paginator */
+        /** @var LengthAwarePaginator<int, User> $paginator */
         $paginator = $this->repository->getUsersPagination(
             $indexDto->perPage ?? self::DEFAULT_PER_PAGE,
             $indexDto->search
@@ -33,6 +33,7 @@ class UserService
         $userEnrichedCollection = $paginator->getCollection()
             ->map(fn (User $user): UserEnriched => $this->enrich($user));
 
+        /** @var LengthAwarePaginator<int, UserEnriched> $paginator */
         return $paginator->setCollection($userEnrichedCollection);
     }
 
