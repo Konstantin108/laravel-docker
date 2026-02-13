@@ -20,7 +20,7 @@ final class UserTest extends TestCase
     public function test_it_returns_users_list_when_no_params_provided(): void
     {
         $count = 3;
-        User::factory()->count($count)->withContact()->create();
+        User::factory()->count($count)->contact()->create();
 
         $response = $this->getJson(route(self::INDEX_ROUTE))
             ->assertJsonStructure([
@@ -47,7 +47,7 @@ final class UserTest extends TestCase
     #[TestWith(['per_page', 's'])]
     public function test_it_returns_error_when_invalid_params_are_provided(string $param, string $value): void
     {
-        User::factory()->count(3)->withContact()->create();
+        User::factory()->count(3)->contact()->create();
 
         $this->getJson(route(self::INDEX_ROUTE, [
             $param => $value,
@@ -59,7 +59,7 @@ final class UserTest extends TestCase
     public function test_it_paginates_users_when_page_param_is_given(): void
     {
         $count = 13;
-        User::factory()->count($count)->withContact()->create();
+        User::factory()->count($count)->contact()->create();
 
         $page = 2;
         $perPage = 9;
@@ -81,7 +81,7 @@ final class UserTest extends TestCase
 
     public function test_it_limits_users_per_page_when_per_page_param_is_given(): void
     {
-        User::factory()->count(3)->withContact()->create();
+        User::factory()->count(3)->contact()->create();
         $perPage = 1;
 
         $response = $this->getJson(route(self::INDEX_ROUTE, [
@@ -101,7 +101,7 @@ final class UserTest extends TestCase
             return new ElasticsearchClientErrorStub;
         });
 
-        User::factory()->count(3)->withContact()->create();
+        User::factory()->count(3)->contact()->create();
 
         $this->expectException(ElasticsearchApiException::class);
         $this->expectExceptionMessage('Index search error.');
@@ -122,7 +122,7 @@ final class UserTest extends TestCase
             return new ElasticsearchClientErrorStub;
         });
 
-        User::factory()->count(3)->withContact()->create();
+        User::factory()->count(3)->contact()->create();
 
         $this->getJson(route(self::INDEX_ROUTE))
             ->assertJson(['message' => 'Server Error'])
