@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+// TODO kpstya надо добавить темплейты для гита
+
 use App\Models\Contact;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -36,7 +38,7 @@ class UserFactory extends Factory
     /**
      * @param  array<string, int|string>  $state
      */
-    public function withContact(array|callable $state = []): self
+    public function contact(array|callable $state = []): self
     {
         return $this->has(Contact::factory()->state($state));
     }

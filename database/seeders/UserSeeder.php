@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
     {
         User::factory()
             ->count(self::USERS_COUNT)
-            ->withContact()
+            ->contact()
             ->create();
     }
 }
