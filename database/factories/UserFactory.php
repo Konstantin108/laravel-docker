@@ -2,8 +2,6 @@
 
 namespace Database\Factories;
 
-// TODO kpstya надо добавить темплейты для гита
-
 use App\Models\Contact;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
