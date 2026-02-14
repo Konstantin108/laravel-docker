@@ -2,18 +2,25 @@
 
 namespace App\Http\Controllers\Api\v2;
 
+use App\Dictionaries\RouteGroupDescriptionDictionary;
+use App\Dictionaries\RouteGroupDictionary;
 use App\Http\Requests\v2\User\IndexRequest;
 use App\Http\Resources\User\IndexResource;
 use App\Services\Elasticsearch\PaginationRequestMapper;
 use App\Services\Elasticsearch\UsersIndexElasticsearchService;
 use Dedoc\Scramble\Attributes\Endpoint;
+use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
 
 class UserController extends Controller
 {
-    #[Endpoint(description: 'Получить список пользователей с пагинацией [v2]')]
+    #[Group(
+        name: RouteGroupDictionary::USERS,
+        description: RouteGroupDescriptionDictionary::USERS
+    )]
+    #[Endpoint(title: 'Получить список пользователей с пагинацией [v2]')]
     public function index(
         IndexRequest $request,
         UsersIndexElasticsearchService $searchService,
