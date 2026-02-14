@@ -21,7 +21,7 @@ final class ClearSearchIndexTest extends SearchIndexCommandTest
     /**
      * @throws SearchIndexException
      */
-    #[DataProvider('indexNameProvider')]
+    #[DataProvider(methodName: 'indexNameProvider')]
     public function test_it_successfully_clears_search_index(string $indexName): void
     {
         $model = SearchIndexEnum::from($indexName)->getModel();
@@ -37,7 +37,7 @@ final class ClearSearchIndexTest extends SearchIndexCommandTest
     /**
      * @throws ReflectionException
      */
-    #[DataProvider('indexNameProvider')]
+    #[DataProvider(methodName: 'indexNameProvider')]
     public function test_it_returns_error_when_clearing_search_index_fails(string $indexName): void
     {
         $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
@@ -55,7 +55,7 @@ final class ClearSearchIndexTest extends SearchIndexCommandTest
         $this->exceptInvalidSearchIndexName('usdrs');
     }
 
-    #[DataProvider('indexNameProvider')]
+    #[DataProvider(methodName: 'indexNameProvider')]
     public function test_it_returns_questions_for_given_index(string $indexName): void
     {
         $this->expectsPrompts($indexName)->assertSuccessful();

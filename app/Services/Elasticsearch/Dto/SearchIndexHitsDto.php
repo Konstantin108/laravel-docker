@@ -8,7 +8,7 @@ use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Mappers\SnakeCaseMapper;
 
-#[MapInputName(SnakeCaseMapper::class)]
+#[MapInputName(input: SnakeCaseMapper::class)]
 final class SearchIndexHitsDto extends Data
 {
     public function __construct(

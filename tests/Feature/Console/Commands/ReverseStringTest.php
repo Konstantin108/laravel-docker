@@ -10,11 +10,11 @@ final class ReverseStringTest extends TestCase
 {
     private const COMMAND = 'app:reverse-string';
 
-    #[TestWith(['12345', '54321'])]
-    #[TestWith(['привет', 'тевирп'])]
-    #[TestWith(['hello', 'olleh'])]
-    #[TestWith(['こんにちは', 'はちにんこ'])]
-    #[TestWith(['안녕하세요', '요세하녕안'])]
+    #[TestWith(data: ['12345', '54321'])]
+    #[TestWith(data: ['привет', 'тевирп'])]
+    #[TestWith(data: ['hello', 'olleh'])]
+    #[TestWith(data: ['こんにちは', 'はちにんこ'])]
+    #[TestWith(data: ['안녕하세요', '요세하녕안'])]
     public function test_it_reverses_string_successfully_when_argument_passed(
         string $string,
         string $reversedString

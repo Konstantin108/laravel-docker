@@ -65,8 +65,8 @@ final class UserTest extends TestCase
         $this->assertIsInt($response->json('meta.total'));
     }
 
-    #[TestWith(['page', 'two'])]
-    #[TestWith(['per_page', 'one'])]
+    #[TestWith(data: ['page', 'two'])]
+    #[TestWith(data: ['per_page', 'one'])]
     public function test_it_returns_error_when_invalid_params_are_provided(string $param, string $value): void
     {
         User::factory()->count(3)->contact()->create();
@@ -104,14 +104,14 @@ final class UserTest extends TestCase
         $this->assertCount($perPage, $response->json('data'));
     }
 
-    #[TestWith(['Иван', 1])]
-    #[TestWith(['BK.RU', 2])]
-    #[TestWith(['Василий', 0])]
-    #[TestWith(['@iva', 1])]
-    #[TestWith(['898', 1])]
-    #[TestWith(['RESERve.', 3])]
-    #[TestWith(['Ив', 3])]
-    #[TestWith([null, 3])]
+    #[TestWith(data: ['Иван', 1])]
+    #[TestWith(data: ['BK.RU', 2])]
+    #[TestWith(data: ['Василий', 0])]
+    #[TestWith(data: ['@iva', 1])]
+    #[TestWith(data: ['898', 1])]
+    #[TestWith(data: ['RESERve.', 3])]
+    #[TestWith(data: ['Ив', 3])]
+    #[TestWith(data: [null, 3])]
     public function test_it_filters_users_by_search_param(?string $search, int $resultCount): void
     {
         $data = [

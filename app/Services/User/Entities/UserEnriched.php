@@ -10,7 +10,7 @@ use Spatie\LaravelData\Attributes\MapOutputName;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Mappers\SnakeCaseMapper;
 
-#[MapOutputName(SnakeCaseMapper::class)]
+#[MapOutputName(output: SnakeCaseMapper::class)]
 final class UserEnriched extends Data implements SearchableSourceContract
 {
     public function __construct(

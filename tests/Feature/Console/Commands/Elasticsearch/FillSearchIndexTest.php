@@ -53,7 +53,7 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
     /**
      * @throws SearchIndexException
      */
-    #[DataProvider('indexNameProvider')]
+    #[DataProvider(methodName: 'indexNameProvider')]
     public function test_it_successfully_fills_search_index(string $indexName): void
     {
         $model = SearchIndexEnum::from($indexName)->getModel();
@@ -117,7 +117,7 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
         $this->assertSame($models->count(), $mail->itemsCount);
     }
 
-    #[DataProvider('indexNameProvider')]
+    #[DataProvider(methodName: 'indexNameProvider')]
     public function test_it_does_not_record_info_log_when_filling_index_and_logging_disabled(string $indexName): void
     {
         $this->logger->shouldReceive('info')->never();
@@ -126,7 +126,7 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
         $this->executeCommand(['index_name' => $indexName]);
     }
 
-    #[DataProvider('indexNameProvider')]
+    #[DataProvider(methodName: 'indexNameProvider')]
     public function test_it_records_info_log_when_filling_index_and_logging_enabled(string $indexName): void
     {
         config()->set('elasticsearch.fill_index_log', true);
@@ -140,7 +140,7 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
     /**
      * @throws SearchIndexException
      */
-    #[DataProvider('indexNameProvider')]
+    #[DataProvider(methodName: 'indexNameProvider')]
     public function test_it_fills_search_index_with_argument_limit(string $indexName): void
     {
         $model = SearchIndexEnum::from($indexName)->getModel();
@@ -155,7 +155,7 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
             ->assertSuccessful();
     }
 
-    #[DataProvider('indexNameProvider')]
+    #[DataProvider(methodName: 'indexNameProvider')]
     public function test_it_fills_search_index_when_table_is_empty(string $indexName): void
     {
         $this->executeCommand(['index_name' => $indexName])
@@ -169,7 +169,7 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
      * @throws ReflectionException
      * @throws SearchIndexException
      */
-    #[DataProvider('indexNameProvider')]
+    #[DataProvider(methodName: 'indexNameProvider')]
     public function test_it_returns_error_when_filling_search_index_fails(string $indexName): void
     {
         $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
@@ -190,7 +190,7 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
         $this->exceptInvalidSearchIndexName('usdrs');
     }
 
-    #[DataProvider('indexNameProvider')]
+    #[DataProvider(methodName: 'indexNameProvider')]
     public function test_it_returns_questions_for_given_index(string $indexName): void
     {
         $this->expectsPrompts($indexName)

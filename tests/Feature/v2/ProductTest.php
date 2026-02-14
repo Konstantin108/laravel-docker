@@ -43,8 +43,8 @@ final class ProductTest extends TestCase
         $this->assertCount($count, $response->json('data'));
     }
 
-    #[TestWith(['page', '2s'])]
-    #[TestWith(['per_page', 's'])]
+    #[TestWith(data: ['page', '2s'])]
+    #[TestWith(data: ['per_page', 's'])]
     public function test_it_returns_error_when_invalid_params_are_provided(string $param, string $value): void
     {
         Product::factory()->count(3)->create();

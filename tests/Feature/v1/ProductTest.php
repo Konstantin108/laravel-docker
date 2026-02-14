@@ -41,12 +41,12 @@ final class ProductTest extends TestCase
         $this->assertCount($count, $response->json('data'));
     }
 
-    #[TestWith(['xiaom', 1])]
-    #[TestWith(['автоваз', 0])]
-    #[TestWith(['0000', 2])]
-    #[TestWith(['цена', 1])]
-    #[TestWith(['sa', 3])]
-    #[TestWith([null, 3])]
+    #[TestWith(data: ['xiaom', 1])]
+    #[TestWith(data: ['автоваз', 0])]
+    #[TestWith(data: ['0000', 2])]
+    #[TestWith(data: ['цена', 1])]
+    #[TestWith(data: ['sa', 3])]
+    #[TestWith(data: [null, 3])]
     public function test_it_filters_products_by_search_param(?string $search, int $resultCount): void
     {
         $data = [

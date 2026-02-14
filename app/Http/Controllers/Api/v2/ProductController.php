@@ -6,12 +6,14 @@ use App\Http\Requests\v2\Product\IndexRequest;
 use App\Http\Resources\Product\IndexResource;
 use App\Services\Elasticsearch\PaginationRequestMapper;
 use App\Services\Elasticsearch\ProductIndexElasticsearchService;
+use Dedoc\Scramble\Attributes\Endpoint;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
 
 class ProductController extends Controller
 {
+    #[Endpoint(description: 'Получить список продуктов с пагинацией [v2]')]
     public function index(
         IndexRequest $request,
         ProductIndexElasticsearchService $searchService,

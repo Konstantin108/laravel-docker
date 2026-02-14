@@ -6,12 +6,14 @@ use App\Http\Requests\v2\User\IndexRequest;
 use App\Http\Resources\User\IndexResource;
 use App\Services\Elasticsearch\PaginationRequestMapper;
 use App\Services\Elasticsearch\UsersIndexElasticsearchService;
+use Dedoc\Scramble\Attributes\Endpoint;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
 
 class UserController extends Controller
 {
+    #[Endpoint(description: 'Получить список пользователей с пагинацией [v2]')]
     public function index(
         IndexRequest $request,
         UsersIndexElasticsearchService $searchService,

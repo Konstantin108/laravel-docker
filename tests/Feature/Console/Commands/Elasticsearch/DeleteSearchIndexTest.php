@@ -13,7 +13,7 @@ final class DeleteSearchIndexTest extends SearchIndexCommandTest
 {
     private const COMMAND = 'app:elasticsearch:delete-index';
 
-    #[DataProvider('indexNameProvider')]
+    #[DataProvider(methodName: 'indexNameProvider')]
     public function test_it_successfully_deletes_search_index(string $indexName): void
     {
         $this->executeCommand(['index_name' => $indexName])
@@ -24,7 +24,7 @@ final class DeleteSearchIndexTest extends SearchIndexCommandTest
     /**
      * @throws ReflectionException
      */
-    #[DataProvider('indexNameProvider')]
+    #[DataProvider(methodName: 'indexNameProvider')]
     public function test_it_returns_error_when_deleting_search_index_fails(string $indexName): void
     {
         $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
@@ -42,7 +42,7 @@ final class DeleteSearchIndexTest extends SearchIndexCommandTest
         $this->exceptInvalidSearchIndexName('usdrs');
     }
 
-    #[DataProvider('indexNameProvider')]
+    #[DataProvider(methodName: 'indexNameProvider')]
     public function test_it_returns_questions_for_given_index(string $indexName): void
     {
         $this->expectsPrompts($indexName)->assertSuccessful();
