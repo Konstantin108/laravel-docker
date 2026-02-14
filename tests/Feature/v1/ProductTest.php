@@ -35,6 +35,7 @@ final class ProductTest extends TestCase
                     ],
                 ],
             ])
+            ->assertHeader('Content-Type', 'application/json')
             ->assertOk();
 
         $this->assertCount($count, $response->json('data'));

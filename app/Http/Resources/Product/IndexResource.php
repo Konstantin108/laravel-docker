@@ -1,5 +1,7 @@
 <?php
 
+// TODO kpstya возможно настроить swagger
+
 namespace App\Http\Resources\Product;
 
 use App\Services\Product\Entities\ProductEnriched;

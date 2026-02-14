@@ -58,6 +58,7 @@ final class UserTest extends TestCase
                     'total',
                 ],
             ])
+            ->assertHeader('Content-Type', 'application/json')
             ->assertOk();
 
         $this->assertCount($count, $response->json('data'));

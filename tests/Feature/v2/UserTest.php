@@ -126,6 +126,7 @@ final class UserTest extends TestCase
 
         $this->getJson(route(self::INDEX_ROUTE))
             ->assertJson(['message' => 'Server Error'])
+            ->assertHeader('Content-Type', 'application/json')
             ->assertInternalServerError();
     }
 }
