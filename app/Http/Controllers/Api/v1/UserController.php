@@ -12,8 +12,6 @@ use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
 
-// TODO kpstya возможно отлавливать исключения эластика или в командах
-
 class UserController extends Controller
 {
     #[Group(
