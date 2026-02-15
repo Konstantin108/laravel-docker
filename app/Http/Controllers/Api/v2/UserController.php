@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers\Api\v2;
 
-use App\Dictionaries\RouteGroupDescriptionDictionary;
-use App\Dictionaries\RouteGroupDictionary;
+use App\Enums\RouteGroupEnum;
 use App\Http\Requests\v2\User\IndexRequest;
 use App\Http\Resources\User\IndexResource;
 use App\Services\Elasticsearch\PaginationRequestMapper;
@@ -17,8 +16,8 @@ use Illuminate\Support\Arr;
 class UserController extends Controller
 {
     #[Group(
-        name: RouteGroupDictionary::USERS,
-        description: RouteGroupDescriptionDictionary::USERS
+        name: RouteGroupEnum::USER->value,
+        description: RouteGroupEnum::DESCRIPTIONS[RouteGroupEnum::USER->value]
     )]
     #[Endpoint(title: 'Получить список пользователей с пагинацией [v2]')]
     public function index(

@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers\Api\v2;
 
-use App\Dictionaries\RouteGroupDescriptionDictionary;
-use App\Dictionaries\RouteGroupDictionary;
+use App\Enums\RouteGroupEnum;
 use App\Http\Requests\v2\Product\IndexRequest;
 use App\Http\Resources\Product\IndexResource;
 use App\Services\Elasticsearch\PaginationRequestMapper;
@@ -17,8 +16,8 @@ use Illuminate\Support\Arr;
 class ProductController extends Controller
 {
     #[Group(
-        name: RouteGroupDictionary::PRODUCTS,
-        description: RouteGroupDescriptionDictionary::PRODUCTS
+        name: RouteGroupEnum::PRODUCT->value,
+        description: RouteGroupEnum::DESCRIPTIONS[RouteGroupEnum::PRODUCT->value]
     )]
     #[Endpoint(title: 'Получить список продуктов с пагинацией [v2]')]
     public function index(

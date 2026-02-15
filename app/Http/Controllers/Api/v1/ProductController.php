@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Dictionaries\RouteGroupDescriptionDictionary;
-use App\Dictionaries\RouteGroupDictionary;
+use App\Enums\RouteGroupEnum;
 use App\Http\Requests\v1\Product\IndexRequest;
 use App\Http\Resources\Product\IndexResource;
 use App\Services\Product\Dto\IndexDto;
@@ -16,8 +15,8 @@ use Illuminate\Routing\Controller;
 class ProductController extends Controller
 {
     #[Group(
-        name: RouteGroupDictionary::PRODUCTS,
-        description: RouteGroupDescriptionDictionary::PRODUCTS
+        name: RouteGroupEnum::PRODUCT->value,
+        description: RouteGroupEnum::DESCRIPTIONS[RouteGroupEnum::PRODUCT->value]
     )]
     #[Endpoint(title: 'Получить список продуктов')]
     public function index(IndexRequest $request, ProductService $productService): AnonymousResourceCollection
