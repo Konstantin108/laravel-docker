@@ -9,11 +9,13 @@ use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Mail\Mailable;
 use Illuminate\Support\Collection;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 final class SendSearchIndexDataJobTest extends TestCase
 {
-    public function test_it_sends_email_with_search_index_data()
+    #[Test]
+    public function it_sends_email_with_search_index_data()
     {
         $indexName = 'any_index_name';
 

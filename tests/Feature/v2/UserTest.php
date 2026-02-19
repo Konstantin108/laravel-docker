@@ -7,6 +7,7 @@ use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
 use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
 use ReflectionException;
 use Tests\TestCase;
@@ -17,7 +18,8 @@ final class UserTest extends TestCase
 
     private const INDEX_ROUTE = 'api.v2.users.index';
 
-    public function test_it_returns_users_list_when_no_params_provided(): void
+    #[Test]
+    public function it_returns_users_list_when_no_params_provided(): void
     {
         $count = 3;
         User::factory()->count($count)->contact()->create();
@@ -43,9 +45,10 @@ final class UserTest extends TestCase
         $this->assertCount($count, $response->json('data'));
     }
 
+    #[Test]
     #[TestWith(data: ['page', '2s'])]
     #[TestWith(data: ['per_page', 's'])]
-    public function test_it_returns_error_when_invalid_params_are_provided(string $param, string $value): void
+    public function it_returns_error_when_invalid_params_are_provided(string $param, string $value): void
     {
         User::factory()->count(3)->contact()->create();
 
@@ -56,7 +59,8 @@ final class UserTest extends TestCase
             ->assertUnprocessable();
     }
 
-    public function test_it_paginates_users_when_page_param_is_given(): void
+    #[Test]
+    public function it_paginates_users_when_page_param_is_given(): void
     {
         $count = 13;
         User::factory()->count($count)->contact()->create();
@@ -79,7 +83,8 @@ final class UserTest extends TestCase
         $this->assertCount($count - $perPage, $data);
     }
 
-    public function test_it_limits_users_per_page_when_per_page_param_is_given(): void
+    #[Test]
+    public function it_limits_users_per_page_when_per_page_param_is_given(): void
     {
         User::factory()->count(3)->contact()->create();
         $perPage = 1;
@@ -95,7 +100,8 @@ final class UserTest extends TestCase
     /**
      * @throws ReflectionException
      */
-    public function test_it_throws_exception_with_stack_trace_when_elasticsearch_fails_in_development_environment(): void
+    #[Test]
+    public function it_throws_exception_with_stack_trace_when_elasticsearch_fails_in_development_environment(): void
     {
         $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
             return new ElasticsearchClientErrorStub;
@@ -114,7 +120,8 @@ final class UserTest extends TestCase
     /**
      * @throws ReflectionException
      */
-    public function test_it_returns_json_error_when_elasticsearch_fails_in_production_environment(): void
+    #[Test]
+    public function it_returns_json_error_when_elasticsearch_fails_in_production_environment(): void
     {
         config()->set('app.debug', false);
 

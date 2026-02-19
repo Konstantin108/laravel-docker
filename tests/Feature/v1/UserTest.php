@@ -5,6 +5,7 @@ namespace Tests\Feature\v1;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
 use Tests\TestCase;
 
@@ -14,7 +15,8 @@ final class UserTest extends TestCase
 
     private const INDEX_ROUTE = 'api.v1.users.index';
 
-    public function test_it_returns_users_list_when_no_params_provided()
+    #[Test]
+    public function it_returns_users_list_when_no_params_provided()
     {
         $count = 3;
         User::factory()->count($count)->contact()->create();
@@ -65,9 +67,10 @@ final class UserTest extends TestCase
         $this->assertIsInt($response->json('meta.total'));
     }
 
+    #[Test]
     #[TestWith(data: ['page', 'two'])]
     #[TestWith(data: ['per_page', 'one'])]
-    public function test_it_returns_error_when_invalid_params_are_provided(string $param, string $value): void
+    public function it_returns_error_when_invalid_params_are_provided(string $param, string $value): void
     {
         User::factory()->count(3)->contact()->create();
 
@@ -78,7 +81,8 @@ final class UserTest extends TestCase
             ->assertUnprocessable();
     }
 
-    public function test_it_paginates_users_when_page_param_is_given(): void
+    #[Test]
+    public function it_paginates_users_when_page_param_is_given(): void
     {
         User::factory()->count(3)->contact()->create();
         $page = 2;
@@ -90,7 +94,8 @@ final class UserTest extends TestCase
             ->assertOk();
     }
 
-    public function test_it_limits_users_per_page_when_per_page_param_is_given(): void
+    #[Test]
+    public function it_limits_users_per_page_when_per_page_param_is_given(): void
     {
         User::factory()->count(3)->contact()->create();
         $perPage = 1;
@@ -104,6 +109,7 @@ final class UserTest extends TestCase
         $this->assertCount($perPage, $response->json('data'));
     }
 
+    #[Test]
     #[TestWith(data: ['Иван', 1])]
     #[TestWith(data: ['BK.RU', 2])]
     #[TestWith(data: ['Василий', 0])]
@@ -112,7 +118,7 @@ final class UserTest extends TestCase
     #[TestWith(data: ['RESERve.', 3])]
     #[TestWith(data: ['Ив', 3])]
     #[TestWith(data: [null, 3])]
-    public function test_it_filters_users_by_search_param(?string $search, int $resultCount): void
+    public function it_filters_users_by_search_param(?string $search, int $resultCount): void
     {
         $data = [
             [

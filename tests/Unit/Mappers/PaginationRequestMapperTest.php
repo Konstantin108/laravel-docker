@@ -3,11 +3,13 @@
 namespace Tests\Unit\Mappers;
 
 use App\Services\Elasticsearch\PaginationRequestMapper;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 final class PaginationRequestMapperTest extends TestCase
 {
-    public function test_it_maps_default_correctly()
+    #[Test]
+    public function it_maps_default_correctly()
     {
         $paginationRequestDto = (new PaginationRequestMapper)->map();
 
@@ -16,7 +18,8 @@ final class PaginationRequestMapperTest extends TestCase
         $this->assertNull($paginationRequestDto->search);
     }
 
-    public function test_it_calculates_from_correctly_for_second_page()
+    #[Test]
+    public function it_calculates_from_correctly_for_second_page()
     {
         $paginationRequestDto = (new PaginationRequestMapper)->map(null, 10, 2);
 
@@ -25,7 +28,8 @@ final class PaginationRequestMapperTest extends TestCase
         $this->assertNull($paginationRequestDto->search);
     }
 
-    public function test_it_calculates_from_correctly()
+    #[Test]
+    public function it_calculates_from_correctly()
     {
         $searchedString = 'searched';
         $paginationRequestDto = (new PaginationRequestMapper)->map($searchedString, 25, 3);

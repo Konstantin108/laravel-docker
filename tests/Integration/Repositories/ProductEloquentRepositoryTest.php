@@ -5,6 +5,7 @@ namespace Tests\Integration\Repositories;
 use App\Models\Product;
 use App\Repositories\Product\ProductEloquentRepository;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 final class ProductEloquentRepositoryTest extends TestCase
@@ -20,7 +21,8 @@ final class ProductEloquentRepositoryTest extends TestCase
         $this->repository = new ProductEloquentRepository;
     }
 
-    public function test_it_returns_all_products(): void
+    #[Test]
+    public function it_returns_all_products(): void
     {
         $count = 2;
         Product::factory()->count($count)->create();
@@ -30,7 +32,8 @@ final class ProductEloquentRepositoryTest extends TestCase
         $this->assertCount($count, $result);
     }
 
-    public function test_it_returns_all_products_when_limit_param_is_given(): void
+    #[Test]
+    public function it_returns_all_products_when_limit_param_is_given(): void
     {
         Product::factory()->count(5)->create();
         $limit = 3;

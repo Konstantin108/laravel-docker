@@ -5,6 +5,7 @@ namespace Tests\Feature\Console\Commands;
 use Exception;
 use Illuminate\Filesystem\Filesystem;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 final class GenerateExcuseTest extends TestCase
@@ -23,7 +24,8 @@ final class GenerateExcuseTest extends TestCase
         $this->app->instance(Filesystem::class, $this->filesystem);
     }
 
-    public function test_it_successfully_generates_excuse(): void
+    #[Test]
+    public function it_successfully_generates_excuse(): void
     {
         $data = [
             'greeting' => ['привет,'],
@@ -49,7 +51,8 @@ final class GenerateExcuseTest extends TestCase
             ->assertSuccessful();
     }
 
-    public function test_it_returns_error_when_generating_excuse_with_invalid_json(): void
+    #[Test]
+    public function it_returns_error_when_generating_excuse_with_invalid_json(): void
     {
         $this->filesystem
             ->shouldReceive('get')
@@ -62,7 +65,8 @@ final class GenerateExcuseTest extends TestCase
             ->assertFailed();
     }
 
-    public function test_it_returns_error_when_generating_excuse_for_for_missing_file(): void
+    #[Test]
+    public function it_returns_error_when_generating_excuse_for_for_missing_file(): void
     {
         $this->filesystem
             ->shouldReceive('get')
