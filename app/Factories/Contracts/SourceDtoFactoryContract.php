@@ -11,5 +11,5 @@ interface SourceDtoFactoryContract
     /**
      * @param  array<string, mixed>  $source
      */
-    public function createFromArray(array $source): SearchableSourceContract;
+    public function make(array $source): SearchableSourceContract;
 }

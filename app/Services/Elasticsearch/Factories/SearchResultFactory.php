@@ -37,7 +37,7 @@ final readonly class SearchResultFactory
      *     }
      * } $response
      */
-    public function createFromArray(array $response): SearchResult
+    public function make(array $response): SearchResult
     {
         return new SearchResult(
             took: $response['took'],

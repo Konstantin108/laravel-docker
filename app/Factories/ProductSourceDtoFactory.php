@@ -24,7 +24,7 @@ class ProductSourceDtoFactory implements SourceDtoFactoryContract
      *     updated_at: string,
      * } $source
      */
-    public function createFromArray(array $source): SearchableSourceContract
+    public function make(array $source): SearchableSourceContract
     {
         return new ProductEnriched(
             id: $source['id'],

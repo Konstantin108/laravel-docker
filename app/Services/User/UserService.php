@@ -19,6 +19,8 @@ class UserService
         private readonly UserRepositoryContract $repository
     ) {}
 
+    // TODO kpstya assertSame() и assertEquals() возможно заменить на более точные проверки типо assertTrue() или assertFalse()
+
     /**
      * @return LengthAwarePaginator<int, UserEnriched>
      */
@@ -45,6 +47,8 @@ class UserService
         return $this->repository->getAllUsers($limit)
             ->map(fn (User $user): UserEnriched => $this->enrich($user));
     }
+
+    // TODO kpstya на это можно написать unit тест
 
     public function enrich(User $user): UserEnriched
     {

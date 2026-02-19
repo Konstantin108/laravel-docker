@@ -12,6 +12,8 @@ class PaginationRequestMapper
 
     private const DEFAULT_PER_PAGE = 10;
 
+    // TODO kpstya на это можно написать unit тест
+
     public function map(
         ?string $search = null,
         ?int $perPage = null,

@@ -56,7 +56,7 @@ abstract class ElasticsearchService
 
         $result = $this->client->search($body, $this->indexName());
 
-        return $this->searchResultFactory->createFromArray($result);
+        return $this->searchResultFactory->make($result);
     }
 
     /**
