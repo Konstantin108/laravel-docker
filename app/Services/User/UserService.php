@@ -46,8 +46,6 @@ class UserService
             ->map(fn (User $user): UserEnriched => $this->enrich($user));
     }
 
-    // TODO kpstya на это можно написать unit тест
-
     public function enrich(User $user): UserEnriched
     {
         return new UserEnriched(
