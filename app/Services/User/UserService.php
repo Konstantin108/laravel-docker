@@ -19,8 +19,6 @@ class UserService
         private readonly UserRepositoryContract $repository
     ) {}
 
-    // TODO kpstya assertSame() и assertEquals() возможно заменить на более точные проверки типо assertTrue() или assertFalse()
-
     /**
      * @return LengthAwarePaginator<int, UserEnriched>
      */

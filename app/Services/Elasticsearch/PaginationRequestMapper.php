@@ -12,8 +12,6 @@ class PaginationRequestMapper
 
     private const DEFAULT_PER_PAGE = 10;
 
-    // TODO kpstya на это можно написать unit тест
-
     public function map(
         ?string $search = null,
         ?int $perPage = null,
@@ -21,7 +19,7 @@ class PaginationRequestMapper
     ): PaginationRequestDto {
         $page = $page ?? self::FIRST_PAGE;
         $size = $perPage ?? self::DEFAULT_PER_PAGE;
-        $from = --$page * $size;
+        $from = ($page - 1) * $size;
 
         return new PaginationRequestDto(
             size: $size,

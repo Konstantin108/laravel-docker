@@ -63,7 +63,7 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
 
         $expectedRows = $models->map(static fn (SearchableContract $model): array => [
             $model->id,
-            --$model->id,
+            $model->id - 1,
             $indexName,
             1,
             'created',
