@@ -11,9 +11,7 @@ use App\Services\Elasticsearch\SourceDtoCollectionService;
 
 final readonly class SearchResultFactory
 {
-    public function __construct(
-        private SourceDtoCollectionService $collectionService
-    ) {}
+    public function __construct(private SourceDtoCollectionService $collectionService) {}
 
     /**
      * @param array{

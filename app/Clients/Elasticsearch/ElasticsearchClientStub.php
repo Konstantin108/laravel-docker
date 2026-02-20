@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Clients\Elasticsearch;
 
-// TODO kpstya надо исправить отступы в конструкторах
-
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Models\Contracts\SearchableContract;
 use App\Services\Contracts\SearchableSourceContract;

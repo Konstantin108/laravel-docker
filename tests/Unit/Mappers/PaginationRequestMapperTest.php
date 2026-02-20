@@ -1,9 +1,5 @@
 <?php
 
-/* TODO kpstya
-    - возможно использовать в AppServiceProvider makeWith()
-    - где в AppServiceProvider я могу использовать singleton()  */
-
 namespace Tests\Unit\Mappers;
 
 use App\Services\Elasticsearch\PaginationRequestMapper;

@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-// TODO kpstya возможно щаменить $app->make() на $this->make()
-
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\Dto\SettingsDto;
 use App\Clients\Elasticsearch\ElasticsearchClient;
@@ -25,9 +23,6 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
         if ($this->app->isLocal()) {
@@ -37,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserRepositoryContract::class, UserEloquentRepository::class);
         $this->app->bind(ProductRepositoryContract::class, ProductEloquentRepository::class);
 
-        $this->app->bind(ElasticsearchClientContract::class, static function (Application $app): ElasticsearchClientContract {
+        $this->app->singleton(ElasticsearchClientContract::class, static function (Application $app): ElasticsearchClientContract {
             if ($app->environment('testing')) {
                 return $app->make(ElasticsearchClientStub::class);
             }
@@ -50,14 +45,14 @@ class AppServiceProvider extends ServiceProvider
             );
         });
 
-        $this->app->bind(SourceDtoCollectionService::class, static function (Application $app): SourceDtoCollectionService {
+        $this->app->singleton(SourceDtoCollectionService::class, static function (Application $app): SourceDtoCollectionService {
             return new SourceDtoCollectionService(...array_map(
                 static fn (string $className): SourceDtoFactoryContract => $app->make($className),
                 config('elasticsearch.source_dto_factories')
             ));
         });
 
-        $this->app->bind(ElasticsearchServiceFactory::class, static function (Application $app): ElasticsearchServiceFactory {
+        $this->app->singleton(ElasticsearchServiceFactory::class, static function (Application $app): ElasticsearchServiceFactory {
             return new ElasticsearchServiceFactory(...array_map(
                 static fn (string $className): ElasticsearchService => $app->make($className),
                 config('elasticsearch.search_services')
@@ -65,9 +60,6 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         if ($this->app->isLocal() && config('app.query_log')) {
