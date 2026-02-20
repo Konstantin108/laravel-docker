@@ -4,16 +4,22 @@ declare(strict_types=1);
 
 namespace App\Clients\Elasticsearch;
 
+// TODO kpstya надо исправить отступы в конструкторах
+
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Models\Contracts\SearchableContract;
 use App\Services\Contracts\SearchableSourceContract;
 use App\Services\Elasticsearch\Enums\SearchIndexEnum;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use Faker\Factory;
+use Illuminate\Container\Container;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use JsonException;
 
 class ElasticsearchClientStub implements ElasticsearchClientContract
 {
+    public function __construct(private readonly Container $container) {}
+
     /**
      * @param  array<string, mixed>  $body
      * @return array<string, mixed>
@@ -80,18 +86,20 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
      * @return array<string, mixed>
      *
      * @throws SearchIndexException
+     * @throws BindingResolutionException
      */
     public function search(array $body, string $indexName): array
     {
-        $model = SearchIndexEnum::from($indexName)->getModel();
-        $service = SearchIndexEnum::from($indexName)->getModelService();
+        $enum = SearchIndexEnum::from($indexName);
+        $model = $enum->getModel();
+        $service = $this->container->make($enum->getModelService());
 
         $elements = $model::query()
             ->where('id', '>', $body['from'])
             ->limit($body['size'])
             ->get()
             ->map(static function (SearchableContract $element) use ($service): SearchableSourceContract {
-                return app($service)->enrich($element);
+                return $service->enrich($element);
             });
 
         $maxScore = Factory::create()->randomFloat(6, 20, 70);

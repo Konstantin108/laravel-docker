@@ -1,5 +1,9 @@
 <?php
 
+/* TODO kpstya
+    - возможно использовать в AppServiceProvider makeWith()
+    - где в AppServiceProvider я могу использовать singleton()  */
+
 namespace Tests\Unit\Mappers;
 
 use App\Services\Elasticsearch\PaginationRequestMapper;
@@ -19,7 +23,7 @@ final class PaginationRequestMapperTest extends TestCase
     }
 
     #[Test]
-    public function it_calculates_from_correctly_for_second_page()
+    public function it_maps_from_correctly_for_second_page()
     {
         $paginationRequestDto = (new PaginationRequestMapper)->map(null, 10, 2);
 
@@ -29,7 +33,7 @@ final class PaginationRequestMapperTest extends TestCase
     }
 
     #[Test]
-    public function it_calculates_from_correctly()
+    public function it_maps_from_correctly()
     {
         $searchedString = 'searched';
         $paginationRequestDto = (new PaginationRequestMapper)->map($searchedString, 25, 3);

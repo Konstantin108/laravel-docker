@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+// TODO kpstya возможно щаменить $app->make() на $this->make()
+
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\Dto\SettingsDto;
 use App\Clients\Elasticsearch\ElasticsearchClient;
@@ -35,16 +37,17 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserRepositoryContract::class, UserEloquentRepository::class);
         $this->app->bind(ProductRepositoryContract::class, ProductEloquentRepository::class);
 
-        $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
-            return match (config('app.env')) {
-                'testing' => new ElasticsearchClientStub,
-                default => new ElasticsearchClient(
-                    config('elasticsearch.url'),
-                    config('elasticsearch.user'),
-                    config('elasticsearch.password'),
-                    SettingsDto::from(config('elasticsearch.settings')),
-                )
-            };
+        $this->app->bind(ElasticsearchClientContract::class, static function (Application $app): ElasticsearchClientContract {
+            if ($app->environment('testing')) {
+                return $app->make(ElasticsearchClientStub::class);
+            }
+
+            return new ElasticsearchClient(
+                config('elasticsearch.url'),
+                config('elasticsearch.user'),
+                config('elasticsearch.password'),
+                SettingsDto::from(config('elasticsearch.settings')),
+            );
         });
 
         $this->app->bind(SourceDtoCollectionService::class, static function (Application $app): SourceDtoCollectionService {
