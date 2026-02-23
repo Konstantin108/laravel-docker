@@ -3,7 +3,6 @@
 namespace Tests\Feature\Console\Commands\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
-use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
 use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
 use App\Events\Elasticsearch\SearchIndexFilledEvent;
 use App\Jobs\SendSearchIndexDataJob;
@@ -23,7 +22,6 @@ use PHPUnit\Framework\Attributes\Test;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
-use ReflectionException;
 use Tests\Feature\Console\Commands\Elasticsearch\Abstract\SearchIndexCommandTest;
 
 final class FillSearchIndexTest extends SearchIndexCommandTest
@@ -172,23 +170,32 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
         Event::assertNotDispatched(SearchIndexFilledEvent::class);
     }
 
+    /* TODO kpstya
+        - возможно заменить Product на Good
+        - возможно переименовать $client в $elasticsearchClient */
+
     /**
-     * @throws ReflectionException
      * @throws SearchIndexException
      */
     #[Test]
     #[DataProvider(methodName: 'indexNameProvider')]
     public function it_returns_error_when_filling_search_index_fails(string $indexName): void
     {
-        $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
-            return new ElasticsearchClientErrorStub;
-        });
-
         $model = SearchIndexEnum::from($indexName)->getModel();
         $model::factory()->count(2)->create();
+        $exceptionMessage = 'Index filling error.';
+
+        $this->mock(
+            ElasticsearchClientContract::class,
+            /** @var ElasticsearchClientContract&MockInterface $elasticsearchClient */
+            static function (ElasticsearchClientContract $elasticsearchClient) use ($exceptionMessage): void {
+                $elasticsearchClient->shouldReceive('bulkIndex')
+                    ->once()
+                    ->andThrow(new ElasticsearchApiException($exceptionMessage));
+            });
 
         $this->expectException(ElasticsearchApiException::class);
-        $this->expectExceptionMessage('Index filling error.');
+        $this->expectExceptionMessage($exceptionMessage);
 
         $this->executeCommand(['index_name' => $indexName]);
     }

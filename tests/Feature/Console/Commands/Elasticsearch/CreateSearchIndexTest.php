@@ -3,11 +3,10 @@
 namespace Tests\Feature\Console\Commands\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
-use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
 use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
+use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use ReflectionException;
 use Tests\Feature\Console\Commands\Elasticsearch\Abstract\SearchIndexCommandTest;
 
 final class CreateSearchIndexTest extends SearchIndexCommandTest
@@ -23,19 +22,23 @@ final class CreateSearchIndexTest extends SearchIndexCommandTest
             ->assertSuccessful();
     }
 
-    /**
-     * @throws ReflectionException
-     */
     #[Test]
     #[DataProvider(methodName: 'indexNameProvider')]
     public function it_returns_error_when_creating_search_index_fails(string $indexName): void
     {
-        $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
-            return new ElasticsearchClientErrorStub;
-        });
+        $exceptionMessage = 'An error occurred while creating the index.';
+
+        $this->mock(
+            ElasticsearchClientContract::class,
+            /** @var ElasticsearchClientContract&MockInterface $elasticsearchClient */
+            static function (ElasticsearchClientContract $elasticsearchClient) use ($exceptionMessage): void {
+                $elasticsearchClient->shouldReceive('createIndex')
+                    ->once()
+                    ->andThrow(new ElasticsearchApiException($exceptionMessage));
+            });
 
         $this->expectException(ElasticsearchApiException::class);
-        $this->expectExceptionMessage('An error occurred while creating the index.');
+        $this->expectExceptionMessage($exceptionMessage);
 
         $this->executeCommand(['index_name' => $indexName]);
     }

@@ -3,13 +3,12 @@
 namespace Tests\Feature\v2;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
-use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
 use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
 use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
-use ReflectionException;
 use Tests\TestCase;
 
 final class ProductTest extends TestCase
@@ -97,39 +96,46 @@ final class ProductTest extends TestCase
         $this->assertCount($perPage, $response->json('data'));
     }
 
-    /**
-     * @throws ReflectionException
-     */
     #[Test]
     public function it_throws_exception_with_stack_trace_when_elasticsearch_fails_in_development_environment(): void
     {
-        $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
-            return new ElasticsearchClientErrorStub;
-        });
-
         Product::factory()->count(3)->create();
 
+        $exceptionMessage = 'Index search error.';
+
+        $this->mock(
+            ElasticsearchClientContract::class,
+            /** @var ElasticsearchClientContract&MockInterface $elasticsearchClient */
+            static function (ElasticsearchClientContract $elasticsearchClient) use ($exceptionMessage): void {
+                $elasticsearchClient->shouldReceive('search')
+                    ->once()
+                    ->andThrow(new ElasticsearchApiException($exceptionMessage));
+            });
+
         $this->expectException(ElasticsearchApiException::class);
-        $this->expectExceptionMessage('Index search error.');
+        $this->expectExceptionMessage($exceptionMessage);
 
         $this->withoutExceptionHandling()
             ->getJson(route(self::INDEX_ROUTE))
             ->assertInternalServerError();
     }
 
-    /**
-     * @throws ReflectionException
-     */
     #[Test]
     public function it_returns_json_error_when_elasticsearch_fails_in_production_environment(): void
     {
         config()->set('app.debug', false);
 
-        $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
-            return new ElasticsearchClientErrorStub;
-        });
-
         Product::factory()->count(3)->create();
+        $exceptionMessage = 'Index search error.';
+
+        $this->mock(
+            ElasticsearchClientContract::class,
+            /** @var ElasticsearchClientContract&MockInterface $elasticsearchClient */
+            static function (ElasticsearchClientContract $elasticsearchClient) use ($exceptionMessage): void {
+                $elasticsearchClient->shouldReceive('search')
+                    ->once()
+                    ->andThrow(new ElasticsearchApiException($exceptionMessage));
+            });
 
         $this->getJson(route(self::INDEX_ROUTE))
             ->assertJson(['message' => 'Server Error'])

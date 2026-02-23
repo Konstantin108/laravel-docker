@@ -3,14 +3,13 @@
 namespace Tests\Feature\Console\Commands\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
-use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
 use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
 use App\Services\Elasticsearch\Enums\SearchIndexEnum;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use ReflectionException;
 use Tests\Feature\Console\Commands\Elasticsearch\Abstract\SearchIndexCommandTest;
 
 final class ClearSearchIndexTest extends SearchIndexCommandTest
@@ -36,19 +35,23 @@ final class ClearSearchIndexTest extends SearchIndexCommandTest
             ->assertSuccessful();
     }
 
-    /**
-     * @throws ReflectionException
-     */
     #[Test]
     #[DataProvider(methodName: 'indexNameProvider')]
     public function it_returns_error_when_clearing_search_index_fails(string $indexName): void
     {
-        $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
-            return new ElasticsearchClientErrorStub;
-        });
+        $exceptionMessage = 'Index clearing error.';
+
+        $this->mock(
+            ElasticsearchClientContract::class,
+            /** @var ElasticsearchClientContract&MockInterface $elasticsearchClient */
+            static function (ElasticsearchClientContract $elasticsearchClient) use ($exceptionMessage): void {
+                $elasticsearchClient->shouldReceive('clearIndex')
+                    ->once()
+                    ->andThrow(new ElasticsearchApiException($exceptionMessage));
+            });
 
         $this->expectException(ElasticsearchApiException::class);
-        $this->expectExceptionMessage('Index clearing error.');
+        $this->expectExceptionMessage($exceptionMessage);
 
         $this->executeCommand(['index_name' => $indexName]);
     }
