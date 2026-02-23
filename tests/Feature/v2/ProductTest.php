@@ -105,8 +105,7 @@ final class ProductTest extends TestCase
 
         $this->mock(
             ElasticsearchClientContract::class,
-            /** @var ElasticsearchClientContract&MockInterface $elasticsearchClient */
-            static function (ElasticsearchClientContract $elasticsearchClient) use ($exceptionMessage): void {
+            static function (MockInterface $elasticsearchClient) use ($exceptionMessage): void {
                 $elasticsearchClient->shouldReceive('search')
                     ->once()
                     ->andThrow(new ElasticsearchApiException($exceptionMessage));
@@ -130,8 +129,7 @@ final class ProductTest extends TestCase
 
         $this->mock(
             ElasticsearchClientContract::class,
-            /** @var ElasticsearchClientContract&MockInterface $elasticsearchClient */
-            static function (ElasticsearchClientContract $elasticsearchClient) use ($exceptionMessage): void {
+            static function (MockInterface $elasticsearchClient) use ($exceptionMessage): void {
                 $elasticsearchClient->shouldReceive('search')
                     ->once()
                     ->andThrow(new ElasticsearchApiException($exceptionMessage));
