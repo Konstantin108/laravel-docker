@@ -21,7 +21,7 @@ final class NotifyAboutSearchIndexFilledListenerTest extends TestCase
         $items = new Collection($this->mock(SearchableSourceContract::class));
         $event = new SearchIndexFilledEvent($items, $indexName);
 
-        new NotifyAboutSearchIndexFilledListener()->handle($event);
+        (new NotifyAboutSearchIndexFilledListener)->handle($event);
 
         /* TODO kpstya
             - надо удалить класс ElasticsearchClientErrorStub и использовать в тестах ->once()->andThrow()
@@ -49,7 +49,7 @@ final class NotifyAboutSearchIndexFilledListenerTest extends TestCase
             'any_index'
         );
 
-        new NotifyAboutSearchIndexFilledListener()->handle($event);
+        (new NotifyAboutSearchIndexFilledListener)->handle($event);
 
         Bus::assertNotDispatched(SendSearchIndexDataJob::class);
     }
