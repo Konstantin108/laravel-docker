@@ -103,8 +103,10 @@ class ProductIndexElasticsearchService extends ElasticsearchService
         $result = $this->client->bulkIndex($body, static::INDEX_NAME);
 
         return tap(
-            $this->bulkIndexResultFactory->createFromArray($result),
+            $this->bulkIndexResultFactory->make($result),
             fn (): ?array => $this->dispatcher->dispatch(new SearchIndexFilledEvent($products, static::INDEX_NAME))
         );
     }
 }
+
+// TODO kpstya использовать Dispatcher в DI для Job, так же обновить тест

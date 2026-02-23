@@ -12,9 +12,7 @@ use Illuminate\Support\Collection;
 
 class ProductService
 {
-    public function __construct(
-        private readonly ProductRepositoryContract $repository,
-    ) {}
+    public function __construct(private readonly ProductRepositoryContract $repository) {}
 
     /**
      * @return Collection<int, ProductEnriched>

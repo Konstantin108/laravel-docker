@@ -10,7 +10,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @property UserEnriched $resource
  */
-#[SchemaName('User\IndexResource')]
+#[SchemaName(name: 'User\IndexResource')]
 class IndexResource extends JsonResource
 {
     public function toArray(Request $request): array

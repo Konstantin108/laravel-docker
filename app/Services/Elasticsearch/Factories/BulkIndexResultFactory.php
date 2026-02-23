@@ -13,7 +13,7 @@ class BulkIndexResultFactory
     /**
      * @param  array<string, mixed>  $data
      */
-    public function createFromArray(array $data): BulkIndexResult
+    public function make(array $data): BulkIndexResult
     {
         return new BulkIndexResult(
             took: $data['took'],

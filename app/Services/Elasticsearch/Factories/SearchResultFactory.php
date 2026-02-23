@@ -11,9 +11,7 @@ use App\Services\Elasticsearch\SourceDtoCollectionService;
 
 final readonly class SearchResultFactory
 {
-    public function __construct(
-        private SourceDtoCollectionService $collectionService
-    ) {}
+    public function __construct(private SourceDtoCollectionService $collectionService) {}
 
     /**
      * @param array{
@@ -37,7 +35,7 @@ final readonly class SearchResultFactory
      *     }
      * } $response
      */
-    public function createFromArray(array $response): SearchResult
+    public function make(array $response): SearchResult
     {
         return new SearchResult(
             took: $response['took'],

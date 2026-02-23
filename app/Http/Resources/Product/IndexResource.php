@@ -1,5 +1,7 @@
 <?php
 
+// TODO kpstya возможно настроить swagger
+
 namespace App\Http\Resources\Product;
 
 use App\Services\Product\Entities\ProductEnriched;
@@ -10,7 +12,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @property ProductEnriched $resource
  */
-#[SchemaName('Product\IndexResource')]
+#[SchemaName(name: 'Product\IndexResource')]
 class IndexResource extends JsonResource
 {
     public function toArray(Request $request): array

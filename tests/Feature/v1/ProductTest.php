@@ -5,6 +5,7 @@ namespace Tests\Feature\v1;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
 use Tests\TestCase;
 
@@ -14,7 +15,8 @@ final class ProductTest extends TestCase
 
     private const INDEX_ROUTE = 'api.v1.products.index';
 
-    public function test_it_returns_products_list_when_no_params_provided()
+    #[Test]
+    public function it_returns_products_list_when_no_params_provided()
     {
         $count = 3;
         Product::factory()->count($count)->create();
@@ -35,18 +37,20 @@ final class ProductTest extends TestCase
                     ],
                 ],
             ])
+            ->assertHeader('Content-Type', 'application/json')
             ->assertOk();
 
         $this->assertCount($count, $response->json('data'));
     }
 
-    #[TestWith(['xiaom', 1])]
-    #[TestWith(['автоваз', 0])]
-    #[TestWith(['0000', 2])]
-    #[TestWith(['цена', 1])]
-    #[TestWith(['sa', 3])]
-    #[TestWith([null, 3])]
-    public function test_it_filters_products_by_search_param(?string $search, int $resultCount): void
+    #[Test]
+    #[TestWith(data: ['xiaom', 1])]
+    #[TestWith(data: ['автоваз', 0])]
+    #[TestWith(data: ['0000', 2])]
+    #[TestWith(data: ['цена', 1])]
+    #[TestWith(data: ['sa', 3])]
+    #[TestWith(data: [null, 3])]
+    public function it_filters_products_by_search_param(?string $search, int $resultCount): void
     {
         $data = [
             ['name' => 'Xiaomi', 'description' => 'лучшая цена на рынке', 'price' => 1500000],

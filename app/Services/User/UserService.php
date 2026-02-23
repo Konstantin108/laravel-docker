@@ -15,9 +15,7 @@ class UserService
 {
     private const DEFAULT_PER_PAGE = 10;
 
-    public function __construct(
-        private readonly UserRepositoryContract $repository
-    ) {}
+    public function __construct(private readonly UserRepositoryContract $repository) {}
 
     /**
      * @return LengthAwarePaginator<int, UserEnriched>

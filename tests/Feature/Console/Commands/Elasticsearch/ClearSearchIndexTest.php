@@ -9,6 +9,7 @@ use App\Services\Elasticsearch\Enums\SearchIndexEnum;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use ReflectionException;
 use Tests\Feature\Console\Commands\Elasticsearch\Abstract\SearchIndexCommandTest;
 
@@ -21,8 +22,9 @@ final class ClearSearchIndexTest extends SearchIndexCommandTest
     /**
      * @throws SearchIndexException
      */
-    #[DataProvider('indexNameProvider')]
-    public function test_it_successfully_clears_search_index(string $indexName): void
+    #[Test]
+    #[DataProvider(methodName: 'indexNameProvider')]
+    public function it_successfully_clears_search_index(string $indexName): void
     {
         $model = SearchIndexEnum::from($indexName)->getModel();
 
@@ -37,8 +39,9 @@ final class ClearSearchIndexTest extends SearchIndexCommandTest
     /**
      * @throws ReflectionException
      */
-    #[DataProvider('indexNameProvider')]
-    public function test_it_returns_error_when_clearing_search_index_fails(string $indexName): void
+    #[Test]
+    #[DataProvider(methodName: 'indexNameProvider')]
+    public function it_returns_error_when_clearing_search_index_fails(string $indexName): void
     {
         $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
             return new ElasticsearchClientErrorStub;
@@ -50,13 +53,15 @@ final class ClearSearchIndexTest extends SearchIndexCommandTest
         $this->executeCommand(['index_name' => $indexName]);
     }
 
-    public function test_it_returns_error_when_invalid_search_index_name_is_given(): void
+    #[Test]
+    public function it_returns_error_when_invalid_search_index_name_is_given(): void
     {
         $this->exceptInvalidSearchIndexName('usdrs');
     }
 
-    #[DataProvider('indexNameProvider')]
-    public function test_it_returns_questions_for_given_index(string $indexName): void
+    #[Test]
+    #[DataProvider(methodName: 'indexNameProvider')]
+    public function it_returns_questions_for_given_index(string $indexName): void
     {
         $this->expectsPrompts($indexName)->assertSuccessful();
     }

@@ -23,9 +23,6 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
         if ($this->app->isLocal()) {
@@ -35,26 +32,27 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserRepositoryContract::class, UserEloquentRepository::class);
         $this->app->bind(ProductRepositoryContract::class, ProductEloquentRepository::class);
 
-        $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
-            return match (config('app.env')) {
-                'testing' => new ElasticsearchClientStub,
-                default => new ElasticsearchClient(
-                    config('elasticsearch.url'),
-                    config('elasticsearch.user'),
-                    config('elasticsearch.password'),
-                    SettingsDto::from(config('elasticsearch.settings')),
-                )
-            };
+        $this->app->singleton(ElasticsearchClientContract::class, static function (Application $app): ElasticsearchClientContract {
+            if ($app->environment('testing')) {
+                return $app->make(ElasticsearchClientStub::class);
+            }
+
+            return new ElasticsearchClient(
+                config('elasticsearch.url'),
+                config('elasticsearch.user'),
+                config('elasticsearch.password'),
+                SettingsDto::from(config('elasticsearch.settings')),
+            );
         });
 
-        $this->app->bind(SourceDtoCollectionService::class, static function (Application $app): SourceDtoCollectionService {
+        $this->app->singleton(SourceDtoCollectionService::class, static function (Application $app): SourceDtoCollectionService {
             return new SourceDtoCollectionService(...array_map(
                 static fn (string $className): SourceDtoFactoryContract => $app->make($className),
                 config('elasticsearch.source_dto_factories')
             ));
         });
 
-        $this->app->bind(ElasticsearchServiceFactory::class, static function (Application $app): ElasticsearchServiceFactory {
+        $this->app->singleton(ElasticsearchServiceFactory::class, static function (Application $app): ElasticsearchServiceFactory {
             return new ElasticsearchServiceFactory(...array_map(
                 static fn (string $className): ElasticsearchService => $app->make($className),
                 config('elasticsearch.search_services')
@@ -62,9 +60,6 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         if ($this->app->isLocal() && config('app.query_log')) {

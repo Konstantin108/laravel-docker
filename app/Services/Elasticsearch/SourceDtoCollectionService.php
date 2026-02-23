@@ -30,7 +30,7 @@ class SourceDtoCollectionService
         return (new Collection($hits))->map(function (array $hit): SearchableSourceContract {
             $indexName = $hit['_index'];
             if (isset($this->factories[$indexName])) {
-                return $this->factories[$indexName]->createFromArray($hit['_source']);
+                return $this->factories[$indexName]->make($hit['_source']);
             }
 
             throw SearchIndexException::doesNotExist($indexName);

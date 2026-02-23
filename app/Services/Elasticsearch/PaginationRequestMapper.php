@@ -19,7 +19,7 @@ class PaginationRequestMapper
     ): PaginationRequestDto {
         $page = $page ?? self::FIRST_PAGE;
         $size = $perPage ?? self::DEFAULT_PER_PAGE;
-        $from = --$page * $size;
+        $from = ($page - 1) * $size;
 
         return new PaginationRequestDto(
             size: $size,
