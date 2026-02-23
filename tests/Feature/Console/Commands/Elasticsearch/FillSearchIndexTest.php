@@ -170,10 +170,6 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
         Event::assertNotDispatched(SearchIndexFilledEvent::class);
     }
 
-    /* TODO kpstya
-        - возможно заменить Product на Good
-        - возможно переименовать $client в $elasticsearchClient */
-
     /**
      * @throws SearchIndexException
      */

@@ -24,10 +24,10 @@ final class NotifyAboutSearchIndexFilledListenerTest extends TestCase
         (new NotifyAboutSearchIndexFilledListener)->handle($event);
 
         /* TODO kpstya
-            - надо удалить класс ElasticsearchClientErrorStub и использовать в тестах ->once()->andThrow()
             - надо получать в тестах экземпяр $job и ассертить
             - возможно вынести дублирование в setUp()
             - возможно избавиться от хелперов включая config()
+            - возможно заменить Product на Good
             - возможно избавиться от использования фасадов */
 
         Bus::assertDispatched(

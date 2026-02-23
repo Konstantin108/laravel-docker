@@ -119,7 +119,7 @@ final class UserTest extends TestCase
             ->assertInternalServerError();
     }
 
-    // TODO kpstya mock с вызовщт ошибки надо вынести
+    // TODO kpstya надо вынести дублирующийся код в SearchIndexCommandTest (мокирование ElasticsearchClientContract)
 
     #[Test]
     public function it_returns_json_error_when_elasticsearch_fails_in_production_environment(): void
