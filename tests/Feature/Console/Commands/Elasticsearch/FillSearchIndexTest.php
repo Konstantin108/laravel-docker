@@ -183,8 +183,8 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
 
         $this->mock(
             ElasticsearchClientContract::class,
-            static function (MockInterface $elasticsearchClient) use ($exceptionMessage): void {
-                $elasticsearchClient->shouldReceive('bulkIndex')
+            static function (MockInterface $client) use ($exceptionMessage): void {
+                $client->shouldReceive('bulkIndex')
                     ->once()
                     ->andThrow(new ElasticsearchApiException($exceptionMessage));
             });

@@ -30,8 +30,8 @@ final class DeleteSearchIndexTest extends SearchIndexCommandTest
 
         $this->mock(
             ElasticsearchClientContract::class,
-            static function (MockInterface $elasticsearchClient) use ($exceptionMessage): void {
-                $elasticsearchClient->shouldReceive('deleteIndex')
+            static function (MockInterface $client) use ($exceptionMessage): void {
+                $client->shouldReceive('deleteIndex')
                     ->once()
                     ->andThrow(new ElasticsearchApiException($exceptionMessage));
             });

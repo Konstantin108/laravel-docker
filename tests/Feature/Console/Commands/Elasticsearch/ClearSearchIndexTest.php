@@ -43,8 +43,8 @@ final class ClearSearchIndexTest extends SearchIndexCommandTest
 
         $this->mock(
             ElasticsearchClientContract::class,
-            static function (MockInterface $elasticsearchClient) use ($exceptionMessage): void {
-                $elasticsearchClient->shouldReceive('clearIndex')
+            static function (MockInterface $client) use ($exceptionMessage): void {
+                $client->shouldReceive('clearIndex')
                     ->once()
                     ->andThrow(new ElasticsearchApiException($exceptionMessage));
             });

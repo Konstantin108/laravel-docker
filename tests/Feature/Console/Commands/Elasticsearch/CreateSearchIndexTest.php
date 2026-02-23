@@ -30,8 +30,8 @@ final class CreateSearchIndexTest extends SearchIndexCommandTest
 
         $this->mock(
             ElasticsearchClientContract::class,
-            static function (MockInterface $elasticsearchClient) use ($exceptionMessage): void {
-                $elasticsearchClient->shouldReceive('createIndex')
+            static function (MockInterface $client) use ($exceptionMessage): void {
+                $client->shouldReceive('createIndex')
                     ->once()
                     ->andThrow(new ElasticsearchApiException($exceptionMessage));
             });
