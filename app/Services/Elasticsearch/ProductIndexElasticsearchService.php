@@ -108,3 +108,5 @@ class ProductIndexElasticsearchService extends ElasticsearchService
         );
     }
 }
+
+// TODO kpstya использовать Dispatcher в DI для Job, так же обновить тест

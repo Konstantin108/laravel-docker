@@ -17,7 +17,7 @@ use Illuminate\Mail\Mailer;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
-use Mockery;
+use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use Psr\Container\ContainerExceptionInterface;
@@ -48,7 +48,10 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
         Queue::fake();
         Mail::fake();
         $this->listener = $this->app->get(NotifyAboutSearchIndexFilledListener::class);
-        $this->logger = Mockery::mock(LoggerInterface::class);
+
+        /** @var LoggerInterface&MockInterface $logger */
+        $logger = $this->mock(LoggerInterface::class);
+        $this->logger = $logger;
     }
 
     /**
@@ -97,6 +100,8 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
 
         $this->listener->handle($event);
 
+        // TODO kpstya возможно избавиться от pushed()
+
         /** @var SendSearchIndexDataJob $job */
         $jobs = Queue::pushed(SendSearchIndexDataJob::class);
         $this->assertCount(1, $jobs);
@@ -121,23 +126,19 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
 
     #[Test]
     #[DataProvider(methodName: 'indexNameProvider')]
-    public function it_does_not_record_info_log_when_filling_index_and_logging_disabled(string $indexName): void
+    public function it_does_not_record_info_log_when_filling_index_and_logging_is_disabled(string $indexName): void
     {
         $this->logger->shouldReceive('info')->never();
-        $this->app->instance(LoggerInterface::class, $this->logger);
-
         $this->executeCommand(['index_name' => $indexName]);
     }
 
     #[Test]
     #[DataProvider(methodName: 'indexNameProvider')]
-    public function it_records_info_log_when_filling_index_and_logging_enabled(string $indexName): void
+    public function it_records_info_log_when_filling_index_and_logging_is_enabled(string $indexName): void
     {
         config()->set('elasticsearch.fill_index_log', true);
 
         $this->logger->shouldReceive('info')->once();
-        $this->app->instance(LoggerInterface::class, $this->logger);
-
         $this->executeCommand(['index_name' => $indexName]);
     }
 

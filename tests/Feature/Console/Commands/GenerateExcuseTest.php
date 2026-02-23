@@ -4,7 +4,7 @@ namespace Tests\Feature\Console\Commands;
 
 use Exception;
 use Illuminate\Filesystem\Filesystem;
-use Mockery;
+use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -20,8 +20,9 @@ final class GenerateExcuseTest extends TestCase
     {
         parent::setUp();
 
-        $this->filesystem = Mockery::mock(Filesystem::class);
-        $this->app->instance(Filesystem::class, $this->filesystem);
+        /** @var Filesystem&MockInterface $filesystem */
+        $filesystem = $this->mock(Filesystem::class);
+        $this->filesystem = $filesystem;
     }
 
     #[Test]

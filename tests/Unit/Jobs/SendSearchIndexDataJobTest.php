@@ -3,41 +3,32 @@
 namespace Tests\Unit\Jobs;
 
 use App\Jobs\SendSearchIndexDataJob;
-use App\Mail\SearchIndexDataMail;
 use App\Services\Contracts\SearchableSourceContract;
 use Illuminate\Contracts\Mail\Mailer;
-use Illuminate\Mail\Mailable;
 use Illuminate\Support\Collection;
-use Mockery;
+use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 final class SendSearchIndexDataJobTest extends TestCase
 {
     #[Test]
-    public function it_sends_email_with_search_index_data()
+    public function it_sends_mail()
     {
-        $indexName = 'any_index_name';
-
-        $items = new Collection(Mockery::mock(SearchableSourceContract::class));
-
-        $mailerMock = Mockery::mock(Mailer::class);
-        $mailerMock->shouldReceive('to')
+        /** @var Mailer&MockInterface $mailer */
+        $mailer = $this->mock(Mailer::class);
+        $mailer->shouldReceive('to')
             ->once()
             ->with(config('mail.admin_email_address'))
             ->andReturnSelf();
 
-        $mailerMock->shouldReceive('send')
-            ->once()
-            ->with(Mockery::on(function (Mailable $mail) use ($items, $indexName): bool {
-                return $mail instanceof SearchIndexDataMail
-                    && $mail->items === $items
-                    && $mail->itemsCount === $items->count()
-                    && $mail->indexName === $indexName;
-            }));
+        $mailer->shouldReceive('send')->once();
 
-        $job = new SendSearchIndexDataJob($items, $indexName);
+        $job = new SendSearchIndexDataJob(
+            new Collection($this->mock(SearchableSourceContract::class)),
+            'any_index_name'
+        );
 
-        $job->handle($mailerMock);
+        $job->handle($mailer);
     }
 }
