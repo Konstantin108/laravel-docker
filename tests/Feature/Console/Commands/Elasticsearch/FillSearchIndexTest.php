@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Console\Commands\Elasticsearch;
 
-use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
 use App\Events\Elasticsearch\SearchIndexFilledEvent;
 use App\Jobs\SendSearchIndexDataJob;
@@ -22,9 +21,9 @@ use PHPUnit\Framework\Attributes\Test;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
-use Tests\Feature\Console\Commands\Elasticsearch\Abstract\SearchIndexCommandTest;
+use Tests\SearchIndexTestCase;
 
-final class FillSearchIndexTest extends SearchIndexCommandTest
+final class FillSearchIndexTest extends SearchIndexTestCase
 {
     use RefreshDatabase;
 
@@ -109,6 +108,7 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
         $this->assertSame($indexName, $job->indexName);
         $this->assertCount($models->count(), $job->items);
 
+        // TODO kpstya избавиться от app()
         $job->handle(app(Mailer::class));
 
         $sentMails = Mail::sent(SearchIndexDataMail::class);
@@ -121,6 +121,8 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
         $this->assertSame($indexName, $mail->indexName);
         $this->assertSame($models->count(), $mail->itemsCount);
     }
+
+    // TODO kpstya добавить в стрелки static и use($this) как вариант
 
     #[Test]
     #[DataProvider(methodName: 'indexNameProvider')]
@@ -181,13 +183,7 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
         $model::factory()->count(2)->create();
         $exceptionMessage = 'Index filling error.';
 
-        $this->mock(
-            ElasticsearchClientContract::class,
-            static function (MockInterface $client) use ($exceptionMessage): void {
-                $client->shouldReceive('bulkIndex')
-                    ->once()
-                    ->andThrow(new ElasticsearchApiException($exceptionMessage));
-            });
+        $this->callMethodWithException('bulkIndex', $exceptionMessage);
 
         $this->expectException(ElasticsearchApiException::class);
         $this->expectExceptionMessage($exceptionMessage);

@@ -2,14 +2,12 @@
 
 namespace Tests\Feature\Console\Commands\Elasticsearch;
 
-use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
-use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Feature\Console\Commands\Elasticsearch\Abstract\SearchIndexCommandTest;
+use Tests\SearchIndexTestCase;
 
-final class DeleteSearchIndexTest extends SearchIndexCommandTest
+final class DeleteSearchIndexTest extends SearchIndexTestCase
 {
     private const COMMAND = 'app:elasticsearch:delete-index';
 
@@ -28,13 +26,7 @@ final class DeleteSearchIndexTest extends SearchIndexCommandTest
     {
         $exceptionMessage = 'Index deleting error.';
 
-        $this->mock(
-            ElasticsearchClientContract::class,
-            static function (MockInterface $client) use ($exceptionMessage): void {
-                $client->shouldReceive('deleteIndex')
-                    ->once()
-                    ->andThrow(new ElasticsearchApiException($exceptionMessage));
-            });
+        $this->callMethodWithException('deleteIndex', $exceptionMessage);
 
         $this->expectException(ElasticsearchApiException::class);
         $this->expectExceptionMessage($exceptionMessage);

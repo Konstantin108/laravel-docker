@@ -2,17 +2,15 @@
 
 namespace Tests\Feature\Console\Commands\Elasticsearch;
 
-use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
 use App\Services\Elasticsearch\Enums\SearchIndexEnum;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Feature\Console\Commands\Elasticsearch\Abstract\SearchIndexCommandTest;
+use Tests\SearchIndexTestCase;
 
-final class ClearSearchIndexTest extends SearchIndexCommandTest
+final class ClearSearchIndexTest extends SearchIndexTestCase
 {
     use RefreshDatabase;
 
@@ -41,13 +39,7 @@ final class ClearSearchIndexTest extends SearchIndexCommandTest
     {
         $exceptionMessage = 'Index clearing error.';
 
-        $this->mock(
-            ElasticsearchClientContract::class,
-            static function (MockInterface $client) use ($exceptionMessage): void {
-                $client->shouldReceive('clearIndex')
-                    ->once()
-                    ->andThrow(new ElasticsearchApiException($exceptionMessage));
-            });
+        $this->callMethodWithException('clearIndex', $exceptionMessage);
 
         $this->expectException(ElasticsearchApiException::class);
         $this->expectExceptionMessage($exceptionMessage);

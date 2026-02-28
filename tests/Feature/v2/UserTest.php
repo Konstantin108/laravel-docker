@@ -112,14 +112,12 @@ final class UserTest extends TestCase
             });
 
         $this->expectException(ElasticsearchApiException::class);
-        $this->expectExceptionMessage('Index search error.');
+        $this->expectExceptionMessage($exceptionMessage);
 
         $this->withoutExceptionHandling()
             ->getJson(route(self::INDEX_ROUTE))
             ->assertInternalServerError();
     }
-
-    // TODO kpstya надо вынести дублирующийся код в SearchIndexCommandTest (мокирование ElasticsearchClientContract)
 
     #[Test]
     public function it_returns_json_error_when_elasticsearch_fails_in_production_environment(): void

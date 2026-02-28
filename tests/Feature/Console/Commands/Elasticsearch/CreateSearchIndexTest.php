@@ -2,14 +2,12 @@
 
 namespace Tests\Feature\Console\Commands\Elasticsearch;
 
-use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
-use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\Feature\Console\Commands\Elasticsearch\Abstract\SearchIndexCommandTest;
+use Tests\SearchIndexTestCase;
 
-final class CreateSearchIndexTest extends SearchIndexCommandTest
+final class CreateSearchIndexTest extends SearchIndexTestCase
 {
     private const COMMAND = 'app:elasticsearch:create-index';
 
@@ -28,13 +26,7 @@ final class CreateSearchIndexTest extends SearchIndexCommandTest
     {
         $exceptionMessage = 'An error occurred while creating the index.';
 
-        $this->mock(
-            ElasticsearchClientContract::class,
-            static function (MockInterface $client) use ($exceptionMessage): void {
-                $client->shouldReceive('createIndex')
-                    ->once()
-                    ->andThrow(new ElasticsearchApiException($exceptionMessage));
-            });
+        $this->callMethodWithException('createIndex', $exceptionMessage);
 
         $this->expectException(ElasticsearchApiException::class);
         $this->expectExceptionMessage($exceptionMessage);
