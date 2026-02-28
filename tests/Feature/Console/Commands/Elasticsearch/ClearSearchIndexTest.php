@@ -8,7 +8,7 @@ use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\SearchIndexTestCase;
+use Tests\TestCases\SearchIndexTestCase;
 
 final class ClearSearchIndexTest extends SearchIndexTestCase
 {

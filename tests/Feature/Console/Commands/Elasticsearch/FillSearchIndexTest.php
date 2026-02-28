@@ -21,7 +21,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
-use Tests\SearchIndexTestCase;
+use Tests\TestCases\SearchIndexTestCase;
 
 final class FillSearchIndexTest extends SearchIndexTestCase
 {

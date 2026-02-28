@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace Tests\TestCases;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
@@ -8,6 +8,7 @@ use App\Services\Elasticsearch\Enums\SearchIndexEnum;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use Illuminate\Testing\PendingCommand;
 use Mockery\MockInterface;
+use Tests\TestCase;
 
 abstract class SearchIndexTestCase extends TestCase
 {

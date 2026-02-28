@@ -5,7 +5,7 @@ namespace Tests\Feature\Console\Commands\Elasticsearch;
 use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\SearchIndexTestCase;
+use Tests\TestCases\SearchIndexTestCase;
 
 final class DeleteSearchIndexTest extends SearchIndexTestCase
 {
