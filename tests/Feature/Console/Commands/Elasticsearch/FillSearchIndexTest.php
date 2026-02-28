@@ -10,6 +10,7 @@ use App\Mail\SearchIndexDataMail;
 use App\Models\Contracts\SearchableContract;
 use App\Services\Elasticsearch\Enums\SearchIndexEnum;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Mail\Mailer;
 use Illuminate\Support\Facades\Event;
@@ -53,6 +54,7 @@ final class FillSearchIndexTest extends SearchIndexTestCase
 
     /**
      * @throws SearchIndexException
+     * @throws BindingResolutionException
      */
     #[Test]
     #[DataProvider(methodName: 'indexNameProvider')]
@@ -108,8 +110,7 @@ final class FillSearchIndexTest extends SearchIndexTestCase
         $this->assertSame($indexName, $job->indexName);
         $this->assertCount($models->count(), $job->items);
 
-        // TODO kpstya избавиться от app()
-        $job->handle(app(Mailer::class));
+        $job->handle($this->app->make(Mailer::class));
 
         $sentMails = Mail::sent(SearchIndexDataMail::class);
         $this->assertCount(1, $sentMails);
@@ -121,8 +122,6 @@ final class FillSearchIndexTest extends SearchIndexTestCase
         $this->assertSame($indexName, $mail->indexName);
         $this->assertSame($models->count(), $mail->itemsCount);
     }
-
-    // TODO kpstya добавить в стрелки static и use($this) как вариант
 
     #[Test]
     #[DataProvider(methodName: 'indexNameProvider')]
