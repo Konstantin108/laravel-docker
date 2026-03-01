@@ -27,6 +27,8 @@ final class DeleteSearchIndexCommand extends Command implements PromptsForMissin
         $searchIndexEnum = $resolver->fromString($this->argument('index_name'));
 
         $result = $factory->make($searchIndexEnum)->deleteSearchIndex();
+
+        $this->components->success('deleting is successful');
         $this->info(json_encode($result, JSON_PRETTY_PRINT));
 
         return self::SUCCESS;

@@ -29,6 +29,7 @@ final class ClearSearchIndexCommandTest extends SearchIndexCommandTestCase
         $model::factory()->count($count)->create();
 
         $this->executeCommand(['index_name' => $indexName])
+            ->expectsOutputToContain('clearing is successful')
             ->expectsOutputToContain(sprintf('"deleted": %d', $count))
             ->assertSuccessful();
     }

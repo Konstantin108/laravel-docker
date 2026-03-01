@@ -81,9 +81,12 @@ final class FillSearchIndexCommand extends Command implements PromptsForMissingI
             ->where(static fn (BulkIndexItem $item): bool => $item->status->isUpdated())
             ->count();
 
-        // TODO kpstya надо добавить флаг показывать таблицу или нет и обновить тесты
+        /* TODO kpstya
+            - во все команды добавить -v для вывода таблицы или информации
+            - обновить тесты ко всем командам */
 
         $this->table($columnNames, $rows);
+        $this->components->success('filling is successful');
         $this->info(sprintf('index: %s', $item->index));
         $this->info(sprintf('took: %d', $result->took));
         $this->info(sprintf('errors: %s', json_encode($result->errors)));

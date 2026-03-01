@@ -81,6 +81,7 @@ final class FillSearchIndexCommandTest extends SearchIndexCommandTestCase
                 ['_id', '_seq_no', '_index', '_version', 'result', '_primary_term', 'status', '_type'],
                 $expectedRows
             )
+            ->expectsOutputToContain('filling is successful')
             ->expectsOutput(sprintf('index: %s', $indexName))
             ->expectsOutputToContain('took')
             ->expectsOutput('errors: false')
