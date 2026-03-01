@@ -59,9 +59,34 @@ final class FillSearchIndexCommand extends Command implements PromptsForMissingI
 
     private function formattedOutput(BulkIndexResult $result): void
     {
-        $item = $result->items->first();
+        $createdDocsCount = $result->items
+            ->where(static fn (BulkIndexItem $item): bool => $item->status->isCreated())
+            ->count();
 
+        $updatedDocsCount = $result->items
+            ->where(static fn (BulkIndexItem $item): bool => $item->status->isUpdated())
+            ->count();
+
+        // TODO kpstya обновить тесты по этой команде
+
+        if ($this->getOutput()->isVerbose()) {
+            $this->printTable($result);
+        }
+
+        $this->components->success('filling is successful');
+        $this->info(sprintf('index: %s', $result->items->first()->index));
+        $this->info(sprintf('took: %d', $result->took));
+        $this->info(sprintf('errors: %s', json_encode($result->errors)));
+        $this->info(sprintf('created: %d', $createdDocsCount));
+        $this->info(sprintf('updated: %d', $updatedDocsCount));
+        $this->info(sprintf('total: %d', $result->items->count()));
+    }
+
+    private function printTable(BulkIndexResult $result): void
+    {
+        $item = $result->items->first();
         $columnNames = array_keys($item->toArray());
+
         $rows = $result->items->map(static fn (BulkIndexItem $item): array => [
             $item->id,
             $item->seqNumber,
@@ -73,25 +98,6 @@ final class FillSearchIndexCommand extends Command implements PromptsForMissingI
             $item->type,
         ]);
 
-        $createdDocsCount = $result->items
-            ->where(static fn (BulkIndexItem $item): bool => $item->status->isCreated())
-            ->count();
-
-        $updatedDocsCount = $result->items
-            ->where(static fn (BulkIndexItem $item): bool => $item->status->isUpdated())
-            ->count();
-
-        /* TODO kpstya
-            - во все команды добавить -v для вывода таблицы или информации
-            - обновить тесты ко всем командам */
-
         $this->table($columnNames, $rows);
-        $this->components->success('filling is successful');
-        $this->info(sprintf('index: %s', $item->index));
-        $this->info(sprintf('took: %d', $result->took));
-        $this->info(sprintf('errors: %s', json_encode($result->errors)));
-        $this->info(sprintf('created: %d', $createdDocsCount));
-        $this->info(sprintf('updated: %d', $updatedDocsCount));
-        $this->info(sprintf('total: %d', $result->items->count()));
     }
 }

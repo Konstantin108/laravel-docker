@@ -19,6 +19,10 @@ final class CreateSearchIndexCommand extends Command implements PromptsForMissin
 
     protected $description = 'Создать индекс в Elasticsearch';
 
+    /* TODO kpstya
+        - добавить -v для вывода json
+        - обновить тесты */
+
     /**
      * @throws SearchIndexException
      */
