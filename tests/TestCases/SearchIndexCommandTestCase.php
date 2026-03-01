@@ -10,7 +10,7 @@ use Illuminate\Testing\PendingCommand;
 use Mockery\MockInterface;
 use Tests\TestCase;
 
-abstract class SearchIndexTestCase extends TestCase
+abstract class SearchIndexCommandTestCase extends TestCase
 {
     abstract protected function command(): string;
 

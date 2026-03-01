@@ -22,9 +22,9 @@ use PHPUnit\Framework\Attributes\Test;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
-use Tests\TestCases\SearchIndexTestCase;
+use Tests\TestCases\SearchIndexCommandTestCase;
 
-final class FillSearchIndexTest extends SearchIndexTestCase
+final class FillSearchIndexCommandTest extends SearchIndexCommandTestCase
 {
     use RefreshDatabase;
 

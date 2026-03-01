@@ -5,9 +5,9 @@ namespace Tests\Feature\Console\Commands\Elasticsearch;
 use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\TestCases\SearchIndexTestCase;
+use Tests\TestCases\SearchIndexCommandTestCase;
 
-final class CreateSearchIndexTest extends SearchIndexTestCase
+final class CreateSearchIndexCommandTest extends SearchIndexCommandTestCase
 {
     private const COMMAND = 'app:elasticsearch:create-index';
 

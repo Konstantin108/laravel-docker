@@ -3,30 +3,43 @@
 namespace Tests\Feature\Console\Commands\Elasticsearch;
 
 use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
+use App\Services\Elasticsearch\Enums\SearchIndexEnum;
+use App\Services\Elasticsearch\Exceptions\SearchIndexException;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use Tests\TestCases\SearchIndexTestCase;
+use Tests\TestCases\SearchIndexCommandTestCase;
 
-final class DeleteSearchIndexTest extends SearchIndexTestCase
+final class ClearSearchIndexCommandTest extends SearchIndexCommandTestCase
 {
-    private const COMMAND = 'app:elasticsearch:delete-index';
+    use RefreshDatabase;
 
+    private const COMMAND = 'app:elasticsearch:clear-index';
+
+    /**
+     * @throws SearchIndexException
+     */
     #[Test]
     #[DataProvider(methodName: 'indexNameProvider')]
-    public function it_successfully_deletes_search_index(string $indexName): void
+    public function it_successfully_clears_search_index(string $indexName): void
     {
+        $model = SearchIndexEnum::from($indexName)->getModel();
+
+        $count = 2;
+        $model::factory()->count($count)->create();
+
         $this->executeCommand(['index_name' => $indexName])
-            ->expectsOutputToContain('"acknowledged": true')
+            ->expectsOutputToContain(sprintf('"deleted": %d', $count))
             ->assertSuccessful();
     }
 
     #[Test]
     #[DataProvider(methodName: 'indexNameProvider')]
-    public function it_returns_error_when_deleting_search_index_fails(string $indexName): void
+    public function it_returns_error_when_clearing_search_index_fails(string $indexName): void
     {
-        $exceptionMessage = 'Index deleting error.';
+        $exceptionMessage = 'Index clearing error.';
 
-        $this->callMethodWithException('deleteIndex', $exceptionMessage);
+        $this->callMethodWithException('clearIndex', $exceptionMessage);
 
         $this->expectException(ElasticsearchApiException::class);
         $this->expectExceptionMessage($exceptionMessage);
