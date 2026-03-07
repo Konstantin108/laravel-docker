@@ -31,11 +31,18 @@ class UserFactory extends Factory
         ];
     }
 
+    // TODO kpstya - laravel - уточнить про директории для api проекта
+
     /**
      * @param  array<string, int|string>  $state
      */
-    public function contact(array|callable $state = []): self
+    public function hasContact(array|callable $state = []): self
     {
+        /* TODO kpstya
+            - использовать hasContact2
+            - убрать state() и передачу $state
+            - добавить передачу $contact */
+
         return $this->has(Contact::factory()->state($state));
     }
 }

@@ -24,6 +24,8 @@ use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
 use Tests\TestCases\SearchIndexCommandTestCase;
 
+// TODO kpstya возможно избавиться от pushed() и использовать Bus::fake()
+
 final class FillSearchIndexCommandTest extends SearchIndexCommandTestCase
 {
     use RefreshDatabase;
@@ -63,24 +65,9 @@ final class FillSearchIndexCommandTest extends SearchIndexCommandTestCase
         $model = SearchIndexEnum::from($indexName)->getModel();
 
         $count = 2;
-        $models = $model::factory()->count($count)->create();
-
-        $expectedRows = $models->map(static fn (SearchableContract $model): array => [
-            $model->id,
-            $model->id - 1,
-            $indexName,
-            1,
-            'created',
-            1,
-            201,
-            '_doc',
-        ]);
+        $model::factory()->count($count)->create();
 
         $this->executeCommand(['index_name' => $indexName])
-            ->expectsTable(
-                ['_id', '_seq_no', '_index', '_version', 'result', '_primary_term', 'status', '_type'],
-                $expectedRows
-            )
             ->expectsOutputToContain('filling is successful')
             ->expectsOutput(sprintf('index: %s', $indexName))
             ->expectsOutputToContain('took')
@@ -96,11 +83,9 @@ final class FillSearchIndexCommandTest extends SearchIndexCommandTestCase
         $event = $events->first()[0];
         $this->assertNotNull($event);
         $this->assertSame($indexName, $event->indexName);
-        $this->assertCount($models->count(), $event->items);
+        $this->assertCount($count, $event->items);
 
         $this->listener->handle($event);
-
-        // TODO kpstya возможно избавиться от pushed()
 
         /** @var SendSearchIndexDataJob $job */
         $jobs = Queue::pushed(SendSearchIndexDataJob::class);
@@ -109,7 +94,7 @@ final class FillSearchIndexCommandTest extends SearchIndexCommandTestCase
         $job = $jobs->first();
         $this->assertNotNull($job);
         $this->assertSame($indexName, $job->indexName);
-        $this->assertCount($models->count(), $job->items);
+        $this->assertCount($count, $job->items);
 
         $job->handle($this->app->make(Mailer::class));
 
@@ -121,7 +106,39 @@ final class FillSearchIndexCommandTest extends SearchIndexCommandTestCase
         $this->assertNotNull($mail);
         $this->assertTrue($mail->hasTo('admin@test.ru'));
         $this->assertSame($indexName, $mail->indexName);
-        $this->assertSame($models->count(), $mail->itemsCount);
+        $this->assertSame($count, $mail->itemsCount);
+    }
+
+    /**
+     * @throws SearchIndexException
+     */
+    #[Test]
+    #[DataProvider(methodName: 'indexNameProvider')]
+    public function it_outputs_items_table_in_verbose_mode_when_filling_search_index(string $indexName): void
+    {
+        $model = SearchIndexEnum::from($indexName)->getModel();
+        $models = $model::factory()->count(2)->create();
+
+        $expectedRows = $models->map(static fn (SearchableContract $model): array => [
+            $model->id,
+            $model->id - 1,
+            $indexName,
+            1,
+            'created',
+            1,
+            201,
+            '_doc',
+        ]);
+
+        $this->executeCommand([
+            'index_name' => $indexName,
+            '-v' => true,
+        ])
+            ->expectsTable(
+                ['_id', '_seq_no', '_index', '_version', 'result', '_primary_term', 'status', '_type'],
+                $expectedRows
+            )
+            ->assertSuccessful();
     }
 
     #[Test]

@@ -19,7 +19,7 @@ final class UserTest extends TestCase
     public function it_returns_users_list_when_no_params_provided()
     {
         $count = 3;
-        User::factory()->count($count)->contact()->create();
+        User::factory()->count($count)->hasContact()->create();
 
         $response = $this->getJson(route(self::INDEX_ROUTE))
             ->assertJsonPath('meta.total', $count)
@@ -72,7 +72,7 @@ final class UserTest extends TestCase
     #[TestWith(data: ['per_page', 'one'])]
     public function it_returns_error_when_invalid_params_are_provided(string $param, string $value): void
     {
-        User::factory()->count(3)->contact()->create();
+        User::factory()->count(3)->hasContact()->create();
 
         $this->getJson(route(self::INDEX_ROUTE, [
             $param => $value,
@@ -84,7 +84,7 @@ final class UserTest extends TestCase
     #[Test]
     public function it_paginates_users_when_page_param_is_given(): void
     {
-        User::factory()->count(3)->contact()->create();
+        User::factory()->count(3)->hasContact()->create();
         $page = 2;
 
         $this->getJson(route(self::INDEX_ROUTE, [
@@ -97,7 +97,7 @@ final class UserTest extends TestCase
     #[Test]
     public function it_limits_users_per_page_when_per_page_param_is_given(): void
     {
-        User::factory()->count(3)->contact()->create();
+        User::factory()->count(3)->hasContact()->create();
         $perPage = 1;
 
         $response = $this->getJson(route(self::INDEX_ROUTE, [
@@ -141,7 +141,7 @@ final class UserTest extends TestCase
                 static fn (array $elem): array => $elem['user'],
                 $data
             )))
-            ->contact(new Sequence(...array_map(
+            ->hasContact(new Sequence(...array_map(
                 static fn (array $elem): array => $elem['contact'],
                 $data
             )))

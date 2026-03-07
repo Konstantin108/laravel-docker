@@ -21,7 +21,7 @@ final class UserTest extends TestCase
     public function it_returns_users_list_when_no_params_provided(): void
     {
         $count = 3;
-        User::factory()->count($count)->contact()->create();
+        User::factory()->count($count)->hasContact()->create();
 
         $response = $this->getJson(route(self::INDEX_ROUTE))
             ->assertJsonStructure([
@@ -49,7 +49,7 @@ final class UserTest extends TestCase
     #[TestWith(data: ['per_page', 's'])]
     public function it_returns_error_when_invalid_params_are_provided(string $param, string $value): void
     {
-        User::factory()->count(3)->contact()->create();
+        User::factory()->count(3)->hasContact()->create();
 
         $this->getJson(route(self::INDEX_ROUTE, [
             $param => $value,
@@ -62,7 +62,7 @@ final class UserTest extends TestCase
     public function it_paginates_users_when_page_param_is_given(): void
     {
         $count = 13;
-        User::factory()->count($count)->contact()->create();
+        User::factory()->count($count)->hasContact()->create();
 
         $page = 2;
         $perPage = 9;
@@ -85,7 +85,7 @@ final class UserTest extends TestCase
     #[Test]
     public function it_limits_users_per_page_when_per_page_param_is_given(): void
     {
-        User::factory()->count(3)->contact()->create();
+        User::factory()->count(3)->hasContact()->create();
         $perPage = 1;
 
         $response = $this->getJson(route(self::INDEX_ROUTE, [
@@ -99,7 +99,7 @@ final class UserTest extends TestCase
     #[Test]
     public function it_throws_exception_with_stack_trace_when_elasticsearch_fails_in_development_environment(): void
     {
-        User::factory()->count(3)->contact()->create();
+        User::factory()->count(3)->hasContact()->create();
 
         $exceptionMessage = 'Index search error.';
 
@@ -124,7 +124,7 @@ final class UserTest extends TestCase
     {
         config()->set('app.debug', false);
 
-        User::factory()->count(3)->contact()->create();
+        User::factory()->count(3)->hasContact()->create();
         $exceptionMessage = 'Index search error.';
 
         $this->mock(

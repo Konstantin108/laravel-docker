@@ -15,6 +15,8 @@ class UserService
 {
     private const DEFAULT_PER_PAGE = 10;
 
+    // TODO kpstya возможно UI перенести в папки Api
+
     public function __construct(private readonly UserRepositoryContract $repository) {}
 
     /**
@@ -27,6 +29,8 @@ class UserService
             $indexDto->perPage ?? self::DEFAULT_PER_PAGE,
             $indexDto->search
         );
+
+        // TODO kpstya возможно заменить getCollection() на through()
 
         $userEnrichedCollection = $paginator->getCollection()
             ->map(fn (User $user): UserEnriched => $this->enrich($user));
