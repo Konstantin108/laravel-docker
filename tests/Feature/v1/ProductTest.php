@@ -3,7 +3,6 @@
 namespace Tests\Feature\v1;
 
 use App\Models\Product;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
@@ -58,10 +57,13 @@ final class ProductTest extends TestCase
             ['name' => 'электрогитара', 'description' => 'отличный звук', 'price' => 999900],
         ];
 
-        Product::factory()
-            ->count(count($data))
-            ->state(new Sequence(...$data))
-            ->create();
+        foreach ($data as $elem) {
+            Product::factory()
+                ->withName($elem['name'])
+                ->withDescription($elem['description'])
+                ->withPrice($elem['price'])
+                ->create();
+        }
 
         $response = $this->getJson(route(self::INDEX_ROUTE, [
             'search' => $search,

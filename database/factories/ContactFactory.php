@@ -25,4 +25,19 @@ class ContactFactory extends Factory
             'telegram' => '@'.$this->faker->userName(),
         ];
     }
+
+    public function withEmail(string $email): self
+    {
+        return $this->state(fn (): array => ['email' => $email]);
+    }
+
+    public function withPhone(string $phone): self
+    {
+        return $this->state(fn (): array => ['phone' => $phone]);
+    }
+
+    public function withTelegram(string $telegram): self
+    {
+        return $this->state(fn (): array => ['telegram' => $telegram]);
+    }
 }

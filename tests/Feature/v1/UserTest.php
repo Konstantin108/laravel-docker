@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\v1;
 
+use App\Models\Contact;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
@@ -135,17 +135,18 @@ final class UserTest extends TestCase
             ],
         ];
 
-        User::factory()
-            ->count(count($data))
-            ->state(new Sequence(...array_map(
-                static fn (array $elem): array => $elem['user'],
-                $data
-            )))
-            ->hasContact(new Sequence(...array_map(
-                static fn (array $elem): array => $elem['contact'],
-                $data
-            )))
-            ->create();
+        foreach ($data as ['user' => $user, 'contact' => $contact]) {
+            User::factory()
+                ->withName($user['name'])
+                ->withEmail($user['email'])
+                ->hasContact(
+                    Contact::factory()
+                        ->withEmail($contact['email'])
+                        ->withPhone($contact['phone'])
+                        ->withTelegram($contact['telegram'])
+                )
+                ->create();
+        }
 
         $response = $this->getJson(route(self::INDEX_ROUTE, [
             'search' => $search,

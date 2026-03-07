@@ -25,4 +25,19 @@ class ProductFactory extends Factory
             'price' => $this->faker->numberBetween(100000, 1500000),
         ];
     }
+
+    public function withName(string $name): self
+    {
+        return $this->state(fn (): array => ['name' => $name]);
+    }
+
+    public function withDescription(string $description): self
+    {
+        return $this->state(fn (): array => ['description' => $description]);
+    }
+
+    public function withPrice(int $price): self
+    {
+        return $this->state(fn (): array => ['price' => $price]);
+    }
 }

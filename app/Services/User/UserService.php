@@ -15,8 +15,6 @@ class UserService
 {
     private const DEFAULT_PER_PAGE = 10;
 
-    // TODO kpstya возможно UI перенести в папки Api
-
     public function __construct(private readonly UserRepositoryContract $repository) {}
 
     /**
