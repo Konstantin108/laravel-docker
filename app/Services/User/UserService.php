@@ -28,13 +28,9 @@ class UserService
             $indexDto->search
         );
 
-        // TODO kpstya возможно заменить getCollection() на through()
-
-        $userEnrichedCollection = $paginator->getCollection()
-            ->map(fn (User $user): UserEnriched => $this->enrich($user));
-
-        /** @var LengthAwarePaginator<int, UserEnriched> $paginator */
-        return $paginator->setCollection($userEnrichedCollection);
+        return $paginator->through(function (User $user): UserEnriched {
+            return $this->enrich($user);
+        });
     }
 
     /**

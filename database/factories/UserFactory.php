@@ -43,7 +43,7 @@ class UserFactory extends Factory
 
     // TODO kpstya найти лучшие практики для директорий в api проектах на Laravel
 
-    public function hasContact(Contact|Factory|null $contact = null): self
+    public function hasContact(Contact|ContactFactory|null $contact = null): self
     {
         if ($contact instanceof Contact) {
             return $this->afterCreating(static function (User $user) use ($contact): void {

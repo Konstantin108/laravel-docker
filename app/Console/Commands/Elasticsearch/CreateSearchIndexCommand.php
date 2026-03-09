@@ -19,9 +19,7 @@ final class CreateSearchIndexCommand extends Command implements PromptsForMissin
 
     protected $description = 'Создать индекс в Elasticsearch';
 
-    /* TODO kpstya
-        - добавить -v для вывода json
-        - обновить тесты */
+    // TODO kpstya обновить тесты к этой команде
 
     /**
      * @throws SearchIndexException
@@ -33,7 +31,9 @@ final class CreateSearchIndexCommand extends Command implements PromptsForMissin
         $result = $factory->make($searchIndexEnum)->createSearchIndex();
 
         $this->components->success('creating is successful');
-        $this->info(json_encode($result, JSON_PRETTY_PRINT));
+        if ($this->getOutput()->isVerbose()) {
+            $this->info(json_encode($result, JSON_PRETTY_PRINT));
+        }
 
         return self::SUCCESS;
     }

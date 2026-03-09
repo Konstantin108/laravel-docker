@@ -71,10 +71,6 @@ final class FillSearchIndexCommand extends Command implements PromptsForMissingI
             $this->printTable($result);
         }
 
-        // TODO kpstya возможно в именах тестов given заменить на provided
-
-        // TODO kpstya возможно в тестах использовать assertJson()
-
         $this->components->success('filling is successful');
         $this->info(sprintf('index: %s', $result->items->first()->index));
         $this->info(sprintf('took: %d', $result->took));

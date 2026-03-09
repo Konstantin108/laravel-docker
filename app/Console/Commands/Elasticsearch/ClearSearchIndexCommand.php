@@ -19,9 +19,7 @@ final class ClearSearchIndexCommand extends Command implements PromptsForMissing
 
     protected $description = 'Очистить индекс в Elasticsearch';
 
-    /* TODO kpstya
-        - добавить -v для вывода json
-        - обновить тесты */
+    // TODO kpstya обновить тесты к этой команде
 
     /**
      * @throws SearchIndexException
@@ -33,7 +31,9 @@ final class ClearSearchIndexCommand extends Command implements PromptsForMissing
         $result = $factory->make($searchIndexEnum)->clearSearchIndex();
 
         $this->components->success('clearing is successful');
-        $this->info(json_encode($result, JSON_PRETTY_PRINT));
+        if ($this->getOutput()->isVerbose()) {
+            $this->info(json_encode($result, JSON_PRETTY_PRINT));
+        }
 
         return self::SUCCESS;
     }

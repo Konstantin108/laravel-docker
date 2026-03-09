@@ -11,8 +11,6 @@ final readonly class LimitScope
 {
     public function __construct(private ?int $limit = null) {}
 
-    // TODO kpstya правильно ли тут сравнивать с null
-
     /**
      * @template TModel of Model
      *
@@ -20,7 +18,7 @@ final readonly class LimitScope
      */
     public function __invoke(Builder $builder): void
     {
-        $builder->when($this->limit !== null, function (Builder $builder): void {
+        $builder->when($this->limit, function (Builder $builder): void {
             $builder->limit($this->limit);
         });
     }

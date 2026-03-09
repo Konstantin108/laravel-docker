@@ -23,8 +23,6 @@ final readonly class SearchScope
 
         $search = '%'.$this->search.'%';
 
-        // TODO kpstya проверить на возможность попадания пустой строки, тогда придется использовать filled()
-
         $builder->where(static function (Builder $builder) use ($search): void {
             $builder->where('name', 'like', $search)
                 ->orWhere('description', 'like', $search)

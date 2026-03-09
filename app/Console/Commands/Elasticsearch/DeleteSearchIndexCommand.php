@@ -19,9 +19,7 @@ final class DeleteSearchIndexCommand extends Command implements PromptsForMissin
 
     protected $description = 'Удалить индекс в Elasticsearch';
 
-    /* TODO kpstya
-        - добавить -v для вывода json
-        - обновить тесты */
+    // TODO kpstya обновить тесты к этой команде
 
     /**
      * @throws SearchIndexException
@@ -33,7 +31,9 @@ final class DeleteSearchIndexCommand extends Command implements PromptsForMissin
         $result = $factory->make($searchIndexEnum)->deleteSearchIndex();
 
         $this->components->success('deleting is successful');
-        $this->info(json_encode($result, JSON_PRETTY_PRINT));
+        if ($this->getOutput()->isVerbose()) {
+            $this->info(json_encode($result, JSON_PRETTY_PRINT));
+        }
 
         return self::SUCCESS;
     }
