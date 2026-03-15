@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\v2;
+namespace Tests\Feature\Endpoints\v2\User;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
@@ -11,11 +11,11 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
 use Tests\TestCase;
 
-final class UserTest extends TestCase
+final class IndexEndpointTest extends TestCase
 {
     use RefreshDatabase;
 
-    private const INDEX_ROUTE = 'api.v2.users.index';
+    private const ROUTE = 'api.v2.users.index';
 
     #[Test]
     public function it_returns_users_list_when_no_params_provided(): void
@@ -23,7 +23,7 @@ final class UserTest extends TestCase
         $count = 3;
         User::factory()->count($count)->hasContact()->create();
 
-        $response = $this->getJson(route(self::INDEX_ROUTE))
+        $response = $this->getJson(route(self::ROUTE))
             ->assertJsonStructure([
                 'data' => [
                     '*' => [
@@ -51,7 +51,7 @@ final class UserTest extends TestCase
     {
         User::factory()->count(3)->hasContact()->create();
 
-        $this->getJson(route(self::INDEX_ROUTE, [
+        $this->getJson(route(self::ROUTE, [
             $param => $value,
         ]))
             ->assertJsonValidationErrors([$param])
@@ -67,7 +67,7 @@ final class UserTest extends TestCase
         $page = 2;
         $perPage = 9;
 
-        $response = $this->getJson(route(self::INDEX_ROUTE, [
+        $response = $this->getJson(route(self::ROUTE, [
             'page' => $page,
             'per_page' => $perPage,
         ]))
@@ -88,7 +88,7 @@ final class UserTest extends TestCase
         User::factory()->count(3)->hasContact()->create();
         $perPage = 1;
 
-        $response = $this->getJson(route(self::INDEX_ROUTE, [
+        $response = $this->getJson(route(self::ROUTE, [
             'per_page' => $perPage,
         ]))
             ->assertOk();
@@ -115,7 +115,7 @@ final class UserTest extends TestCase
         $this->expectExceptionMessage($exceptionMessage);
 
         $this->withoutExceptionHandling()
-            ->getJson(route(self::INDEX_ROUTE))
+            ->getJson(route(self::ROUTE))
             ->assertInternalServerError();
     }
 
@@ -135,7 +135,7 @@ final class UserTest extends TestCase
                     ->andThrow(new ElasticsearchApiException($exceptionMessage));
             });
 
-        $this->getJson(route(self::INDEX_ROUTE))
+        $this->getJson(route(self::ROUTE))
             ->assertJson(['message' => 'Server Error'])
             ->assertHeader('Content-Type', 'application/json')
             ->assertInternalServerError();

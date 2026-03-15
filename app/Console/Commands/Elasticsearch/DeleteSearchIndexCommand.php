@@ -19,8 +19,6 @@ final class DeleteSearchIndexCommand extends Command implements PromptsForMissin
 
     protected $description = 'Удалить индекс в Elasticsearch';
 
-    // TODO kpstya обновить тесты к этой команде
-
     /**
      * @throws SearchIndexException
      */

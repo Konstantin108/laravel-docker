@@ -17,6 +17,17 @@ final class DeleteSearchIndexCommandTest extends SearchIndexCommandTestCase
     {
         $this->executeCommand(['index_name' => $indexName])
             ->expectsOutputToContain('deleting is successful')
+            ->assertSuccessful();
+    }
+
+    #[Test]
+    #[DataProvider(methodName: 'indexNameProvider')]
+    public function it_prints_pretty_json_in_verbose_mode_when_deleting_search_index(string $indexName): void
+    {
+        $this->executeCommand([
+            'index_name' => $indexName,
+            '-v' => true,
+        ])
             ->expectsOutputToContain('"acknowledged": true')
             ->assertSuccessful();
     }

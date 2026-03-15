@@ -19,8 +19,6 @@ final class ClearSearchIndexCommand extends Command implements PromptsForMissing
 
     protected $description = 'Очистить индекс в Elasticsearch';
 
-    // TODO kpstya обновить тесты к этой команде
-
     /**
      * @throws SearchIndexException
      */

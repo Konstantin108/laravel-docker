@@ -30,6 +30,25 @@ final class ClearSearchIndexCommandTest extends SearchIndexCommandTestCase
 
         $this->executeCommand(['index_name' => $indexName])
             ->expectsOutputToContain('clearing is successful')
+            ->assertSuccessful();
+    }
+
+    /**
+     * @throws SearchIndexException
+     */
+    #[Test]
+    #[DataProvider(methodName: 'indexNameProvider')]
+    public function it_prints_pretty_json_in_verbose_mode_when_clearing_search_index(string $indexName): void
+    {
+        $model = SearchIndexEnum::from($indexName)->getModel();
+
+        $count = 2;
+        $model::factory()->count($count)->create();
+
+        $this->executeCommand([
+            'index_name' => $indexName,
+            '-v' => true,
+        ])
             ->expectsOutputToContain(sprintf('"deleted": %d', $count))
             ->assertSuccessful();
     }

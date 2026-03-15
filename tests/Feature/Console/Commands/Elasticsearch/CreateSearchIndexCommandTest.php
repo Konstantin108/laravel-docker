@@ -17,6 +17,17 @@ final class CreateSearchIndexCommandTest extends SearchIndexCommandTestCase
     {
         $this->executeCommand(['index_name' => $indexName])
             ->expectsOutputToContain('creating is successful')
+            ->assertSuccessful();
+    }
+
+    #[Test]
+    #[DataProvider(methodName: 'indexNameProvider')]
+    public function it_prints_pretty_json_in_verbose_mode_when_creating_search_index(string $indexName): void
+    {
+        $this->executeCommand([
+            'index_name' => $indexName,
+            '-v' => true,
+        ])
             ->expectsOutputToContain(sprintf('"index": "%s"', $indexName))
             ->assertSuccessful();
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\v1;
+namespace Tests\Feature\Endpoints\v1\Product;
 
 use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -8,11 +8,11 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
 use Tests\TestCase;
 
-final class ProductTest extends TestCase
+final class IndexEndpointTest extends TestCase
 {
     use RefreshDatabase;
 
-    private const INDEX_ROUTE = 'api.v1.products.index';
+    private const ROUTE = 'api.v1.products.index';
 
     #[Test]
     public function it_returns_products_list_when_no_params_provided()
@@ -20,7 +20,7 @@ final class ProductTest extends TestCase
         $count = 3;
         Product::factory()->count($count)->create();
 
-        $response = $this->getJson(route(self::INDEX_ROUTE))
+        $response = $this->getJson(route(self::ROUTE))
             ->assertJsonStructure([
                 'data' => [
                     '*' => [
@@ -65,7 +65,7 @@ final class ProductTest extends TestCase
                 ->create();
         }
 
-        $response = $this->getJson(route(self::INDEX_ROUTE, [
+        $response = $this->getJson(route(self::ROUTE, [
             'search' => $search,
         ]))->assertOk();
 
