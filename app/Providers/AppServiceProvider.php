@@ -15,17 +15,19 @@ use App\Services\Elasticsearch\Abstract\ElasticsearchService;
 use App\Services\Elasticsearch\Factories\ElasticsearchServiceFactory;
 use App\Services\Elasticsearch\SourceDtoCollectionService;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
+use RuntimeException;
 
 class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        if ($this->app->isLocal()) {
+        if ($this->app->environment('local')) {
             $this->app->register(IdeHelperServiceProvider::class);
         }
 
@@ -62,7 +64,17 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        if ($this->app->isLocal() && config('app.query_log')) {
+        if ($this->app->environment('production')) {
+            DB::prohibitDestructiveCommands();
+
+            if (config('app.debug')) {
+                throw new RuntimeException('Debug must be disabled in production!');
+            }
+        }
+
+        Model::shouldBeStrict();
+
+        if ($this->app->environment('local') && config('app.query_log')) {
             DB::listen(static function (QueryExecuted $query): void {
                 Log::channel('query_log')->debug($query->sql, [
                     'bindings' => $query->bindings,

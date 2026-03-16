@@ -56,4 +56,12 @@ class UserService
             updatedAt: $user->updated_at,
         );
     }
+
+    /**
+     * @return list<string>
+     */
+    public function relations(): array
+    {
+        return ['contact'];
+    }
 }

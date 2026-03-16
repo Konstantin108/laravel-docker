@@ -41,8 +41,6 @@ class UserFactory extends Factory
         return $this->state(fn (): array => ['email' => $email]);
     }
 
-    // TODO kpstya найти лучшие практики для директорий в api проектах на Laravel
-
     public function hasContact(Contact|ContactFactory|null $contact = null): self
     {
         if ($contact instanceof Contact) {

@@ -93,6 +93,7 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
         $service = $this->container->make($enum->getModelService());
 
         $elements = $model::query()
+            ->with($service->relations())
             ->where('id', '>', $body['from'])
             ->limit($body['size'])
             ->get()

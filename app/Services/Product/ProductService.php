@@ -22,7 +22,8 @@ class ProductService
         return $this->repository->getAllProducts(
             $indexDto->search,
             $indexDto->limit,
-        )->map(fn (Product $product): ProductEnriched => $this->enrich($product));
+        )
+            ->map(fn (Product $product): ProductEnriched => $this->enrich($product));
     }
 
     public function enrich(Product $product): ProductEnriched
@@ -38,5 +39,13 @@ class ProductService
             createdAt: $product->created_at,
             updatedAt: $product->updated_at,
         );
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function relations(): array
+    {
+        return ['category'];
     }
 }

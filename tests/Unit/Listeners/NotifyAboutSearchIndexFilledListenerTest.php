@@ -1,5 +1,7 @@
 <?php
 
+// TODO kpstya возможно в ендпоинты версии 1 и 2 нужно добавить сортировки
+
 namespace Tests\Unit\Listeners;
 
 use App\Events\Elasticsearch\SearchIndexFilledEvent;
@@ -27,7 +29,6 @@ final class NotifyAboutSearchIndexFilledListenerTest extends TestCase
             - надо получать в тестах экземпяр $job и ассертить
             - возможно вынести дублирование в setUp()
             - возможно избавиться от хелперов включая config()
-            - возможно заменить Product на Good
             - возможно избавиться от использования фасадов */
 
         Bus::assertDispatched(
