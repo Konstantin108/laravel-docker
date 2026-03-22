@@ -77,7 +77,7 @@ final class IndexEndpointTest extends TestCase
         $this->getJson(route(self::ROUTE, [
             $param => $value,
         ]))
-            ->assertJsonValidationErrors([$param])
+            ->assertInvalid([$param])
             ->assertUnprocessable();
     }
 
