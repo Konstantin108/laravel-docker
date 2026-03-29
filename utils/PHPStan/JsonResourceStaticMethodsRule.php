@@ -15,6 +15,11 @@ use ReflectionClass;
 
 final class JsonResourceStaticMethodsRule implements Rule
 {
+    private const NOT_ALLOWED_METHODS = [
+        'withoutWrapping',
+        'wrap',
+    ];
+
     public function getNodeType(): string
     {
         return StaticCall::class;
@@ -22,11 +27,6 @@ final class JsonResourceStaticMethodsRule implements Rule
 
     public function processNode(Node $node, Scope $scope): array
     {
-        $notAllowedMethods = [
-            'withoutWrapping',
-            'wrap',
-        ];
-
         if (! $node->class instanceof FullyQualified) {
             return [];
         }
@@ -39,7 +39,7 @@ final class JsonResourceStaticMethodsRule implements Rule
 
         $methodName = $node->name->toString();
 
-        if (! in_array($methodName, $notAllowedMethods, true)) {
+        if (! in_array($methodName, self::NOT_ALLOWED_METHODS, true)) {
             return [];
         }
 
