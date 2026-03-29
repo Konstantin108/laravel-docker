@@ -9,8 +9,10 @@ use Illuminate\Support\Collection;
 
 final readonly class SearchIndexFilledEvent
 {
+    /**
+     * @param  Collection<int, SearchableSourceContract>  $items
+     */
     public function __construct(
-        /** @var Collection<int, SearchableSourceContract> */
         public Collection $items,
         public string $indexName
     ) {}

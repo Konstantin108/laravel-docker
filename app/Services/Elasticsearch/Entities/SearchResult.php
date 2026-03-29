@@ -12,12 +12,14 @@ use Spatie\LaravelData\Data;
 
 final class SearchResult extends Data
 {
+    /**
+     * @param  Collection<string, SearchableSourceContract>  $hits
+     */
     public function __construct(
         public readonly int $took,
         public readonly bool $timedOut,
         public readonly SearchIndexShardsDto $shardsDto,
         public readonly SearchIndexHitsDto $hitsDto,
-        /** @var Collection<string, SearchableSourceContract> */
         public readonly Collection $hits
     ) {}
 }

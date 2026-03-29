@@ -39,7 +39,7 @@ final class JsonResourceStaticMethodsRule implements Rule
 
         $methodName = $node->name->toString();
 
-        if (! in_array($methodName, $notAllowedMethods)) {
+        if (! in_array($methodName, $notAllowedMethods, true)) {
             return [];
         }
 
