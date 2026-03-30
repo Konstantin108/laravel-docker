@@ -34,6 +34,8 @@ final class JsonResourceStaticPropertyRule implements Rule
 
         $varName = $node->var->name;
 
+        // TODO kpstya нужно ли тут приведение типа
+
         if ((string) $varName !== 'wrap') {
             return [];
         }
