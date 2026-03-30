@@ -24,17 +24,17 @@ final class NotifyAboutSearchIndexFilledListenerTest extends TestCase
         (new NotifyAboutSearchIndexFilledListener)->handle($event);
 
         /* TODO kpstya
-            - надо получать в тестах экземпяр $job и ассертить
-            - возможно вынести дублирование в setUp()
             - возможно избавиться от хелперов включая config()
             - возможно избавиться от использования фасадов */
 
-        Bus::assertDispatched(
-            SendSearchIndexDataJob::class,
-            static function (SendSearchIndexDataJob $job) use ($items, $indexName): bool {
-                return $job->items === $items && $job->indexName === $indexName;
-            }
-        );
+        $jobs = Bus::dispatched(SendSearchIndexDataJob::class);
+        $this->assertCount(1, $jobs);
+
+        $job = $jobs->first();
+        $this->assertNotNull($job);
+        $this->assertSame($indexName, $job->indexName);
+        $this->assertSame($items, $job->items);
+        $this->assertCount($items->count(), $job->items);
     }
 
     #[Test]
