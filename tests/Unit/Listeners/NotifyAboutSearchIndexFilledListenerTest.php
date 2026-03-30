@@ -30,10 +30,6 @@ final class NotifyAboutSearchIndexFilledListenerTest extends TestCase
 
         (new NotifyAboutSearchIndexFilledListener)->handle($event);
 
-        /* TODO kpstya
-            - возможно избавиться от хелперов включая config()
-            - возможно избавиться от использования фасадов */
-
         $jobs = Bus::dispatched(SendSearchIndexDataJob::class);
         $this->assertCount(1, $jobs);
 
