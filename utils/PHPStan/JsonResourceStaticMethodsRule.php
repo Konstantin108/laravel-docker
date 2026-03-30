@@ -1,7 +1,5 @@
 <?php
 
-// TODO kpstya возможно заменить isset() на in_array()
-
 declare(strict_types=1);
 
 namespace Utils\PHPStan;

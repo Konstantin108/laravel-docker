@@ -1,7 +1,5 @@
 <?php
 
-// TODO kpstya возможно в ендпоинты версии 1 и 2 нужно добавить сортировки
-
 namespace Tests\Unit\Listeners;
 
 use App\Events\Elasticsearch\SearchIndexFilledEvent;
