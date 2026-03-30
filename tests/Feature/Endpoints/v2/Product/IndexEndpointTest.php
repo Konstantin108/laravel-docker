@@ -1,22 +1,21 @@
 <?php
 
-namespace Tests\Feature\v2;
+namespace Tests\Feature\Endpoints\v2\Product;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
-use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
 use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
 use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
-use ReflectionException;
 use Tests\TestCase;
 
-final class ProductTest extends TestCase
+final class IndexEndpointTest extends TestCase
 {
     use RefreshDatabase;
 
-    private const INDEX_ROUTE = 'api.v2.products.index';
+    private const ROUTE = 'api.v2.products.index';
 
     #[Test]
     public function it_returns_products_list_when_no_params_provided(): void
@@ -24,7 +23,7 @@ final class ProductTest extends TestCase
         $count = 3;
         Product::factory()->count($count)->create();
 
-        $response = $this->getJson(route(self::INDEX_ROUTE))
+        $response = $this->getJson(route(self::ROUTE))
             ->assertJsonStructure([
                 'data' => [
                     '*' => [
@@ -52,10 +51,10 @@ final class ProductTest extends TestCase
     {
         Product::factory()->count(3)->create();
 
-        $this->getJson(route(self::INDEX_ROUTE, [
+        $this->getJson(route(self::ROUTE, [
             $param => $value,
         ]))
-            ->assertJsonValidationErrors([$param])
+            ->assertInvalid([$param])
             ->assertUnprocessable();
     }
 
@@ -68,7 +67,7 @@ final class ProductTest extends TestCase
         $page = 2;
         $perPage = 9;
 
-        $response = $this->getJson(route(self::INDEX_ROUTE, [
+        $response = $this->getJson(route(self::ROUTE, [
             'page' => $page,
             'per_page' => $perPage,
         ]))
@@ -89,7 +88,7 @@ final class ProductTest extends TestCase
         Product::factory()->count(3)->create();
         $perPage = 1;
 
-        $response = $this->getJson(route(self::INDEX_ROUTE, [
+        $response = $this->getJson(route(self::ROUTE, [
             'per_page' => $perPage,
         ]))
             ->assertOk();
@@ -97,41 +96,46 @@ final class ProductTest extends TestCase
         $this->assertCount($perPage, $response->json('data'));
     }
 
-    /**
-     * @throws ReflectionException
-     */
     #[Test]
     public function it_throws_exception_with_stack_trace_when_elasticsearch_fails_in_development_environment(): void
     {
-        $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
-            return new ElasticsearchClientErrorStub;
-        });
-
         Product::factory()->count(3)->create();
 
+        $exceptionMessage = 'Index search error.';
+
+        $this->mock(
+            ElasticsearchClientContract::class,
+            static function (MockInterface $client) use ($exceptionMessage): void {
+                $client->shouldReceive('search')
+                    ->once()
+                    ->andThrow(new ElasticsearchApiException($exceptionMessage));
+            });
+
         $this->expectException(ElasticsearchApiException::class);
-        $this->expectExceptionMessage('Index search error.');
+        $this->expectExceptionMessage($exceptionMessage);
 
         $this->withoutExceptionHandling()
-            ->getJson(route(self::INDEX_ROUTE))
+            ->getJson(route(self::ROUTE))
             ->assertInternalServerError();
     }
 
-    /**
-     * @throws ReflectionException
-     */
     #[Test]
     public function it_returns_json_error_when_elasticsearch_fails_in_production_environment(): void
     {
         config()->set('app.debug', false);
 
-        $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
-            return new ElasticsearchClientErrorStub;
-        });
-
         Product::factory()->count(3)->create();
+        $exceptionMessage = 'Index search error.';
 
-        $this->getJson(route(self::INDEX_ROUTE))
+        $this->mock(
+            ElasticsearchClientContract::class,
+            static function (MockInterface $client) use ($exceptionMessage): void {
+                $client->shouldReceive('search')
+                    ->once()
+                    ->andThrow(new ElasticsearchApiException($exceptionMessage));
+            });
+
+        $this->getJson(route(self::ROUTE))
             ->assertJson(['message' => 'Server Error'])
             ->assertHeader('Content-Type', 'application/json')
             ->assertInternalServerError();

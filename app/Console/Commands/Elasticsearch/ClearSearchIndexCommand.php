@@ -27,7 +27,11 @@ final class ClearSearchIndexCommand extends Command implements PromptsForMissing
         $searchIndexEnum = $resolver->fromString($this->argument('index_name'));
 
         $result = $factory->make($searchIndexEnum)->clearSearchIndex();
-        $this->info(json_encode($result, JSON_PRETTY_PRINT));
+
+        $this->components->success('clearing is successful');
+        if ($this->getOutput()->isVerbose()) {
+            $this->info(json_encode($result, JSON_PRETTY_PRINT));
+        }
 
         return self::SUCCESS;
     }

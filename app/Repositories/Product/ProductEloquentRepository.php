@@ -18,7 +18,7 @@ class ProductEloquentRepository implements ProductRepositoryContract
     public function getAllProducts(?string $search = null, ?int $limit = null): Collection
     {
         return Product::query()
-            ->with('category')
+            ->with(['category'])
             ->tap(new SearchScope($search))
             ->tap(new LimitScope($limit))
             ->get();

@@ -1,27 +1,27 @@
 <?php
 
-namespace Tests\Feature\v1;
+namespace Tests\Feature\Endpoints\v1\User;
 
+use App\Models\Contact;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
 use Tests\TestCase;
 
-final class UserTest extends TestCase
+final class IndexEndpointTest extends TestCase
 {
     use RefreshDatabase;
 
-    private const INDEX_ROUTE = 'api.v1.users.index';
+    private const ROUTE = 'api.v1.users.index';
 
     #[Test]
     public function it_returns_users_list_when_no_params_provided()
     {
         $count = 3;
-        User::factory()->count($count)->contact()->create();
+        User::factory()->count($count)->hasContact()->create();
 
-        $response = $this->getJson(route(self::INDEX_ROUTE))
+        $response = $this->getJson(route(self::ROUTE))
             ->assertJsonPath('meta.total', $count)
             ->assertJsonStructure([
                 'data' => [
@@ -72,22 +72,22 @@ final class UserTest extends TestCase
     #[TestWith(data: ['per_page', 'one'])]
     public function it_returns_error_when_invalid_params_are_provided(string $param, string $value): void
     {
-        User::factory()->count(3)->contact()->create();
+        User::factory()->count(3)->hasContact()->create();
 
-        $this->getJson(route(self::INDEX_ROUTE, [
+        $this->getJson(route(self::ROUTE, [
             $param => $value,
         ]))
-            ->assertJsonValidationErrors([$param])
+            ->assertInvalid([$param])
             ->assertUnprocessable();
     }
 
     #[Test]
     public function it_paginates_users_when_page_param_is_given(): void
     {
-        User::factory()->count(3)->contact()->create();
+        User::factory()->count(3)->hasContact()->create();
         $page = 2;
 
-        $this->getJson(route(self::INDEX_ROUTE, [
+        $this->getJson(route(self::ROUTE, [
             'page' => $page,
         ]))
             ->assertJsonPath('meta.current_page', $page)
@@ -97,10 +97,10 @@ final class UserTest extends TestCase
     #[Test]
     public function it_limits_users_per_page_when_per_page_param_is_given(): void
     {
-        User::factory()->count(3)->contact()->create();
+        User::factory()->count(3)->hasContact()->create();
         $perPage = 1;
 
-        $response = $this->getJson(route(self::INDEX_ROUTE, [
+        $response = $this->getJson(route(self::ROUTE, [
             'per_page' => $perPage,
         ]))
             ->assertJsonPath('meta.per_page', $perPage)
@@ -135,19 +135,20 @@ final class UserTest extends TestCase
             ],
         ];
 
-        User::factory()
-            ->count(count($data))
-            ->state(new Sequence(...array_map(
-                static fn (array $elem): array => $elem['user'],
-                $data
-            )))
-            ->contact(new Sequence(...array_map(
-                static fn (array $elem): array => $elem['contact'],
-                $data
-            )))
-            ->create();
+        foreach ($data as ['user' => $user, 'contact' => $contact]) {
+            User::factory()
+                ->withName($user['name'])
+                ->withEmail($user['email'])
+                ->hasContact(
+                    Contact::factory()
+                        ->withEmail($contact['email'])
+                        ->withPhone($contact['phone'])
+                        ->withTelegram($contact['telegram'])
+                )
+                ->create();
+        }
 
-        $response = $this->getJson(route(self::INDEX_ROUTE, [
+        $response = $this->getJson(route(self::ROUTE, [
             'search' => $search,
         ]))
             ->assertJsonPath('meta.total', $resultCount)

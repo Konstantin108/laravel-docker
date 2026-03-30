@@ -1,13 +1,16 @@
 <?php
 
-namespace Tests\Feature\Console\Commands\Elasticsearch\Abstract;
+namespace Tests\TestCases;
 
+use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
+use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
 use App\Services\Elasticsearch\Enums\SearchIndexEnum;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use Illuminate\Testing\PendingCommand;
+use Mockery\MockInterface;
 use Tests\TestCase;
 
-abstract class SearchIndexCommandTest extends TestCase
+abstract class SearchIndexCommandTestCase extends TestCase
 {
     abstract protected function command(): string;
 
@@ -42,6 +45,17 @@ abstract class SearchIndexCommandTest extends TestCase
                 $indexName,
                 array_column(SearchIndexEnum::cases(), 'value')
             );
+    }
+
+    protected function callMethodWithException(string $methodName, string $exceptionMessage): void
+    {
+        $this->mock(
+            ElasticsearchClientContract::class,
+            static function (MockInterface $client) use ($methodName, $exceptionMessage): void {
+                $client->shouldReceive($methodName)
+                    ->once()
+                    ->andThrow(new ElasticsearchApiException($exceptionMessage));
+            });
     }
 
     /**

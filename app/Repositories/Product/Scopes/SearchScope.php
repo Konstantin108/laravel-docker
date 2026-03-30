@@ -23,7 +23,7 @@ final readonly class SearchScope
 
         $search = '%'.$this->search.'%';
 
-        $builder->where(function (Builder $builder) use ($search): void {
+        $builder->where(static function (Builder $builder) use ($search): void {
             $builder->where('name', 'like', $search)
                 ->orWhere('description', 'like', $search)
                 ->orWhere('price', 'like', $search);

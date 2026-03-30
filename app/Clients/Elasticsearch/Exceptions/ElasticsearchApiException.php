@@ -9,7 +9,7 @@ use Throwable;
 
 final class ElasticsearchApiException extends Exception
 {
-    public static function buildMessage(Throwable $previous): self
+    public static function create(Throwable $previous): self
     {
         return new self($previous->getMessage(), $previous->getCode(), $previous);
     }

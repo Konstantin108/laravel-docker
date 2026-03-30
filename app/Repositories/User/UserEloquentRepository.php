@@ -19,7 +19,7 @@ class UserEloquentRepository implements UserRepositoryContract
     public function getUsersPagination(int $perPage, ?string $search = null): LengthAwarePaginator
     {
         return User::query()
-            ->with('contact')
+            ->with(['contact'])
             ->tap(new SearchScope($search))
             ->paginate($perPage);
     }
@@ -30,7 +30,7 @@ class UserEloquentRepository implements UserRepositoryContract
     public function getAllUsers(?int $limit = null): Collection
     {
         return User::query()
-            ->with('contact')
+            ->with(['contact'])
             ->tap(new LimitScope($limit))
             ->get();
     }

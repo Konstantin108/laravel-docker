@@ -101,7 +101,7 @@ class ElasticsearchClient implements ElasticsearchClientContract
         try {
             return $request()->json();
         } catch (Throwable $exception) {
-            throw ElasticsearchApiException::buildMessage($exception);
+            throw ElasticsearchApiException::create($exception);
         }
     }
 

@@ -28,11 +28,9 @@ class UserService
             $indexDto->search
         );
 
-        $userEnrichedCollection = $paginator->getCollection()
-            ->map(fn (User $user): UserEnriched => $this->enrich($user));
-
-        /** @var LengthAwarePaginator<int, UserEnriched> $paginator */
-        return $paginator->setCollection($userEnrichedCollection);
+        return $paginator->through(function (User $user): UserEnriched {
+            return $this->enrich($user);
+        });
     }
 
     /**
@@ -57,5 +55,13 @@ class UserService
             createdAt: $user->created_at,
             updatedAt: $user->updated_at,
         );
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function relations(): array
+    {
+        return ['contact'];
     }
 }

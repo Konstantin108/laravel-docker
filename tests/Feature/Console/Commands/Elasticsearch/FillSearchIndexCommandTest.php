@@ -2,8 +2,6 @@
 
 namespace Tests\Feature\Console\Commands\Elasticsearch;
 
-use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
-use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
 use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
 use App\Events\Elasticsearch\SearchIndexFilledEvent;
 use App\Jobs\SendSearchIndexDataJob;
@@ -12,6 +10,7 @@ use App\Mail\SearchIndexDataMail;
 use App\Models\Contracts\SearchableContract;
 use App\Services\Elasticsearch\Enums\SearchIndexEnum;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Mail\Mailer;
 use Illuminate\Support\Facades\Event;
@@ -23,10 +22,11 @@ use PHPUnit\Framework\Attributes\Test;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
-use ReflectionException;
-use Tests\Feature\Console\Commands\Elasticsearch\Abstract\SearchIndexCommandTest;
+use Tests\TestCases\SearchIndexCommandTestCase;
 
-final class FillSearchIndexTest extends SearchIndexCommandTest
+// TODO kpstya возможно избавиться от pushed() и использовать Bus::fake()
+
+final class FillSearchIndexCommandTest extends SearchIndexCommandTestCase
 {
     use RefreshDatabase;
 
@@ -56,6 +56,7 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
 
     /**
      * @throws SearchIndexException
+     * @throws BindingResolutionException
      */
     #[Test]
     #[DataProvider(methodName: 'indexNameProvider')]
@@ -64,24 +65,10 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
         $model = SearchIndexEnum::from($indexName)->getModel();
 
         $count = 2;
-        $models = $model::factory()->count($count)->create();
-
-        $expectedRows = $models->map(static fn (SearchableContract $model): array => [
-            $model->id,
-            $model->id - 1,
-            $indexName,
-            1,
-            'created',
-            1,
-            201,
-            '_doc',
-        ]);
+        $model::factory()->count($count)->create();
 
         $this->executeCommand(['index_name' => $indexName])
-            ->expectsTable(
-                ['_id', '_seq_no', '_index', '_version', 'result', '_primary_term', 'status', '_type'],
-                $expectedRows
-            )
+            ->expectsOutputToContain('filling is successful')
             ->expectsOutput(sprintf('index: %s', $indexName))
             ->expectsOutputToContain('took')
             ->expectsOutput('errors: false')
@@ -96,11 +83,9 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
         $event = $events->first()[0];
         $this->assertNotNull($event);
         $this->assertSame($indexName, $event->indexName);
-        $this->assertCount($models->count(), $event->items);
+        $this->assertCount($count, $event->items);
 
         $this->listener->handle($event);
-
-        // TODO kpstya возможно избавиться от pushed()
 
         /** @var SendSearchIndexDataJob $job */
         $jobs = Queue::pushed(SendSearchIndexDataJob::class);
@@ -109,9 +94,9 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
         $job = $jobs->first();
         $this->assertNotNull($job);
         $this->assertSame($indexName, $job->indexName);
-        $this->assertCount($models->count(), $job->items);
+        $this->assertCount($count, $job->items);
 
-        $job->handle(app(Mailer::class));
+        $job->handle($this->app->make(Mailer::class));
 
         $sentMails = Mail::sent(SearchIndexDataMail::class);
         $this->assertCount(1, $sentMails);
@@ -121,7 +106,39 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
         $this->assertNotNull($mail);
         $this->assertTrue($mail->hasTo('admin@test.ru'));
         $this->assertSame($indexName, $mail->indexName);
-        $this->assertSame($models->count(), $mail->itemsCount);
+        $this->assertSame($count, $mail->itemsCount);
+    }
+
+    /**
+     * @throws SearchIndexException
+     */
+    #[Test]
+    #[DataProvider(methodName: 'indexNameProvider')]
+    public function it_outputs_items_table_in_verbose_mode_when_filling_search_index(string $indexName): void
+    {
+        $model = SearchIndexEnum::from($indexName)->getModel();
+        $models = $model::factory()->count(2)->create();
+
+        $expectedRows = $models->map(static fn (SearchableContract $model): array => [
+            $model->id,
+            $model->id - 1,
+            $indexName,
+            1,
+            'created',
+            1,
+            201,
+            '_doc',
+        ]);
+
+        $this->executeCommand([
+            'index_name' => $indexName,
+            '-v' => true,
+        ])
+            ->expectsTable(
+                ['_id', '_seq_no', '_index', '_version', 'result', '_primary_term', 'status', '_type'],
+                $expectedRows
+            )
+            ->assertSuccessful();
     }
 
     #[Test]
@@ -173,22 +190,20 @@ final class FillSearchIndexTest extends SearchIndexCommandTest
     }
 
     /**
-     * @throws ReflectionException
      * @throws SearchIndexException
      */
     #[Test]
     #[DataProvider(methodName: 'indexNameProvider')]
     public function it_returns_error_when_filling_search_index_fails(string $indexName): void
     {
-        $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
-            return new ElasticsearchClientErrorStub;
-        });
-
         $model = SearchIndexEnum::from($indexName)->getModel();
         $model::factory()->count(2)->create();
+        $exceptionMessage = 'Index filling error.';
+
+        $this->callMethodWithException('bulkIndex', $exceptionMessage);
 
         $this->expectException(ElasticsearchApiException::class);
-        $this->expectExceptionMessage('Index filling error.');
+        $this->expectExceptionMessage($exceptionMessage);
 
         $this->executeCommand(['index_name' => $indexName]);
     }

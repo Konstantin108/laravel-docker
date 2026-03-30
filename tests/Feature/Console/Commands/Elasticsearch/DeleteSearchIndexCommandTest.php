@@ -2,15 +2,12 @@
 
 namespace Tests\Feature\Console\Commands\Elasticsearch;
 
-use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
-use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
 use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use ReflectionException;
-use Tests\Feature\Console\Commands\Elasticsearch\Abstract\SearchIndexCommandTest;
+use Tests\TestCases\SearchIndexCommandTestCase;
 
-final class DeleteSearchIndexTest extends SearchIndexCommandTest
+final class DeleteSearchIndexCommandTest extends SearchIndexCommandTestCase
 {
     private const COMMAND = 'app:elasticsearch:delete-index';
 
@@ -19,23 +16,32 @@ final class DeleteSearchIndexTest extends SearchIndexCommandTest
     public function it_successfully_deletes_search_index(string $indexName): void
     {
         $this->executeCommand(['index_name' => $indexName])
+            ->expectsOutputToContain('deleting is successful')
+            ->assertSuccessful();
+    }
+
+    #[Test]
+    #[DataProvider(methodName: 'indexNameProvider')]
+    public function it_prints_pretty_json_in_verbose_mode_when_deleting_search_index(string $indexName): void
+    {
+        $this->executeCommand([
+            'index_name' => $indexName,
+            '-v' => true,
+        ])
             ->expectsOutputToContain('"acknowledged": true')
             ->assertSuccessful();
     }
 
-    /**
-     * @throws ReflectionException
-     */
     #[Test]
     #[DataProvider(methodName: 'indexNameProvider')]
     public function it_returns_error_when_deleting_search_index_fails(string $indexName): void
     {
-        $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
-            return new ElasticsearchClientErrorStub;
-        });
+        $exceptionMessage = 'Index deleting error.';
+
+        $this->callMethodWithException('deleteIndex', $exceptionMessage);
 
         $this->expectException(ElasticsearchApiException::class);
-        $this->expectExceptionMessage('Index deleting error.');
+        $this->expectExceptionMessage($exceptionMessage);
 
         $this->executeCommand(['index_name' => $indexName]);
     }

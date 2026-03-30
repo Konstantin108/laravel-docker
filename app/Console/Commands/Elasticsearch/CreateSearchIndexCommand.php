@@ -27,7 +27,11 @@ final class CreateSearchIndexCommand extends Command implements PromptsForMissin
         $searchIndexEnum = $resolver->fromString($this->argument('index_name'));
 
         $result = $factory->make($searchIndexEnum)->createSearchIndex();
-        $this->info(json_encode($result, JSON_PRETTY_PRINT));
+
+        $this->components->success('creating is successful');
+        if ($this->getOutput()->isVerbose()) {
+            $this->info(json_encode($result, JSON_PRETTY_PRINT));
+        }
 
         return self::SUCCESS;
     }

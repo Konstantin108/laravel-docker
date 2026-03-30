@@ -8,10 +8,12 @@ use Illuminate\Support\Collection;
 
 final readonly class BulkIndexResult
 {
+    /**
+     * @param  Collection<int, BulkIndexItem>  $items
+     */
     public function __construct(
         public int $took,
         public bool $errors,
-        /** @var Collection<int, BulkIndexItem> */
         public Collection $items
     ) {}
 }

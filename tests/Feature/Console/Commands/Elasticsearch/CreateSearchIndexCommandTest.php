@@ -2,15 +2,12 @@
 
 namespace Tests\Feature\Console\Commands\Elasticsearch;
 
-use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
-use App\Clients\Elasticsearch\ElasticsearchClientErrorStub;
 use App\Clients\Elasticsearch\Exceptions\ElasticsearchApiException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use ReflectionException;
-use Tests\Feature\Console\Commands\Elasticsearch\Abstract\SearchIndexCommandTest;
+use Tests\TestCases\SearchIndexCommandTestCase;
 
-final class CreateSearchIndexTest extends SearchIndexCommandTest
+final class CreateSearchIndexCommandTest extends SearchIndexCommandTestCase
 {
     private const COMMAND = 'app:elasticsearch:create-index';
 
@@ -19,23 +16,32 @@ final class CreateSearchIndexTest extends SearchIndexCommandTest
     public function it_successfully_creates_search_index(string $indexName): void
     {
         $this->executeCommand(['index_name' => $indexName])
+            ->expectsOutputToContain('creating is successful')
+            ->assertSuccessful();
+    }
+
+    #[Test]
+    #[DataProvider(methodName: 'indexNameProvider')]
+    public function it_prints_pretty_json_in_verbose_mode_when_creating_search_index(string $indexName): void
+    {
+        $this->executeCommand([
+            'index_name' => $indexName,
+            '-v' => true,
+        ])
             ->expectsOutputToContain(sprintf('"index": "%s"', $indexName))
             ->assertSuccessful();
     }
 
-    /**
-     * @throws ReflectionException
-     */
     #[Test]
     #[DataProvider(methodName: 'indexNameProvider')]
     public function it_returns_error_when_creating_search_index_fails(string $indexName): void
     {
-        $this->app->bind(ElasticsearchClientContract::class, static function (): ElasticsearchClientContract {
-            return new ElasticsearchClientErrorStub;
-        });
+        $exceptionMessage = 'An error occurred while creating the index.';
+
+        $this->callMethodWithException('createIndex', $exceptionMessage);
 
         $this->expectException(ElasticsearchApiException::class);
-        $this->expectExceptionMessage('An error occurred while creating the index.');
+        $this->expectExceptionMessage($exceptionMessage);
 
         $this->executeCommand(['index_name' => $indexName]);
     }

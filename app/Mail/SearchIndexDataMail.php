@@ -10,8 +10,10 @@ use Illuminate\Support\Collection;
 
 final class SearchIndexDataMail extends Mailable
 {
+    /**
+     * @param  Collection<int, SearchableSourceContract>  $items
+     */
     public function __construct(
-        /** @var Collection<int, SearchableSourceContract> */
         public readonly Collection $items,
         public readonly int $itemsCount,
         public readonly string $indexName

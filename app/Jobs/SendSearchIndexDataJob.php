@@ -19,8 +19,10 @@ final class SendSearchIndexDataJob implements ShouldQueue
 
     public int $tries = 3;
 
+    /**
+     * @param  Collection<int, SearchableSourceContract>  $items
+     */
     public function __construct(
-        /** @var Collection<int, SearchableSourceContract> */
         public readonly Collection $items,
         public readonly string $indexName
     ) {}
