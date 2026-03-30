@@ -13,9 +13,9 @@ use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Mail\Mailer;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Queue;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -23,8 +23,6 @@ use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
 use Tests\TestCases\SearchIndexCommandTestCase;
-
-// TODO kpstya возможно избавиться от pushed() и использовать Bus::fake()
 
 final class FillSearchIndexCommandTest extends SearchIndexCommandTestCase
 {
@@ -45,7 +43,7 @@ final class FillSearchIndexCommandTest extends SearchIndexCommandTestCase
         parent::setUp();
 
         Event::fake();
-        Queue::fake();
+        Bus::fake();
         Mail::fake();
         $this->listener = $this->app->get(NotifyAboutSearchIndexFilledListener::class);
 
@@ -88,7 +86,7 @@ final class FillSearchIndexCommandTest extends SearchIndexCommandTestCase
         $this->listener->handle($event);
 
         /** @var SendSearchIndexDataJob $job */
-        $jobs = Queue::pushed(SendSearchIndexDataJob::class);
+        $jobs = Bus::dispatched(SendSearchIndexDataJob::class);
         $this->assertCount(1, $jobs);
 
         $job = $jobs->first();

@@ -13,13 +13,20 @@ use Tests\TestCase;
 
 final class NotifyAboutSearchIndexFilledListenerTest extends TestCase
 {
+    private const INDEX_NAME = 'any_index_name';
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Bus::fake();
+    }
+
     #[Test]
     public function it_dispatches_job_when_report_is_enabled(): void
     {
-        Bus::fake();
-        $indexName = 'any_index_name';
         $items = new Collection($this->mock(SearchableSourceContract::class));
-        $event = new SearchIndexFilledEvent($items, $indexName);
+        $event = new SearchIndexFilledEvent($items, self::INDEX_NAME);
 
         (new NotifyAboutSearchIndexFilledListener)->handle($event);
 
@@ -32,7 +39,7 @@ final class NotifyAboutSearchIndexFilledListenerTest extends TestCase
 
         $job = $jobs->first();
         $this->assertNotNull($job);
-        $this->assertSame($indexName, $job->indexName);
+        $this->assertSame(self::INDEX_NAME, $job->indexName);
         $this->assertSame($items, $job->items);
         $this->assertCount($items->count(), $job->items);
     }
@@ -42,10 +49,9 @@ final class NotifyAboutSearchIndexFilledListenerTest extends TestCase
     {
         config()->set('elasticsearch.send_report_to_email', false);
 
-        Bus::fake();
         $event = new SearchIndexFilledEvent(
             new Collection($this->mock(SearchableSourceContract::class)),
-            'any_index'
+            self::INDEX_NAME
         );
 
         (new NotifyAboutSearchIndexFilledListener)->handle($event);

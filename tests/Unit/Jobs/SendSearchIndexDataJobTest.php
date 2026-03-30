@@ -12,6 +12,8 @@ use Tests\TestCase;
 
 final class SendSearchIndexDataJobTest extends TestCase
 {
+    private const INDEX_NAME = 'any_index_name';
+
     #[Test]
     public function it_sends_mail()
     {
@@ -26,7 +28,7 @@ final class SendSearchIndexDataJobTest extends TestCase
 
         $job = new SendSearchIndexDataJob(
             new Collection($this->mock(SearchableSourceContract::class)),
-            'any_index_name'
+            self::INDEX_NAME,
         );
 
         $job->handle($mailer);
