@@ -29,6 +29,8 @@ class ProductIndexElasticsearchService extends ElasticsearchService
         parent::__construct($client, $searchResultFactory);
     }
 
+    // TODO kpstya возможно переработать эти методы и в классах наследниках подменять только свойство
+
     protected function indexName(): string
     {
         return static::INDEX_NAME;

@@ -2,11 +2,15 @@
 
 namespace Tests\Feature\Console\Commands;
 
+// TODO kpstya возможно надо заменить на контракт
+
 use Exception;
 use Illuminate\Filesystem\Filesystem;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
+
+// TODO kpstya возможно добавить статический анализ для вьюх
 
 final class GenerateExcuseTest extends TestCase
 {

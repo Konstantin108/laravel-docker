@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+/* TODO kpstya - возможно реализовывать интерфейс будет базовый абстрактный класс, а уже от него будут наследоваться
+    другие классы. Тогда я смогу упростить и использовать в сервисах класс контракт и возможно смогу отвязать
+    использование эвента для каждого сервиса, сейчас это не много костыльно и слишком высокий уровень каплинга */
+
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\Dto\SettingsDto;
 use App\Clients\Elasticsearch\ElasticsearchClient;
@@ -61,6 +65,8 @@ class AppServiceProvider extends ServiceProvider
             ));
         });
     }
+
+    // TODO kpstya надо ли создать директивы для view
 
     public function boot(): void
     {

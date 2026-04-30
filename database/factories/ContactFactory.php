@@ -13,6 +13,8 @@ class ContactFactory extends Factory
 {
     protected $model = Contact::class;
 
+    // TODO kpstya проверить, что в фабриках заполняются все поля моделей
+
     /**
      * @return array<string, mixed>
      */

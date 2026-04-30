@@ -11,6 +11,8 @@ class IndexRequest extends FormRequest
         return true;
     }
 
+    // TODO kpstya per_page надо добавить правило max
+
     /**
      * @return array<string, list<string>>
      */
@@ -23,3 +25,5 @@ class IndexRequest extends FormRequest
         ];
     }
 }
+
+// TODO kpstya проверить, что у меня везде используется аннотация class-string

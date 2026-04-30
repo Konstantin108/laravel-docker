@@ -19,6 +19,13 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        /* TODO kpstya
+            - возможно добавить static
+            - сделать переносы строки
+            - пересоздать таблицы
+            - нужен ли в миграциях строгий тип
+            - проверить корректность всех миграций */
+
         Schema::create(TableDictionary::PASSWORD_RESET_TOKENS, function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');

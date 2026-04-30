@@ -20,6 +20,8 @@ final readonly class GenerateExcuseAction
      */
     public function handle(): string
     {
+        // TODO kpstya resource_path - можно ли заменить это на фасад или же DI
+
         $content = $this->filesystem->get(resource_path(self::PATH));
         $phrases = json_decode($content, true, flags: JSON_THROW_ON_ERROR);
 

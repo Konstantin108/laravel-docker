@@ -11,6 +11,8 @@ use App\Services\Elasticsearch\Entities\SearchResult;
 use App\Services\Elasticsearch\Factories\SearchResultFactory;
 use stdClass;
 
+// TODO kpstya поменять имя класса на BaseElasticsearchService
+
 abstract class ElasticsearchService
 {
     public function __construct(
