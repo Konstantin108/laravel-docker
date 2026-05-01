@@ -13,7 +13,9 @@ class ContactFactory extends Factory
 {
     protected $model = Contact::class;
 
-    // TODO kpstya проверить, что в фабриках заполняются все поля моделей
+    /* TODO kpstya
+        - надо ограничить доступ к документации из продуктовой среды
+        - проверить, что в фабриках заполняются все поля моделей */
 
     /**
      * @return array<string, mixed>

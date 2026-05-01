@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Console\Commands;
 
-// TODO kpstya возможно надо заменить на контракт
+// TODO kpstya возможно надо заменить Illuminate\Filesystem\Filesystem на контракт
 
 use Exception;
 use Illuminate\Filesystem\Filesystem;

@@ -22,7 +22,7 @@ final class ReverseStringTest extends TestCase
         string $reversedString
     ): void {
         $this->artisan(self::COMMAND, [
-            'string:string' => $string,
+            'string' => $string,
         ])
             ->expectsOutput($reversedString)
             ->assertSuccessful();

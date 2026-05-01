@@ -120,7 +120,7 @@ final class IndexEndpointTest extends TestCase
     #[TestWith(data: [null, 3])]
     public function it_filters_users_by_search_param(?string $search, int $resultCount): void
     {
-        $data = [
+        $payload = [
             [
                 'user' => ['name' => 'Иван', 'email' => 'ivan@bk.ru'],
                 'contact' => ['email' => 'ivan@reserve.ru', 'phone' => '79094545533', 'telegram' => '@ivan'],
@@ -135,7 +135,7 @@ final class IndexEndpointTest extends TestCase
             ],
         ];
 
-        foreach ($data as ['user' => $user, 'contact' => $contact]) {
+        foreach ($payload as ['user' => $user, 'contact' => $contact]) {
             User::factory()
                 ->withName($user['name'])
                 ->withEmail($user['email'])

@@ -21,10 +21,9 @@ class UserController extends Controller
     #[Endpoint(title: 'Получить список пользователей с пагинацией')]
     public function index(IndexRequest $request, UserService $userService): AnonymousResourceCollection
     {
-        $data = $request->validated();
-
         return IndexResource::collection(
-            $userService->getPagination(IndexDto::from($data))->withQueryString()
+            $userService->getPagination(IndexDto::from($request->validated()))
+                ->withQueryString()
         );
     }
 }

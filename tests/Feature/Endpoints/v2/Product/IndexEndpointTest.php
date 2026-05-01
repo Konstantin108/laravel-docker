@@ -122,7 +122,7 @@ final class IndexEndpointTest extends TestCase
     #[Test]
     public function it_returns_json_error_when_elasticsearch_fails_in_production_environment(): void
     {
-        config()->set('app.debug', false);
+        config(['app.debug' => false]);
 
         Product::factory()->count(3)->create();
         $exceptionMessage = 'Index search error.';

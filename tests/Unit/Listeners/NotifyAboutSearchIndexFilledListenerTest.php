@@ -43,7 +43,7 @@ final class NotifyAboutSearchIndexFilledListenerTest extends TestCase
     #[Test]
     public function it_does_not_dispatch_job_when_report_is_disabled(): void
     {
-        config()->set('elasticsearch.send_report_to_email', false);
+        config(['elasticsearch.send_report_to_email' => false]);
 
         $event = new SearchIndexFilledEvent(
             new Collection($this->mock(SearchableSourceContract::class)),

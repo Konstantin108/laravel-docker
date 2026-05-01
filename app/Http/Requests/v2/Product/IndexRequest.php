@@ -25,5 +25,3 @@ class IndexRequest extends FormRequest
         ];
     }
 }
-
-// TODO kpstya проверить, что у меня везде используется аннотация class-string

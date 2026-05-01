@@ -21,10 +21,8 @@ class ProductController extends Controller
     #[Endpoint(title: 'Получить список продуктов')]
     public function index(IndexRequest $request, ProductService $productService): AnonymousResourceCollection
     {
-        $data = $request->validated();
-
         return IndexResource::collection(
-            $productService->getProducts(IndexDto::from($data))
+            $productService->getProducts(IndexDto::from($request->validated()))
         );
     }
 }

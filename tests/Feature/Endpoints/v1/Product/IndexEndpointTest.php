@@ -51,13 +51,13 @@ final class IndexEndpointTest extends TestCase
     #[TestWith(data: [null, 3])]
     public function it_filters_products_by_search_param(?string $search, int $resultCount): void
     {
-        $data = [
+        $payload = [
             ['name' => 'Xiaomi', 'description' => 'лучшая цена на рынке', 'price' => 1500000],
             ['name' => 'samsung', 'description' => 'корейское качество', 'price' => 950000],
             ['name' => 'электрогитара', 'description' => 'отличный звук', 'price' => 999900],
         ];
 
-        foreach ($data as $elem) {
+        foreach ($payload as $elem) {
             Product::factory()
                 ->withName($elem['name'])
                 ->withDescription($elem['description'])

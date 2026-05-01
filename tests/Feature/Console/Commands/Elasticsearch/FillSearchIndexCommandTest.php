@@ -151,7 +151,7 @@ final class FillSearchIndexCommandTest extends SearchIndexCommandTestCase
     #[DataProvider(methodName: 'indexNameProvider')]
     public function it_records_info_log_when_filling_index_and_logging_is_enabled(string $indexName): void
     {
-        config()->set('elasticsearch.fill_index_log', true);
+        config(['elasticsearch.fill_index_log' => true]);
 
         $this->logger->shouldReceive('info')->once();
         $this->executeCommand(['index_name' => $indexName]);
