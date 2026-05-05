@@ -25,10 +25,14 @@ final class UserEloquentRepositoryTest extends TestCase
     #[Test]
     public function it_returns_paginated_users_when_per_page_param_is_given(): void
     {
+        /* TODO kpstya
+            - надо добавить тесты на сортировку для v1\User и v1\Product
+            - возможно добавить сортировку для v2\User и v2\Product, тогда добавить и тесты на это */
+
         User::factory()->count(3)->hasContact()->create();
         $perPage = 2;
 
-        $result = $this->repository->getUsersPagination($perPage);
+        $result = $this->repository->getPagination(perPage: $perPage);
 
         $this->assertInstanceOf(LengthAwarePaginator::class, $result);
         $this->assertCount($perPage, $result->items());
@@ -44,7 +48,7 @@ final class UserEloquentRepositoryTest extends TestCase
         $count = 2;
         User::factory()->count($count)->hasContact()->create();
 
-        $result = $this->repository->getAllUsers();
+        $result = $this->repository->getList();
 
         $this->assertCount($count, $result);
 
@@ -59,7 +63,7 @@ final class UserEloquentRepositoryTest extends TestCase
         User::factory()->count(5)->hasContact()->create();
         $limit = 3;
 
-        $result = $this->repository->getAllUsers($limit);
+        $result = $this->repository->getList($limit);
 
         $this->assertCount($limit, $result);
     }

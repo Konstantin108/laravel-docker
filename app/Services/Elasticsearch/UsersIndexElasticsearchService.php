@@ -103,7 +103,7 @@ class UsersIndexElasticsearchService extends ElasticsearchService
 
     public function fillSearchIndex(?int $limit = null): ?BulkIndexResult
     {
-        $users = $this->userService->getUsers($limit);
+        $users = $this->userService->getList($limit);
         if ($users->isEmpty()) {
             return null;
         }

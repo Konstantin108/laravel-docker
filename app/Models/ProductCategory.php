@@ -33,11 +33,6 @@ class ProductCategory extends Model
     use HasFactory;
 
     /**
-     * @var list<string>
-     */
-    protected $guarded = ['id'];
-
-    /**
      * @return HasMany<Product, $this>
      */
     public function products(): HasMany

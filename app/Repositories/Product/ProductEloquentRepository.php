@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repositories\Product;
 
+use App\Enums\SortedByEnum;
 use App\Models\Product;
 use App\Repositories\Product\Contracts\ProductRepositoryContract;
 use App\Repositories\Product\Scopes\SearchScope;
@@ -15,12 +16,18 @@ class ProductEloquentRepository implements ProductRepositoryContract
     /**
      * @return Collection<int, Product>
      */
-    public function getAllProducts(?string $search = null, ?int $limit = null): Collection
-    {
+    public function getList(
+        SortedByEnum $sortedByEnum = SortedByEnum::DESC,
+        ?string $search = null,
+        ?int $limit = null
+    ): Collection {
         return Product::query()
             ->with(['category'])
             ->tap(new SearchScope($search))
             ->tap(new LimitScope($limit))
+            ->orderBy('id', $sortedByEnum->value)
             ->get();
     }
 }
+
+// TODO kpstya возможно для User и Product в обоих версиях стоит добавить поля, по которым можно сортировать

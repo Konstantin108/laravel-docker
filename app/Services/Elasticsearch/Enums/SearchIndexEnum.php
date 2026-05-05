@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Model;
 enum SearchIndexEnum: string
 {
     case USERS = 'users';
-
     case PRODUCTS = 'products';
 
     /**

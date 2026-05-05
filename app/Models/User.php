@@ -1,7 +1,5 @@
 <?php
 
-// TODO kpstya контроллеры, сервисы, репозитории - надо обдумать имена методов
-
 namespace App\Models;
 
 use App\Models\Contracts\SearchableContract;
@@ -40,11 +38,6 @@ class User extends Authenticatable implements SearchableContract
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
-
-    /**
-     * @var list<string>
-     */
-    protected $guarded = ['id'];
 
     /**
      * @var list<string>

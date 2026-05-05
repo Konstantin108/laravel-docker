@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace App\Services\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
+use App\Enums\SortedByEnum;
 use App\Events\Elasticsearch\SearchIndexFilledEvent;
 use App\Services\Elasticsearch\Abstract\ElasticsearchService;
 use App\Services\Elasticsearch\Entities\BulkIndexResult;
 use App\Services\Elasticsearch\Factories\BulkIndexResultFactory;
 use App\Services\Elasticsearch\Factories\SearchResultFactory;
-use App\Services\Product\Dto\IndexDto;
+use App\Services\Product\Dto\FilterDto;
 use App\Services\Product\Entities\ProductEnriched;
 use App\Services\Product\ProductService;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -91,7 +92,10 @@ class ProductIndexElasticsearchService extends ElasticsearchService
 
     public function fillSearchIndex(?int $limit = null): ?BulkIndexResult
     {
-        $products = $this->productService->getProducts(new IndexDto(limit: $limit));
+        $products = $this->productService->getList(new FilterDto(
+            sortedBy: SortedByEnum::ASC,
+            limit: $limit
+        ));
         if ($products->isEmpty()) {
             return null;
         }

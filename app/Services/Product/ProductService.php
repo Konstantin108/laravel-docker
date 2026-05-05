@@ -6,7 +6,7 @@ namespace App\Services\Product;
 
 use App\Models\Product;
 use App\Repositories\Product\Contracts\ProductRepositoryContract;
-use App\Services\Product\Dto\IndexDto;
+use App\Services\Product\Dto\FilterDto;
 use App\Services\Product\Entities\ProductEnriched;
 use Illuminate\Support\Collection;
 
@@ -17,11 +17,12 @@ class ProductService
     /**
      * @return Collection<int, ProductEnriched>
      */
-    public function getProducts(IndexDto $indexDto): Collection
+    public function getList(FilterDto $filterDto): Collection
     {
-        return $this->repository->getAllProducts(
-            $indexDto->search,
-            $indexDto->limit,
+        return $this->repository->getList(
+            $filterDto->sortedBy,
+            $filterDto->search,
+            $filterDto->limit,
         )
             ->map(fn (Product $product): ProductEnriched => $this->enrich($product));
     }

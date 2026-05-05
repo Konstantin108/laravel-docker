@@ -7,7 +7,6 @@ namespace App\Services\Elasticsearch\Enums;
 enum BulkStatusEnum: int
 {
     case CREATED = 201;
-
     case UPDATED = 200;
 
     public function isCreated(): bool

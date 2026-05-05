@@ -1,5 +1,7 @@
 <?php
 
+// TODO kpstya возможно нужно заменить использование пагинации на контракт
+
 namespace App\Http\Controllers\Api\v2;
 
 use App\Enums\RouteGroupEnum;

@@ -27,7 +27,7 @@ final class ProductEloquentRepositoryTest extends TestCase
         $count = 2;
         Product::factory()->count($count)->create();
 
-        $result = $this->repository->getAllProducts();
+        $result = $this->repository->getList();
 
         $this->assertCount($count, $result);
     }
@@ -38,8 +38,10 @@ final class ProductEloquentRepositoryTest extends TestCase
         Product::factory()->count(5)->create();
         $limit = 3;
 
-        $result = $this->repository->getAllProducts(limit: $limit);
+        $result = $this->repository->getList(limit: $limit);
 
         $this->assertCount($limit, $result);
     }
 }
+
+// TODO kpstya возможно надо доработать тесты репозиториев с учетом сортирвки

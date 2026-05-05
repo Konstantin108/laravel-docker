@@ -21,8 +21,6 @@ final readonly class SearchScope
             return;
         }
 
-        // TODO kpstya возможно переработать этот запрос
-
         $search = '%'.$this->search.'%';
 
         $builder->where(static function (Builder $builder) use ($search): void {

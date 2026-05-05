@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Enums\RouteGroupEnum;
+use App\Enums\SortedByEnum;
 use App\Http\Requests\v1\User\IndexRequest;
 use App\Http\Resources\User\IndexResource;
-use App\Services\User\Dto\IndexDto;
+use App\Services\User\Dto\FilterDto;
 use App\Services\User\UserService;
 use Dedoc\Scramble\Attributes\Endpoint;
 use Dedoc\Scramble\Attributes\Group;
@@ -22,7 +23,12 @@ class UserController extends Controller
     public function index(IndexRequest $request, UserService $userService): AnonymousResourceCollection
     {
         return IndexResource::collection(
-            $userService->getPagination(IndexDto::from($request->validated()))
+            $userService->getPagination(new FilterDto(
+                sortedBy: SortedByEnum::from($request->validated('sorted_by', 'desc')),
+                search: $request->validated('search'),
+                perPage: $request->validated('per_page'),
+
+            ))
                 ->withQueryString()
         );
     }
