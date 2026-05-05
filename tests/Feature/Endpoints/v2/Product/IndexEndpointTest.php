@@ -18,7 +18,7 @@ final class IndexEndpointTest extends TestCase
     private const ROUTE = 'api.v2.products.index';
 
     #[Test]
-    public function it_returns_products_list_when_no_params_provided(): void
+    public function it_returns_paginated_products_when_no_params_provided(): void
     {
         $count = 3;
         Product::factory()->count($count)->create();

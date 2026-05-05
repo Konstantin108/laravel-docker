@@ -13,12 +13,10 @@ final class IndexEndpointTest extends TestCase
 {
     use RefreshDatabase;
 
-    // TODO kpstya переименовать на пагинацию
-
     private const ROUTE = 'api.v1.users.index';
 
     #[Test]
-    public function it_returns_users_list_when_no_params_provided(): void
+    public function it_returns_paginated_users_when_no_params_provided(): void
     {
         $count = 3;
         User::factory()->count($count)->hasContact()->create();

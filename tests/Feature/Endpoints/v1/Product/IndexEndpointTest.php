@@ -42,8 +42,6 @@ final class IndexEndpointTest extends TestCase
         $this->assertCount($count, $response->json('data'));
     }
 
-    // TODO kpstya запустить все тесты. почему тут так мало тестов
-
     #[Test]
     #[TestWith(data: ['xiaom', 1])]
     #[TestWith(data: ['автоваз', 0])]

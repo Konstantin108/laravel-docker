@@ -71,8 +71,6 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 
-    // TODO kpstya надо ли создать директивы для view
-
     public function boot(): void
     {
         if ($this->app->environment('production')) {

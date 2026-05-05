@@ -9,14 +9,11 @@ use App\Models\User;
 use App\Repositories\Scopes\LimitScope;
 use App\Repositories\User\Contracts\UserRepositoryContract;
 use App\Repositories\User\Scopes\SearchScope;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 class UserEloquentRepository implements UserRepositoryContract
 {
-    /**
-     * @return LengthAwarePaginator<int, User>
-     */
     public function getPagination(
         SortedByEnum $sortedByEnum = SortedByEnum::DESC,
         ?int $perPage = null,

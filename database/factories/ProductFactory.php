@@ -19,10 +19,8 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         return [
-            // TODO kpstya тут очень слабая уникальность
-
             'category_id' => ProductCategory::factory(),
-            'name' => $this->faker->unique()->word(),
+            'name' => $this->faker->unique()->bothify('????????##'),
             'description' => $this->faker->optional()->sentence(),
             'price' => $this->faker->numberBetween(100000, 1500000),
         ];

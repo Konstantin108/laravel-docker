@@ -14,5 +14,3 @@ final readonly class FilterDto
         public ?int $perPage = null
     ) {}
 }
-
-// TODO kpstya надо убрать использование Spatie там, где он избыточен

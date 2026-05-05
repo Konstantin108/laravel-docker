@@ -4,8 +4,8 @@ namespace Tests\Integration\Repositories;
 
 use App\Models\User;
 use App\Repositories\User\UserEloquentRepository;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Pagination\LengthAwarePaginator;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 

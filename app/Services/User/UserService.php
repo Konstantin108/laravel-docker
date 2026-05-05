@@ -8,24 +8,18 @@ use App\Models\User;
 use App\Repositories\User\Contracts\UserRepositoryContract;
 use App\Services\User\Dto\FilterDto;
 use App\Services\User\Entities\UserEnriched;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-
-/* TODO kpstya
-    - возможно надо использовать Illuminate\Contracts\Pagination\LengthAwarePaginator
-    - возможно написать маппер для FilterDto
-    - getPagination() возможно переименовать*/
 
 class UserService
 {
     public function __construct(private readonly UserRepositoryContract $repository) {}
 
     /**
-     * @return LengthAwarePaginator<int, UserEnriched>
+     * @return LengthAwarePaginator<int, User>
      */
     public function getPagination(FilterDto $filterDto): LengthAwarePaginator
     {
-        /** @var LengthAwarePaginator<int, User> $paginator */
         $paginator = $this->repository->getPagination(
             $filterDto->sortedBy,
             $filterDto->perPage,

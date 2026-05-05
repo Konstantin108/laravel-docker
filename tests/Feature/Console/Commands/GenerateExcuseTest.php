@@ -10,8 +10,6 @@ use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
-// TODO kpstya возможно добавить статический анализ для вьюх
-
 final class GenerateExcuseTest extends TestCase
 {
     private const COMMAND = 'app:generate-excuse';
