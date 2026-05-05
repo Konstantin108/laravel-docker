@@ -32,6 +32,8 @@ class Contact extends Model
     /** @use HasFactory<ContactFactory> */
     use HasFactory;
 
+    // TODO kpstya возможно убрать guarded во всех моделях
+
     /**
      * @var list<string>
      */

@@ -17,3 +17,5 @@ final class IndexDto extends Data
         public readonly ?int $page = null,
     ) {}
 }
+
+// TODO kpstya кажется page не нужен в dto и в реквесте

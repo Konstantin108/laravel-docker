@@ -13,10 +13,12 @@ final class IndexEndpointTest extends TestCase
 {
     use RefreshDatabase;
 
+    // TODO kpstya переименовать на пагинацию
+
     private const ROUTE = 'api.v1.users.index';
 
     #[Test]
-    public function it_returns_users_list_when_no_params_provided()
+    public function it_returns_users_list_when_no_params_provided(): void
     {
         $count = 3;
         User::factory()->count($count)->hasContact()->create();
@@ -120,7 +122,7 @@ final class IndexEndpointTest extends TestCase
     #[TestWith(data: [null, 3])]
     public function it_filters_users_by_search_param(?string $search, int $resultCount): void
     {
-        $payload = [
+        $data = [
             [
                 'user' => ['name' => 'Иван', 'email' => 'ivan@bk.ru'],
                 'contact' => ['email' => 'ivan@reserve.ru', 'phone' => '79094545533', 'telegram' => '@ivan'],
@@ -135,7 +137,7 @@ final class IndexEndpointTest extends TestCase
             ],
         ];
 
-        foreach ($payload as ['user' => $user, 'contact' => $contact]) {
+        foreach ($data as ['user' => $user, 'contact' => $contact]) {
             User::factory()
                 ->withName($user['name'])
                 ->withEmail($user['email'])

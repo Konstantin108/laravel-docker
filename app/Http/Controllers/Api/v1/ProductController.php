@@ -1,5 +1,7 @@
 <?php
 
+// TODO kpstya надо написать тест на рендер письма
+
 namespace App\Http\Controllers\Api\v1;
 
 use App\Enums\RouteGroupEnum;

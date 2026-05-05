@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 final class PaginationRequestMapperTest extends TestCase
 {
     #[Test]
-    public function it_maps_default_correctly()
+    public function it_maps_default_correctly(): void
     {
         $paginationRequestDto = (new PaginationRequestMapper)->map();
 
@@ -19,7 +19,7 @@ final class PaginationRequestMapperTest extends TestCase
     }
 
     #[Test]
-    public function it_maps_from_correctly_for_second_page()
+    public function it_maps_from_correctly_for_second_page(): void
     {
         $paginationRequestDto = (new PaginationRequestMapper)->map(null, 10, 2);
 
@@ -29,7 +29,7 @@ final class PaginationRequestMapperTest extends TestCase
     }
 
     #[Test]
-    public function it_maps_from_correctly()
+    public function it_maps_from_correctly(): void
     {
         $searchedString = 'searched';
         $paginationRequestDto = (new PaginationRequestMapper)->map($searchedString, 25, 3);

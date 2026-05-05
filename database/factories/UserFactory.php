@@ -49,6 +49,8 @@ class UserFactory extends Factory
             });
         }
 
+        // TODO kpstya проверить, что модели отражают все связи из БД
+
         return $this->has($contact ?? Contact::factory());
     }
 }

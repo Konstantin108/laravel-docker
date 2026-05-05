@@ -11,8 +11,6 @@ class IndexRequest extends FormRequest
         return true;
     }
 
-    // TODO kpstya per_page надо добавить правило max
-
     /**
      * @return array<string, list<string>>
      */

@@ -1,5 +1,7 @@
 <?php
 
+// TODO kpstya контроллеры, сервисы, репозитории - надо обдумать имена методов
+
 namespace App\Models;
 
 use App\Models\Contracts\SearchableContract;

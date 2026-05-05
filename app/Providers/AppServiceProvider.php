@@ -19,6 +19,7 @@ use App\Services\Elasticsearch\Abstract\ElasticsearchService;
 use App\Services\Elasticsearch\Factories\ElasticsearchServiceFactory;
 use App\Services\Elasticsearch\SourceDtoCollectionService;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
+use Dedoc\Scramble\ScrambleServiceProvider;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Foundation\Application;
@@ -33,6 +34,10 @@ class AppServiceProvider extends ServiceProvider
     {
         if ($this->app->environment('local')) {
             $this->app->register(IdeHelperServiceProvider::class);
+        }
+
+        if ($this->app->environment('local') || config('scramble_enabled')) {
+            $this->app->register(ScrambleServiceProvider::class);
         }
 
         $this->app->bind(UserRepositoryContract::class, UserEloquentRepository::class);

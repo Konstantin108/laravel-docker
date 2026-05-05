@@ -15,6 +15,9 @@ interface UserRepositoryContract
      */
     public function getUsersPagination(int $perPage, ?string $search = null): LengthAwarePaginator;
 
+    /* TODO kpstya - все, что связано с пагинацией переименовать
+        на что-то типо get paginated */
+
     /**
      * @return Collection<int, User>
      */

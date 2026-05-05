@@ -3,6 +3,8 @@
 use Dedoc\Scramble\Http\Middleware\RestrictedDocsAccess;
 
 return [
+    'enabled' => env('SCRAMBLE_ENABLED', false),
+
     /*
      * Your API path. By default, all routes starting with this path will be added to the docs.
      * If you need to change this behavior, you can add your custom routes resolver using `Scramble::routes()`.

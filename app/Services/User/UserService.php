@@ -11,6 +11,12 @@ use App\Services\User\Entities\UserEnriched;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
+/* TODO kpstya
+    - возможно надо использовать Illuminate\Contracts\Pagination\LengthAwarePaginator
+    - DEFAULT_PER_PAGE не нужен в сервисе, это свойство относится непосредственно к пагинации
+    - возможно написать маппер для FilterDto
+    - getPagination() возможно переименовать*/
+
 class UserService
 {
     private const DEFAULT_PER_PAGE = 10;

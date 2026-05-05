@@ -15,7 +15,7 @@ final class IndexEndpointTest extends TestCase
     private const ROUTE = 'api.v1.products.index';
 
     #[Test]
-    public function it_returns_products_list_when_no_params_provided()
+    public function it_returns_products_list_when_no_params_provided(): void
     {
         $count = 3;
         Product::factory()->count($count)->create();
@@ -42,6 +42,8 @@ final class IndexEndpointTest extends TestCase
         $this->assertCount($count, $response->json('data'));
     }
 
+    // TODO kpstya запустить все тесты. почему тут так мало тестов
+
     #[Test]
     #[TestWith(data: ['xiaom', 1])]
     #[TestWith(data: ['автоваз', 0])]
@@ -51,13 +53,13 @@ final class IndexEndpointTest extends TestCase
     #[TestWith(data: [null, 3])]
     public function it_filters_products_by_search_param(?string $search, int $resultCount): void
     {
-        $payload = [
+        $data = [
             ['name' => 'Xiaomi', 'description' => 'лучшая цена на рынке', 'price' => 1500000],
             ['name' => 'samsung', 'description' => 'корейское качество', 'price' => 950000],
             ['name' => 'электрогитара', 'description' => 'отличный звук', 'price' => 999900],
         ];
 
-        foreach ($payload as $elem) {
+        foreach ($data as $elem) {
             Product::factory()
                 ->withName($elem['name'])
                 ->withDescription($elem['description'])
