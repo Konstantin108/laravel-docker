@@ -10,7 +10,7 @@ class PaginationRequestMapper
 {
     private const FIRST_PAGE = 1;
 
-    private const DEFAULT_PER_PAGE = 10;
+    private const DEFAULT_PER_PAGE = 15;
 
     public function map(
         ?string $search = null,

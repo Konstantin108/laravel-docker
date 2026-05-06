@@ -2,8 +2,6 @@
 
 namespace Tests\Feature\Console\Commands;
 
-// TODO kpstya возможно надо заменить Illuminate\Filesystem\Filesystem на контракт
-
 use Exception;
 use Illuminate\Filesystem\Filesystem;
 use Mockery\MockInterface;

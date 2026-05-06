@@ -14,6 +14,8 @@ final class IndexEndpointTest extends TestCase
 
     private const ROUTE = 'api.v1.products.index';
 
+    // TODO kpstya надо добавить тест на limit, возможно добавить еще какие-нибудь тесты
+
     #[Test]
     public function it_returns_products_list_when_no_params_provided(): void
     {

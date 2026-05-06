@@ -13,7 +13,7 @@ final class PaginationRequestMapperTest extends TestCase
     {
         $paginationRequestDto = (new PaginationRequestMapper)->map();
 
-        $this->assertSame(10, $paginationRequestDto->size);
+        $this->assertSame(15, $paginationRequestDto->size);
         $this->assertSame(0, $paginationRequestDto->from);
         $this->assertNull($paginationRequestDto->search);
     }
@@ -21,10 +21,10 @@ final class PaginationRequestMapperTest extends TestCase
     #[Test]
     public function it_maps_from_correctly_for_second_page(): void
     {
-        $paginationRequestDto = (new PaginationRequestMapper)->map(null, 10, 2);
+        $paginationRequestDto = (new PaginationRequestMapper)->map(null, 12, 2);
 
-        $this->assertSame(10, $paginationRequestDto->size);
-        $this->assertSame(10, $paginationRequestDto->from);
+        $this->assertSame(12, $paginationRequestDto->size);
+        $this->assertSame(12, $paginationRequestDto->from);
         $this->assertNull($paginationRequestDto->search);
     }
 

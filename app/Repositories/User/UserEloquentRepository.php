@@ -23,7 +23,7 @@ class UserEloquentRepository implements UserRepositoryContract
             ->with(['contact'])
             ->tap(new SearchScope($search))
             ->orderBy('id', $sortedByEnum->value)
-            ->paginate($perPage ?? 10);
+            ->paginate($perPage);
     }
 
     /**
