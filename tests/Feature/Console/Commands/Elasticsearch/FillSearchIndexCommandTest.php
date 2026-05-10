@@ -28,7 +28,7 @@ final class FillSearchIndexCommandTest extends SearchIndexCommandTestCase
 {
     use RefreshDatabase;
 
-    private const COMMAND = 'app:elasticsearch:fill-index';
+    protected string $command = 'app:elasticsearch:fill-index';
 
     private NotifyAboutSearchIndexFilledListener $listener;
 
@@ -168,7 +168,7 @@ final class FillSearchIndexCommandTest extends SearchIndexCommandTestCase
         $model::factory()->count(3)->create();
         $limit = 2;
 
-        $this->artisan(self::COMMAND, [
+        $this->executeCommand([
             'index_name' => $indexName,
             '--limit' => $limit,
         ])
@@ -219,10 +219,5 @@ final class FillSearchIndexCommandTest extends SearchIndexCommandTestCase
         $this->expectsPrompts($indexName)
             ->expectsQuestion('Указать лимит отправялемых записей?', '')
             ->assertSuccessful();
-    }
-
-    protected function command(): string
-    {
-        return self::COMMAND;
     }
 }

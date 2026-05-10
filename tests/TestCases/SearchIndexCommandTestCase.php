@@ -12,7 +12,7 @@ use Tests\TestCase;
 
 abstract class SearchIndexCommandTestCase extends TestCase
 {
-    abstract protected function command(): string;
+    protected string $command;
 
     /**
      * @return array<int, array<int, string>>
@@ -63,6 +63,6 @@ abstract class SearchIndexCommandTestCase extends TestCase
      */
     protected function executeCommand(array $arguments = []): PendingCommand
     {
-        return $this->artisan($this->command(), $arguments);
+        return $this->artisan($this->command, $arguments);
     }
 }
