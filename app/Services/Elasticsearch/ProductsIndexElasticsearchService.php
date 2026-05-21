@@ -88,8 +88,6 @@ class ProductsIndexElasticsearchService extends BaseElasticsearchService
 
     public function fillSearchIndex(?int $limit = null): ?BulkIndexResult
     {
-        // TODO kpstya найти способ избавиться от этого дублирования
-
         $products = $this->productService->getList(new FilterDto(
             sortedBy: SortedByEnum::ASC,
             limit: $limit

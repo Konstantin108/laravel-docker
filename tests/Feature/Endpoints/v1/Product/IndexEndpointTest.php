@@ -14,8 +14,6 @@ final class IndexEndpointTest extends TestCase
 
     private const ROUTE = 'api.v1.products.index';
 
-    // TODO kpstya надо добавить тест на limit, возможно добавить еще какие-нибудь тесты
-
     #[Test]
     public function it_returns_products_list_when_no_params_provided(): void
     {
@@ -42,6 +40,34 @@ final class IndexEndpointTest extends TestCase
             ->assertOk();
 
         $this->assertCount($count, $response->json('data'));
+    }
+
+    #[Test]
+    #[TestWith(data: ['limit', 'two'])]
+    #[TestWith(data: ['sorted_by', 'abc'])]
+    public function it_returns_error_when_invalid_params_are_provided(string $param, string $value): void
+    {
+        Product::factory()->count(3)->create();
+
+        $this->getJson(route(self::ROUTE, [
+            $param => $value,
+        ]))
+            ->assertInvalid([$param])
+            ->assertUnprocessable();
+    }
+
+    #[Test]
+    public function it_limits_products_when_limit_param_is_given(): void
+    {
+        Product::factory()->count(3)->create();
+        $limit = 1;
+
+        $response = $this->getJson(route(self::ROUTE, [
+            'limit' => $limit,
+        ]))
+            ->assertOk();
+
+        $this->assertCount($limit, $response->json('data'));
     }
 
     #[Test]

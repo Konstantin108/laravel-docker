@@ -70,6 +70,7 @@ final class IndexEndpointTest extends TestCase
     #[Test]
     #[TestWith(data: ['page', 'two'])]
     #[TestWith(data: ['per_page', 'one'])]
+    #[TestWith(data: ['sorted_by', 'abc'])]
     public function it_returns_error_when_invalid_params_are_provided(string $param, string $value): void
     {
         User::factory()->count(3)->hasContact()->create();
