@@ -1,23 +1,25 @@
 <?php
 
-namespace App\Providers;
+// TODO kpstya надо бы разбить этот класс на несколько
 
-/* TODO kpstya - возможно реализовывать интерфейс будет базовый абстрактный класс, а уже от него будут наследоваться
-    другие классы. Тогда я смогу упростить и использовать в сервисах класс контракт и возможно смогу отвязать
-    использование эвента для каждого сервиса, сейчас это не много костыльно и слишком высокий уровень каплинга */
+namespace App\Providers;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Clients\Elasticsearch\Dto\SettingsDto;
 use App\Clients\Elasticsearch\ElasticsearchClient;
 use App\Clients\Elasticsearch\ElasticsearchClientStub;
 use App\Factories\Contracts\SourceDtoFactoryContract;
+use App\Http\Controllers\Api\v2\ProductController;
+use App\Http\Controllers\Api\v2\UserController;
 use App\Repositories\Product\Contracts\ProductRepositoryContract;
 use App\Repositories\Product\ProductEloquentRepository;
 use App\Repositories\User\Contracts\UserRepositoryContract;
 use App\Repositories\User\UserEloquentRepository;
-use App\Services\Elasticsearch\Abstract\ElasticsearchService;
+use App\Services\Elasticsearch\Contracts\ElasticsearchServiceContract;
 use App\Services\Elasticsearch\Factories\ElasticsearchServiceFactory;
+use App\Services\Elasticsearch\ProductsIndexElasticsearchService;
 use App\Services\Elasticsearch\SourceDtoCollectionService;
+use App\Services\Elasticsearch\UsersIndexElasticsearchService;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Dedoc\Scramble\ScrambleServiceProvider;
 use Illuminate\Database\Eloquent\Model;
@@ -65,10 +67,18 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->singleton(ElasticsearchServiceFactory::class, static function (Application $app): ElasticsearchServiceFactory {
             return new ElasticsearchServiceFactory(...array_map(
-                static fn (string $className): ElasticsearchService => $app->make($className),
+                static fn (string $className): ElasticsearchServiceContract => $app->make($className),
                 config('elasticsearch.search_services')
             ));
         });
+
+        $this->app->when(UserController::class)
+            ->needs(ElasticsearchServiceContract::class)
+            ->give(UsersIndexElasticsearchService::class);
+
+        $this->app->when(ProductController::class)
+            ->needs(ElasticsearchServiceContract::class)
+            ->give(ProductsIndexElasticsearchService::class);
     }
 
     public function boot(): void

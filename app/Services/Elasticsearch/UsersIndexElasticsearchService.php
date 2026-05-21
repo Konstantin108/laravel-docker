@@ -6,7 +6,7 @@ namespace App\Services\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Events\Elasticsearch\SearchIndexFilledEvent;
-use App\Services\Elasticsearch\Abstract\ElasticsearchService;
+use App\Services\Elasticsearch\Abstract\BaseElasticsearchService;
 use App\Services\Elasticsearch\Entities\BulkIndexResult;
 use App\Services\Elasticsearch\Factories\BulkIndexResultFactory;
 use App\Services\Elasticsearch\Factories\SearchResultFactory;
@@ -14,10 +14,8 @@ use App\Services\User\Entities\UserEnriched;
 use App\Services\User\UserService;
 use Illuminate\Contracts\Events\Dispatcher;
 
-class UsersIndexElasticsearchService extends ElasticsearchService
+class UsersIndexElasticsearchService extends BaseElasticsearchService
 {
-    protected const INDEX_NAME = 'users';
-
     public function __construct(
         protected ElasticsearchClientContract $client,
         protected SearchResultFactory $searchResultFactory,
@@ -30,7 +28,7 @@ class UsersIndexElasticsearchService extends ElasticsearchService
 
     protected function indexName(): string
     {
-        return static::INDEX_NAME;
+        return 'users';
     }
 
     /**
@@ -110,15 +108,15 @@ class UsersIndexElasticsearchService extends ElasticsearchService
 
         $body = $users->map(fn (UserEnriched $user): string => $this->makeDocElement(
             $user->toArray(),
-            static::INDEX_NAME
+            $this->indexName()
         ))
             ->implode('');
 
-        $result = $this->client->bulkIndex($body, static::INDEX_NAME);
+        $result = $this->client->bulkIndex($body, $this->indexName());
 
         return tap(
             $this->bulkIndexResultFactory->make($result),
-            fn (): ?array => $this->dispatcher->dispatch(new SearchIndexFilledEvent($users, static::INDEX_NAME))
+            fn (): ?array => $this->dispatcher->dispatch(new SearchIndexFilledEvent($users, $this->indexName()))
         );
     }
 }

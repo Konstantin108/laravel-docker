@@ -7,7 +7,7 @@ namespace App\Services\Elasticsearch;
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Enums\SortedByEnum;
 use App\Events\Elasticsearch\SearchIndexFilledEvent;
-use App\Services\Elasticsearch\Abstract\ElasticsearchService;
+use App\Services\Elasticsearch\Abstract\BaseElasticsearchService;
 use App\Services\Elasticsearch\Entities\BulkIndexResult;
 use App\Services\Elasticsearch\Factories\BulkIndexResultFactory;
 use App\Services\Elasticsearch\Factories\SearchResultFactory;
@@ -16,10 +16,8 @@ use App\Services\Product\Entities\ProductEnriched;
 use App\Services\Product\ProductService;
 use Illuminate\Contracts\Events\Dispatcher;
 
-class ProductIndexElasticsearchService extends ElasticsearchService
+class ProductsIndexElasticsearchService extends BaseElasticsearchService
 {
-    protected const INDEX_NAME = 'products';
-
     public function __construct(
         protected ElasticsearchClientContract $client,
         protected SearchResultFactory $searchResultFactory,
@@ -30,11 +28,9 @@ class ProductIndexElasticsearchService extends ElasticsearchService
         parent::__construct($client, $searchResultFactory);
     }
 
-    // TODO kpstya возможно переработать эти методы и в классах наследниках подменять только свойство
-
     protected function indexName(): string
     {
-        return static::INDEX_NAME;
+        return 'products';
     }
 
     /**
@@ -92,6 +88,8 @@ class ProductIndexElasticsearchService extends ElasticsearchService
 
     public function fillSearchIndex(?int $limit = null): ?BulkIndexResult
     {
+        // TODO kpstya найти способ избавиться от этого дублирования
+
         $products = $this->productService->getList(new FilterDto(
             sortedBy: SortedByEnum::ASC,
             limit: $limit
@@ -102,15 +100,15 @@ class ProductIndexElasticsearchService extends ElasticsearchService
 
         $body = $products->map(fn (ProductEnriched $product): string => $this->makeDocElement(
             $product->toArray(),
-            static::INDEX_NAME
+            $this->indexName()
         ))
             ->implode('');
 
-        $result = $this->client->bulkIndex($body, static::INDEX_NAME);
+        $result = $this->client->bulkIndex($body, $this->indexName());
 
         return tap(
             $this->bulkIndexResultFactory->make($result),
-            fn (): ?array => $this->dispatcher->dispatch(new SearchIndexFilledEvent($products, static::INDEX_NAME))
+            fn (): ?array => $this->dispatcher->dispatch(new SearchIndexFilledEvent($products, $this->indexName()))
         );
     }
 }

@@ -33,6 +33,6 @@ return [
 
     'search_services' => [
         'users' => \App\Services\Elasticsearch\UsersIndexElasticsearchService::class,
-        'products' => \App\Services\Elasticsearch\ProductIndexElasticsearchService::class,
+        'products' => \App\Services\Elasticsearch\ProductsIndexElasticsearchService::class,
     ],
 ];
