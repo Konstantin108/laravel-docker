@@ -13,8 +13,6 @@ class ContactFactory extends Factory
 {
     protected $model = Contact::class;
 
-    // TODO kpstya написать тест на формирование данных для письма
-
     /**
      * @return array<string, mixed>
      */
