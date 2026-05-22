@@ -10,9 +10,6 @@ use Illuminate\Support\Collection;
 
 class BulkIndexResultFactory
 {
-    /* TODO kpstya - у меня нигде нет проверок на то, что приходит от Elasticsearch,
-        вдруг данные окажутся некорректными, это надо исправить, так же надо наверное обновить под это тесты */
-
     /**
      * @param  array<string, mixed>  $data
      */

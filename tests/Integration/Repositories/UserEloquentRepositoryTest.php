@@ -1,7 +1,5 @@
 <?php
 
-// TODO kpstya возможно реализовать Elasticsearch репозиторий
-
 namespace Tests\Integration\Repositories;
 
 use App\Enums\SortedByEnum;

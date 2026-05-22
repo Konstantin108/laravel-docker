@@ -6,8 +6,6 @@ namespace App\Services\Contracts;
 
 interface SearchableSourceContract
 {
-    // TODO kpstya необходимо добавить базовую реализацию
-
     public function getId(): int;
 
     /**
