@@ -2,8 +2,10 @@
 
 namespace Tests\Integration\Repositories;
 
+use App\Enums\SortedByEnum;
 use App\Models\Product;
 use App\Repositories\Product\ProductEloquentRepository;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -14,11 +16,14 @@ final class ProductEloquentRepositoryTest extends TestCase
 
     private ProductEloquentRepository $repository;
 
+    /**
+     * @throws BindingResolutionException
+     */
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->repository = new ProductEloquentRepository;
+        $this->repository = $this->app->make(ProductEloquentRepository::class);
     }
 
     #[Test]
@@ -29,6 +34,7 @@ final class ProductEloquentRepositoryTest extends TestCase
 
         $result = $this->repository->getList();
 
+        $this->assertInstanceOf(Product::class, $result->first());
         $this->assertCount($count, $result);
     }
 
@@ -42,6 +48,33 @@ final class ProductEloquentRepositoryTest extends TestCase
 
         $this->assertCount($limit, $result);
     }
-}
 
-// TODO kpstya возможно надо доработать тесты репозиториев с учетом сортирвки
+    #[test]
+    public function it_returns_paginated_users_sorted_by_id_asc(): void
+    {
+        Product::factory()->count(5)->create();
+
+        $ids = $this->repository->getList(sortedByEnum: SortedByEnum::ASC)
+            ->pluck('id')
+            ->values()
+            ->all();
+
+        $expected = $ids;
+        sort($expected);
+
+        $this->assertSame($expected, $ids);
+    }
+
+    #[test]
+    public function it_returns_paginated_users_sorted_by_id_desc(): void
+    {
+        Product::factory()->count(5)->create();
+
+        $ids = $this->repository->getList()->pluck('id')->values()->all();
+
+        $expected = $ids;
+        rsort($expected);
+
+        $this->assertSame($expected, $ids);
+    }
+}
