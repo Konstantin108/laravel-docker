@@ -157,4 +157,33 @@ final class IndexEndpointTest extends TestCase
 
         $this->assertCount($resultCount, $response->json('data'));
     }
+
+    #[test]
+    public function it_sorts_paginated_users_by_id_desc(): void
+    {
+        User::factory()->count(3)->hasContact()->create();
+        $lastUser = User::query()->latest('id')->first();
+
+        $response = $this->getJson(route(self::ROUTE))->assertOk();
+
+        $this->assertSame($lastUser->id, $response->json('data.0.id'));
+    }
+
+    #[test]
+    public function it_sorts_paginated_users_by_id_asc(): void
+    {
+        $firstUserId = User::factory()
+            ->count(3)
+            ->hasContact()
+            ->create()
+            ->first()
+            ->id;
+
+        $response = $this->getJson(route(self::ROUTE, [
+            'sorted_by' => 'asc',
+        ]))
+            ->assertOk();
+
+        $this->assertSame($firstUserId, $response->json('data.0.id'));
+    }
 }

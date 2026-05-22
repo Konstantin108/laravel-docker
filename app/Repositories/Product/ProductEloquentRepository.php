@@ -29,5 +29,3 @@ class ProductEloquentRepository implements ProductRepositoryContract
             ->get();
     }
 }
-
-// TODO kpstya возможно для User и Product в обоих версиях стоит добавить поля, по которым можно сортировать
