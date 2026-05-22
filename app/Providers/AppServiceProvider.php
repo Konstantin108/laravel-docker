@@ -1,7 +1,5 @@
 <?php
 
-// TODO kpstya надо бы разбить этот класс на несколько
-
 namespace App\Providers;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;

@@ -9,13 +9,13 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create(TableDictionary::CACHE, function (Blueprint $table) {
+        Schema::create(TableDictionary::CACHE, static function (Blueprint $table): void {
             $table->string('key')->primary();
             $table->mediumText('value');
             $table->integer('expiration');
         });
 
-        Schema::create(TableDictionary::CACHE_LOCKS, function (Blueprint $table) {
+        Schema::create(TableDictionary::CACHE_LOCKS, static function (Blueprint $table): void {
             $table->string('key')->primary();
             $table->string('owner');
             $table->integer('expiration');
