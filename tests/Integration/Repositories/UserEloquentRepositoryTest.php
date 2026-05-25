@@ -30,7 +30,7 @@ final class UserEloquentRepositoryTest extends TestCase
     #[Test]
     public function it_returns_paginated_users_when_per_page_param_is_given(): void
     {
-        // TODO kpstya возможно добавить сортировку для v2\User и v2\Product, тогда добавить и тесты на это
+        // TODO kpstya для v2 необходимо обновить тесты (добавить тестирование сортировки)
 
         User::factory()->count(3)->hasContact()->create();
         $perPage = 2;

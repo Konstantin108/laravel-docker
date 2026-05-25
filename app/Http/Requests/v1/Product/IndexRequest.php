@@ -21,8 +21,8 @@ class IndexRequest extends FormRequest
     {
         return [
             'search' => ['sometimes', 'string', 'nullable'],
-            'sorted_by' => ['sometimes', 'string', Rule::enum(SortedByEnum::class)],
             'limit' => ['sometimes', 'integer', 'min:1', 'nullable'],
+            'sorted_by' => ['sometimes', 'string', Rule::enum(SortedByEnum::class)],
         ];
     }
 }

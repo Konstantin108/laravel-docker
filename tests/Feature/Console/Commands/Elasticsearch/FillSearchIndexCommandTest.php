@@ -28,8 +28,6 @@ final class FillSearchIndexCommandTest extends SearchIndexCommandTestCase
 {
     use RefreshDatabase;
 
-    protected string $command = 'app:elasticsearch:fill-index';
-
     private NotifyAboutSearchIndexFilledListener $listener;
 
     private LoggerInterface $logger;
@@ -219,5 +217,10 @@ final class FillSearchIndexCommandTest extends SearchIndexCommandTestCase
         $this->expectsPrompts($indexName)
             ->expectsQuestion('Указать лимит отправялемых записей?', '')
             ->assertSuccessful();
+    }
+
+    protected function command(): string
+    {
+        return 'app:elasticsearch:fill-index';
     }
 }

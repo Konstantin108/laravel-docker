@@ -14,8 +14,6 @@ final class ClearSearchIndexCommandTest extends SearchIndexCommandTestCase
 {
     use RefreshDatabase;
 
-    protected string $command = 'app:elasticsearch:clear-index';
-
     /**
      * @throws SearchIndexException
      */
@@ -78,5 +76,10 @@ final class ClearSearchIndexCommandTest extends SearchIndexCommandTestCase
     public function it_returns_questions_for_given_index(string $indexName): void
     {
         $this->expectsPrompts($indexName)->assertSuccessful();
+    }
+
+    protected function command(): string
+    {
+        return 'app:elasticsearch:clear-index';
     }
 }

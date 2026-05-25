@@ -12,8 +12,6 @@ use Tests\TestCase;
 
 abstract class SearchIndexCommandTestCase extends TestCase
 {
-    protected string $command;
-
     /**
      * @return array<int, array<int, string>>
      */
@@ -24,6 +22,8 @@ abstract class SearchIndexCommandTestCase extends TestCase
             SearchIndexEnum::cases()
         );
     }
+
+    abstract protected function command(): string;
 
     protected function exceptInvalidSearchIndexName(string $indexName): void
     {
@@ -63,6 +63,6 @@ abstract class SearchIndexCommandTestCase extends TestCase
      */
     protected function executeCommand(array $arguments = []): PendingCommand
     {
-        return $this->artisan($this->command, $arguments);
+        return $this->artisan($this->command(), $arguments);
     }
 }

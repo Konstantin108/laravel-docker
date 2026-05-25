@@ -97,6 +97,11 @@ abstract class BaseElasticsearchService implements ElasticsearchServiceContract
         return [
             'size' => $requestDto->size,
             'from' => $requestDto->from,
+            'sort' => [
+                'id' => [
+                    'order' => $requestDto->sort,
+                ],
+            ],
             'query' => [
                 'multi_match' => [
                     'query' => $requestDto->search,
@@ -106,6 +111,8 @@ abstract class BaseElasticsearchService implements ElasticsearchServiceContract
         ];
     }
 
+    // TODO kpstya возможно создать ElasticsearchRepository, которые будут реализовывать RepositoryContract
+
     /**
      * @return array<string, mixed>
      */
@@ -114,6 +121,11 @@ abstract class BaseElasticsearchService implements ElasticsearchServiceContract
         return [
             'size' => $requestDto->size,
             'from' => $requestDto->from,
+            'sort' => [
+                'id' => [
+                    'order' => $requestDto->sort,
+                ],
+            ],
             'query' => [
                 'match_all' => new stdClass,
             ],

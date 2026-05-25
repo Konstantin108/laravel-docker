@@ -29,6 +29,7 @@ class UserController extends Controller
         $searchResult = $this->searchService->findInSearchIndex($mapper->map(
             Arr::get($data, 'search'),
             Arr::get($data, 'per_page'),
+            Arr::get($data, 'sorted_by'),
             Arr::get($data, 'page'),
         ));
 
