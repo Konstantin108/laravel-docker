@@ -36,7 +36,7 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(IdeHelperServiceProvider::class);
         }
 
-        if ($this->app->environment('local') || config('scramble_enabled')) {
+        if ($this->app->environment('local') || config('scramble.enabled')) {
             $this->app->register(ScrambleServiceProvider::class);
         }
 
