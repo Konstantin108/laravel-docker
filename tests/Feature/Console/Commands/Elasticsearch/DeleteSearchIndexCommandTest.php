@@ -9,8 +9,6 @@ use Tests\TestCases\SearchIndexCommandTestCase;
 
 final class DeleteSearchIndexCommandTest extends SearchIndexCommandTestCase
 {
-    private const COMMAND = 'app:elasticsearch:delete-index';
-
     #[Test]
     #[DataProvider(methodName: 'indexNameProvider')]
     public function it_successfully_deletes_search_index(string $indexName): void
@@ -61,6 +59,6 @@ final class DeleteSearchIndexCommandTest extends SearchIndexCommandTestCase
 
     protected function command(): string
     {
-        return self::COMMAND;
+        return 'app:elasticsearch:delete-index';
     }
 }

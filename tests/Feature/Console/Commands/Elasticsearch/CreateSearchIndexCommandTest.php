@@ -9,8 +9,6 @@ use Tests\TestCases\SearchIndexCommandTestCase;
 
 final class CreateSearchIndexCommandTest extends SearchIndexCommandTestCase
 {
-    private const COMMAND = 'app:elasticsearch:create-index';
-
     #[Test]
     #[DataProvider(methodName: 'indexNameProvider')]
     public function it_successfully_creates_search_index(string $indexName): void
@@ -61,6 +59,6 @@ final class CreateSearchIndexCommandTest extends SearchIndexCommandTestCase
 
     protected function command(): string
     {
-        return self::COMMAND;
+        return 'app:elasticsearch:create-index';
     }
 }

@@ -14,8 +14,6 @@ final class ClearSearchIndexCommandTest extends SearchIndexCommandTestCase
 {
     use RefreshDatabase;
 
-    private const COMMAND = 'app:elasticsearch:clear-index';
-
     /**
      * @throws SearchIndexException
      */
@@ -82,6 +80,6 @@ final class ClearSearchIndexCommandTest extends SearchIndexCommandTestCase
 
     protected function command(): string
     {
-        return self::COMMAND;
+        return 'app:elasticsearch:clear-index';
     }
 }

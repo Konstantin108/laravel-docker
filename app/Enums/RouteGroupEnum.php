@@ -7,7 +7,6 @@ namespace App\Enums;
 enum RouteGroupEnum: string
 {
     case USER = 'user';
-
     case PRODUCT = 'product';
 
     public const DESCRIPTIONS = [

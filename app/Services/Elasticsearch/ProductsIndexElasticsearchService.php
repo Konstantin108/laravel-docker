@@ -5,20 +5,19 @@ declare(strict_types=1);
 namespace App\Services\Elasticsearch;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
+use App\Enums\SortedByEnum;
 use App\Events\Elasticsearch\SearchIndexFilledEvent;
-use App\Services\Elasticsearch\Abstract\ElasticsearchService;
+use App\Services\Elasticsearch\Abstract\BaseElasticsearchService;
 use App\Services\Elasticsearch\Entities\BulkIndexResult;
 use App\Services\Elasticsearch\Factories\BulkIndexResultFactory;
 use App\Services\Elasticsearch\Factories\SearchResultFactory;
-use App\Services\Product\Dto\IndexDto;
+use App\Services\Product\Dto\FilterDto;
 use App\Services\Product\Entities\ProductEnriched;
 use App\Services\Product\ProductService;
 use Illuminate\Contracts\Events\Dispatcher;
 
-class ProductIndexElasticsearchService extends ElasticsearchService
+class ProductsIndexElasticsearchService extends BaseElasticsearchService
 {
-    protected const INDEX_NAME = 'products';
-
     public function __construct(
         protected ElasticsearchClientContract $client,
         protected SearchResultFactory $searchResultFactory,
@@ -31,7 +30,7 @@ class ProductIndexElasticsearchService extends ElasticsearchService
 
     protected function indexName(): string
     {
-        return static::INDEX_NAME;
+        return 'products';
     }
 
     /**
@@ -89,24 +88,25 @@ class ProductIndexElasticsearchService extends ElasticsearchService
 
     public function fillSearchIndex(?int $limit = null): ?BulkIndexResult
     {
-        $products = $this->productService->getProducts(new IndexDto(limit: $limit));
+        $products = $this->productService->getList(new FilterDto(
+            sortedBy: SortedByEnum::ASC,
+            limit: $limit
+        ));
         if ($products->isEmpty()) {
             return null;
         }
 
         $body = $products->map(fn (ProductEnriched $product): string => $this->makeDocElement(
             $product->toArray(),
-            static::INDEX_NAME
+            $this->indexName()
         ))
             ->implode('');
 
-        $result = $this->client->bulkIndex($body, static::INDEX_NAME);
+        $result = $this->client->bulkIndex($body, $this->indexName());
 
         return tap(
             $this->bulkIndexResultFactory->make($result),
-            fn (): ?array => $this->dispatcher->dispatch(new SearchIndexFilledEvent($products, static::INDEX_NAME))
+            fn (): ?array => $this->dispatcher->dispatch(new SearchIndexFilledEvent($products, $this->indexName()))
         );
     }
 }
-
-// TODO kpstya использовать Dispatcher в DI для Job, так же обновить тест

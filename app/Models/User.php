@@ -42,11 +42,6 @@ class User extends Authenticatable implements SearchableContract
     /**
      * @var list<string>
      */
-    protected $guarded = ['id'];
-
-    /**
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',

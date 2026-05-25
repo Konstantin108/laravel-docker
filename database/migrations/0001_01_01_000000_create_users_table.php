@@ -9,7 +9,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create(TableDictionary::USERS, function (Blueprint $table) {
+        Schema::create(TableDictionary::USERS, static function (Blueprint $table): void {
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
@@ -19,15 +19,17 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create(TableDictionary::PASSWORD_RESET_TOKENS, function (Blueprint $table) {
+        Schema::create(TableDictionary::PASSWORD_RESET_TOKENS, static function (Blueprint $table): void {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
 
-        Schema::create(TableDictionary::SESSIONS, function (Blueprint $table) {
+        Schema::create(TableDictionary::SESSIONS, static function (Blueprint $table): void {
             $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
+            $table->foreignId('user_id')
+                ->nullable()
+                ->index();
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->longText('payload');

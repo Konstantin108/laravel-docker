@@ -6,31 +6,18 @@ namespace App\Services\Elasticsearch\Abstract;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Conditions\SearchCondition;
+use App\Services\Elasticsearch\Contracts\ElasticsearchServiceContract;
 use App\Services\Elasticsearch\Dto\PaginationRequestDto;
 use App\Services\Elasticsearch\Entities\SearchResult;
 use App\Services\Elasticsearch\Factories\SearchResultFactory;
 use stdClass;
 
-abstract class ElasticsearchService
+abstract class BaseElasticsearchService implements ElasticsearchServiceContract
 {
     public function __construct(
         protected ElasticsearchClientContract $client,
         protected SearchResultFactory $searchResultFactory,
     ) {}
-
-    abstract protected function indexName(): string;
-
-    /**
-     * @return array<string, mixed>
-     */
-    abstract protected function bodyIndexCreate(): array;
-
-    /**
-     * @return list<string>
-     */
-    abstract protected function multiMatchFieldsSettings(): array;
-
-    abstract public function fillSearchIndex(?int $limit = null): mixed;
 
     /**
      * @return array<string, mixed>
@@ -73,6 +60,18 @@ abstract class ElasticsearchService
         return $this->client->clearIndex($body, $this->indexName());
     }
 
+    abstract protected function indexName(): string;
+
+    /**
+     * @return array<string, mixed>
+     */
+    abstract protected function bodyIndexCreate(): array;
+
+    /**
+     * @return list<string>
+     */
+    abstract protected function multiMatchFieldsSettings(): array;
+
     /**
      * @param  array<string, int|string>  $data
      */
@@ -98,6 +97,11 @@ abstract class ElasticsearchService
         return [
             'size' => $requestDto->size,
             'from' => $requestDto->from,
+            'sort' => [
+                'id' => [
+                    'order' => $requestDto->sort,
+                ],
+            ],
             'query' => [
                 'multi_match' => [
                     'query' => $requestDto->search,
@@ -107,6 +111,8 @@ abstract class ElasticsearchService
         ];
     }
 
+    // TODO kpstya возможно создать ElasticsearchRepository, которые будут реализовывать RepositoryContract
+
     /**
      * @return array<string, mixed>
      */
@@ -115,6 +121,11 @@ abstract class ElasticsearchService
         return [
             'size' => $requestDto->size,
             'from' => $requestDto->from,
+            'sort' => [
+                'id' => [
+                    'order' => $requestDto->sort,
+                ],
+            ],
             'query' => [
                 'match_all' => new stdClass,
             ],

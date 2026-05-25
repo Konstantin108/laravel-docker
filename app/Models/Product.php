@@ -34,11 +34,6 @@ class Product extends Model implements SearchableContract
     use HasFactory;
 
     /**
-     * @var list<string>
-     */
-    protected $guarded = ['id'];
-
-    /**
      * @return BelongsTo<ProductCategory, $this>
      */
     public function category(): BelongsTo

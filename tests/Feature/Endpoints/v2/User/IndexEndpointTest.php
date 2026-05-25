@@ -18,7 +18,7 @@ final class IndexEndpointTest extends TestCase
     private const ROUTE = 'api.v2.users.index';
 
     #[Test]
-    public function it_returns_users_list_when_no_params_provided(): void
+    public function it_returns_paginated_users_when_no_params_provided(): void
     {
         $count = 3;
         User::factory()->count($count)->hasContact()->create();
@@ -122,7 +122,7 @@ final class IndexEndpointTest extends TestCase
     #[Test]
     public function it_returns_json_error_when_elasticsearch_fails_in_production_environment(): void
     {
-        config()->set('app.debug', false);
+        config(['app.debug' => false]);
 
         User::factory()->count(3)->hasContact()->create();
         $exceptionMessage = 'Index search error.';

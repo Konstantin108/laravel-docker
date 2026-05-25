@@ -9,7 +9,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create(TableDictionary::JOBS, function (Blueprint $table) {
+        Schema::create(TableDictionary::JOBS, static function (Blueprint $table): void {
             $table->id();
             $table->string('queue')->index();
             $table->longText('payload');
@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedInteger('created_at');
         });
 
-        Schema::create(TableDictionary::JOB_BATHES, function (Blueprint $table) {
+        Schema::create(TableDictionary::JOB_BATHES, static function (Blueprint $table): void {
             $table->string('id')->primary();
             $table->string('name');
             $table->integer('total_jobs');
@@ -32,7 +32,7 @@ return new class extends Migration
             $table->integer('finished_at')->nullable();
         });
 
-        Schema::create(TableDictionary::FAILED_JOBS, function (Blueprint $table) {
+        Schema::create(TableDictionary::FAILED_JOBS, static function (Blueprint $table): void {
             $table->id();
             $table->string('uuid')->unique();
             $table->text('connection');

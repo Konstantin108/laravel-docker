@@ -33,11 +33,6 @@ class Contact extends Model
     use HasFactory;
 
     /**
-     * @var list<string>
-     */
-    protected $guarded = ['id'];
-
-    /**
      * @return BelongsTo<User, $this>
      */
     public function user(): BelongsTo

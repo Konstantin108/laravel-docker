@@ -20,7 +20,7 @@ class ProductFactory extends Factory
     {
         return [
             'category_id' => ProductCategory::factory(),
-            'name' => $this->faker->unique()->word(),
+            'name' => $this->faker->unique()->bothify('????????##'),
             'description' => $this->faker->optional()->sentence(),
             'price' => $this->faker->numberBetween(100000, 1500000),
         ];

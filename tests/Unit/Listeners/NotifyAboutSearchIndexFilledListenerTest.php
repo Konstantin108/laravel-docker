@@ -13,39 +13,41 @@ use Tests\TestCase;
 
 final class NotifyAboutSearchIndexFilledListenerTest extends TestCase
 {
+    private const INDEX_NAME = 'any_index_name';
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Bus::fake();
+    }
+
     #[Test]
     public function it_dispatches_job_when_report_is_enabled(): void
     {
-        Bus::fake();
-        $indexName = 'any_index_name';
         $items = new Collection($this->mock(SearchableSourceContract::class));
-        $event = new SearchIndexFilledEvent($items, $indexName);
+        $event = new SearchIndexFilledEvent($items, self::INDEX_NAME);
 
         (new NotifyAboutSearchIndexFilledListener)->handle($event);
 
-        /* TODO kpstya
-            - надо получать в тестах экземпяр $job и ассертить
-            - возможно вынести дублирование в setUp()
-            - возможно избавиться от хелперов включая config()
-            - возможно избавиться от использования фасадов */
+        $jobs = Bus::dispatched(SendSearchIndexDataJob::class);
+        $this->assertCount(1, $jobs);
 
-        Bus::assertDispatched(
-            SendSearchIndexDataJob::class,
-            static function (SendSearchIndexDataJob $job) use ($items, $indexName): bool {
-                return $job->items === $items && $job->indexName === $indexName;
-            }
-        );
+        $job = $jobs->first();
+        $this->assertNotNull($job);
+        $this->assertSame(self::INDEX_NAME, $job->indexName);
+        $this->assertSame($items, $job->items);
+        $this->assertCount($items->count(), $job->items);
     }
 
     #[Test]
     public function it_does_not_dispatch_job_when_report_is_disabled(): void
     {
-        config()->set('elasticsearch.send_report_to_email', false);
+        config(['elasticsearch.send_report_to_email' => false]);
 
-        Bus::fake();
         $event = new SearchIndexFilledEvent(
             new Collection($this->mock(SearchableSourceContract::class)),
-            'any_index'
+            self::INDEX_NAME
         );
 
         (new NotifyAboutSearchIndexFilledListener)->handle($event);

@@ -13,9 +13,9 @@ use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Mail\Mailer;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Queue;
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -24,13 +24,9 @@ use Psr\Container\NotFoundExceptionInterface;
 use Psr\Log\LoggerInterface;
 use Tests\TestCases\SearchIndexCommandTestCase;
 
-// TODO kpstya возможно избавиться от pushed() и использовать Bus::fake()
-
 final class FillSearchIndexCommandTest extends SearchIndexCommandTestCase
 {
     use RefreshDatabase;
-
-    private const COMMAND = 'app:elasticsearch:fill-index';
 
     private NotifyAboutSearchIndexFilledListener $listener;
 
@@ -45,7 +41,7 @@ final class FillSearchIndexCommandTest extends SearchIndexCommandTestCase
         parent::setUp();
 
         Event::fake();
-        Queue::fake();
+        Bus::fake();
         Mail::fake();
         $this->listener = $this->app->get(NotifyAboutSearchIndexFilledListener::class);
 
@@ -88,7 +84,7 @@ final class FillSearchIndexCommandTest extends SearchIndexCommandTestCase
         $this->listener->handle($event);
 
         /** @var SendSearchIndexDataJob $job */
-        $jobs = Queue::pushed(SendSearchIndexDataJob::class);
+        $jobs = Bus::dispatched(SendSearchIndexDataJob::class);
         $this->assertCount(1, $jobs);
 
         $job = $jobs->first();
@@ -153,7 +149,7 @@ final class FillSearchIndexCommandTest extends SearchIndexCommandTestCase
     #[DataProvider(methodName: 'indexNameProvider')]
     public function it_records_info_log_when_filling_index_and_logging_is_enabled(string $indexName): void
     {
-        config()->set('elasticsearch.fill_index_log', true);
+        config(['elasticsearch.fill_index_log' => true]);
 
         $this->logger->shouldReceive('info')->once();
         $this->executeCommand(['index_name' => $indexName]);
@@ -170,7 +166,7 @@ final class FillSearchIndexCommandTest extends SearchIndexCommandTestCase
         $model::factory()->count(3)->create();
         $limit = 2;
 
-        $this->artisan(self::COMMAND, [
+        $this->executeCommand([
             'index_name' => $indexName,
             '--limit' => $limit,
         ])
@@ -225,6 +221,6 @@ final class FillSearchIndexCommandTest extends SearchIndexCommandTestCase
 
     protected function command(): string
     {
-        return self::COMMAND;
+        return 'app:elasticsearch:fill-index';
     }
 }

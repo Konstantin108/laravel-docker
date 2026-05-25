@@ -6,26 +6,24 @@ namespace App\Services\User;
 
 use App\Models\User;
 use App\Repositories\User\Contracts\UserRepositoryContract;
-use App\Services\User\Dto\IndexDto;
+use App\Services\User\Dto\FilterDto;
 use App\Services\User\Entities\UserEnriched;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 class UserService
 {
-    private const DEFAULT_PER_PAGE = 10;
-
     public function __construct(private readonly UserRepositoryContract $repository) {}
 
     /**
-     * @return LengthAwarePaginator<int, UserEnriched>
+     * @return LengthAwarePaginator<int, User>
      */
-    public function getPagination(IndexDto $indexDto): LengthAwarePaginator
+    public function getPagination(FilterDto $filterDto): LengthAwarePaginator
     {
-        /** @var LengthAwarePaginator<int, User> $paginator */
-        $paginator = $this->repository->getUsersPagination(
-            $indexDto->perPage ?? self::DEFAULT_PER_PAGE,
-            $indexDto->search
+        $paginator = $this->repository->getPagination(
+            $filterDto->sortedBy,
+            $filterDto->perPage,
+            $filterDto->search
         );
 
         return $paginator->through(function (User $user): UserEnriched {
@@ -36,9 +34,9 @@ class UserService
     /**
      * @return Collection<int, UserEnriched>
      */
-    public function getUsers(?int $limit = null): Collection
+    public function getList(?int $limit = null): Collection
     {
-        return $this->repository->getAllUsers($limit)
+        return $this->repository->getList($limit)
             ->map(fn (User $user): UserEnriched => $this->enrich($user));
     }
 

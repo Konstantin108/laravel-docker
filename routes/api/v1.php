@@ -5,7 +5,11 @@ use App\Http\Controllers\Api\v1\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->name('api.v1.')->group(static function (): void {
-    Route::get('users', [UserController::class, 'index'])->name('users.index');
+    Route::prefix('users')->name('users.')->group(static function (): void {
+        Route::get('/', [UserController::class, 'index'])->name('index');
+    });
 
-    Route::get('products', [ProductController::class, 'index'])->name('products.index');
+    Route::prefix('products')->name('products.')->group(static function (): void {
+        Route::get('/', [ProductController::class, 'index'])->name('index');
+    });
 });

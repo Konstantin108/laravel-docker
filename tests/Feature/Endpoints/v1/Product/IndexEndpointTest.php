@@ -15,7 +15,7 @@ final class IndexEndpointTest extends TestCase
     private const ROUTE = 'api.v1.products.index';
 
     #[Test]
-    public function it_returns_products_list_when_no_params_provided()
+    public function it_returns_products_list_when_no_params_provided(): void
     {
         $count = 3;
         Product::factory()->count($count)->create();
@@ -40,6 +40,34 @@ final class IndexEndpointTest extends TestCase
             ->assertOk();
 
         $this->assertCount($count, $response->json('data'));
+    }
+
+    #[Test]
+    #[TestWith(data: ['limit', 'two'])]
+    #[TestWith(data: ['sorted_by', 'abc'])]
+    public function it_returns_error_when_invalid_params_are_provided(string $param, string $value): void
+    {
+        Product::factory()->count(3)->create();
+
+        $this->getJson(route(self::ROUTE, [
+            $param => $value,
+        ]))
+            ->assertInvalid([$param])
+            ->assertUnprocessable();
+    }
+
+    #[Test]
+    public function it_limits_products_when_limit_param_is_given(): void
+    {
+        Product::factory()->count(3)->create();
+        $limit = 1;
+
+        $response = $this->getJson(route(self::ROUTE, [
+            'limit' => $limit,
+        ]))
+            ->assertOk();
+
+        $this->assertCount($limit, $response->json('data'));
     }
 
     #[Test]
@@ -70,5 +98,33 @@ final class IndexEndpointTest extends TestCase
         ]))->assertOk();
 
         $this->assertCount($resultCount, $response->json('data'));
+    }
+
+    #[test]
+    public function it_sorts_products_by_id_desc(): void
+    {
+        Product::factory()->count(4)->create();
+        $lastUser = Product::query()->latest('id')->first();
+
+        $response = $this->getJson(route(self::ROUTE))->assertOk();
+
+        $this->assertSame($lastUser->id, $response->json('data.0.id'));
+    }
+
+    #[test]
+    public function it_sorts_products_by_id_asc(): void
+    {
+        $firstUserId = Product::factory()
+            ->count(3)
+            ->create()
+            ->first()
+            ->id;
+
+        $response = $this->getJson(route(self::ROUTE, [
+            'sorted_by' => 'asc',
+        ]))
+            ->assertOk();
+
+        $this->assertSame($firstUserId, $response->json('data.0.id'));
     }
 }

@@ -24,6 +24,10 @@ final class SearchIndexDataMail extends Mailable
         return $this->subject(
             sprintf('Индекс %s заполнен', strtoupper($this->indexName))
         )
-            ->view('mail.elasticsearch.search_index_filled');
+            ->view('mail.elasticsearch.search_index_filled', [
+                'items' => $this->items,
+                'itemsCount' => $this->itemsCount,
+                'indexName' => $this->indexName,
+            ]);
     }
 }

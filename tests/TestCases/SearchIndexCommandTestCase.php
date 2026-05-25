@@ -12,8 +12,6 @@ use Tests\TestCase;
 
 abstract class SearchIndexCommandTestCase extends TestCase
 {
-    abstract protected function command(): string;
-
     /**
      * @return array<int, array<int, string>>
      */
@@ -24,6 +22,8 @@ abstract class SearchIndexCommandTestCase extends TestCase
             SearchIndexEnum::cases()
         );
     }
+
+    abstract protected function command(): string;
 
     protected function exceptInvalidSearchIndexName(string $indexName): void
     {

@@ -16,7 +16,7 @@ final class IndexEndpointTest extends TestCase
     private const ROUTE = 'api.v1.users.index';
 
     #[Test]
-    public function it_returns_users_list_when_no_params_provided()
+    public function it_returns_paginated_users_when_no_params_provided(): void
     {
         $count = 3;
         User::factory()->count($count)->hasContact()->create();
@@ -70,6 +70,7 @@ final class IndexEndpointTest extends TestCase
     #[Test]
     #[TestWith(data: ['page', 'two'])]
     #[TestWith(data: ['per_page', 'one'])]
+    #[TestWith(data: ['sorted_by', 'abc'])]
     public function it_returns_error_when_invalid_params_are_provided(string $param, string $value): void
     {
         User::factory()->count(3)->hasContact()->create();
@@ -155,5 +156,34 @@ final class IndexEndpointTest extends TestCase
             ->assertOk();
 
         $this->assertCount($resultCount, $response->json('data'));
+    }
+
+    #[test]
+    public function it_sorts_paginated_users_by_id_desc(): void
+    {
+        User::factory()->count(3)->hasContact()->create();
+        $lastUser = User::query()->latest('id')->first();
+
+        $response = $this->getJson(route(self::ROUTE))->assertOk();
+
+        $this->assertSame($lastUser->id, $response->json('data.0.id'));
+    }
+
+    #[test]
+    public function it_sorts_paginated_users_by_id_asc(): void
+    {
+        $firstUserId = User::factory()
+            ->count(3)
+            ->hasContact()
+            ->create()
+            ->first()
+            ->id;
+
+        $response = $this->getJson(route(self::ROUTE, [
+            'sorted_by' => 'asc',
+        ]))
+            ->assertOk();
+
+        $this->assertSame($firstUserId, $response->json('data.0.id'));
     }
 }

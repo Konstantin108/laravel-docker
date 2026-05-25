@@ -72,7 +72,10 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": [
+                "barryvdh/laravel-ide-helper",
+                "dedoc/scramble"
+            ]
         }
     },
     "config": {
