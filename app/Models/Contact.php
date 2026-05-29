@@ -29,7 +29,9 @@ use Illuminate\Support\Carbon;
  */
 class Contact extends Model
 {
-    /** @use HasFactory<ContactFactory> */
+    /**
+     * @use HasFactory<ContactFactory>
+     */
     use HasFactory;
 
     /**

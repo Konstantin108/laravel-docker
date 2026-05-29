@@ -1,5 +1,10 @@
 <?php
 
+/* TODO kpstya
+    - надо проверить формирование писем
+    - надо установить пакет для подклбчения анализа в шаблонах blade
+    - для создания ElasticsearchRepository надо будет доработать функционал v2 */
+
 namespace App\Models;
 
 use Database\Factories\ProductCategoryFactory;
@@ -29,7 +34,9 @@ use Illuminate\Support\Carbon;
  */
 class ProductCategory extends Model
 {
-    /** @use HasFactory<ProductCategoryFactory> */
+    /**
+     * @use HasFactory<ProductCategoryFactory>
+     */
     use HasFactory;
 
     /**
@@ -39,4 +46,6 @@ class ProductCategory extends Model
     {
         return $this->hasMany(Product::class, 'category_id');
     }
+
+    // TODO kpstya возможно в связях излишни имена полей
 }

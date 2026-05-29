@@ -36,8 +36,12 @@ use Illuminate\Support\Carbon;
  */
 class User extends Authenticatable implements SearchableContract
 {
-    /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    /**
+     * @use HasFactory<UserFactory>
+     */
+    use HasFactory;
+
+    use Notifiable;
 
     /**
      * @var list<string>
