@@ -5,12 +5,14 @@ parameters:
 
     paths:
         - app/
+        - resources/views/
 
     # Level 9 is the highest level
     level: 6
 
     ignoreErrors:
         - '#^PHPDoc tag @mixin contains unknown class Eloquent.#'
+        - identifier: missingType.checkedException
 
     excludePaths:
         - app/Http/Resources/

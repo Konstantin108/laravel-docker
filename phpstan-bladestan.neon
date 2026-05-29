@@ -1,0 +1,27 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    level: 6
+
+    excludePaths:
+        - 'tests/*/Fixture/*'
+        - 'tests/Rules/data/*'
+        - 'tests/skeleton/resources/views/*'
+
+    exceptions:
+        reportUncheckedExceptionDeadCatch: true
+        implicitThrows: false
+        check:
+            missingCheckedExceptionInThrows: true
+            tooWideThrowType: true
+        uncheckedExceptionClasses:
+            - 'Bladestan\Exception\ShouldNotHappenException'
+            - 'Nette\Utils\JsonException'
+            - 'ReflectionException'
+            - 'Webmozart\Assert\InvalidArgumentException'
+
+    ignoreErrors:
+        -
+            identifier: missingType.checkedException
+            path: tests/*

@@ -26,7 +26,7 @@ final class SearchIndexDataMail extends Mailable
         )
             ->view('mail.elasticsearch.search_index_filled', [
                 'items' => $this->items,
-                'itemsCount' => $this->itemsCount,
+//                'itemsCount' => $this->itemsCount,
                 'indexName' => $this->indexName,
             ]);
     }
