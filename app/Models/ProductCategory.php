@@ -1,10 +1,5 @@
 <?php
 
-/* TODO kpstya
-    - надо проверить формирование писем
-    - надо установить пакет для подклбчения анализа в шаблонах blade
-    - для создания ElasticsearchRepository надо будет доработать функционал v2 */
-
 namespace App\Models;
 
 use Database\Factories\ProductCategoryFactory;

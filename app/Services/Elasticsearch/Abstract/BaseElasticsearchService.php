@@ -111,7 +111,8 @@ abstract class BaseElasticsearchService implements ElasticsearchServiceContract
         ];
     }
 
-    // TODO kpstya возможно создать ElasticsearchRepository, которые будут реализовывать RepositoryContract
+    /* TODO kpstya возможно создать ElasticsearchRepository, которые будут реализовывать RepositoryContract
+        надо будет доработать функционал v2 */
 
     /**
      * @return array<string, mixed>
