@@ -34,3 +34,5 @@ interface ElasticsearchClientContract
      */
     public function clearIndex(array $body, string $indexName): array;
 }
+
+// TODO kpstya в интерфейсе указать какие могут быть выброшены исключения
