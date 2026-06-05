@@ -87,8 +87,6 @@ abstract class BaseElasticsearchService implements ElasticsearchServiceContract
             ]),
             json_encode($data),
         );
-
-        // TODO kpstya возможно избавиться от двойных ковычек
     }
 
     /**

@@ -40,8 +40,6 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
     {
         $lines = array_filter(explode("\n", $body));
 
-        // TODO kpstya возможно избавиться от двойных ковычек
-
         $seqNumber = 0;
         $linesCount = count($lines);
         for ($i = 0; $i < $linesCount; $i += 2) {

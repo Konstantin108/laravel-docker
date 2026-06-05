@@ -51,8 +51,6 @@ final class ClearSearchIndexCommandTest extends SearchIndexCommandTestCase
             ->assertSuccessful();
     }
 
-    // TODO kpstya возможно избавиться от двойных ковычек
-
     #[Test]
     #[DataProvider(methodName: 'indexNameProvider')]
     public function it_returns_error_when_clearing_search_index_fails(string $indexName): void

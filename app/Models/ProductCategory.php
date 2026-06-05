@@ -39,8 +39,6 @@ class ProductCategory extends Model
      */
     public function products(): HasMany
     {
-        return $this->hasMany(Product::class, 'category_id');
+        return $this->hasMany(Product::class);
     }
-
-    // TODO kpstya возможно в связях излишни имена полей
 }
