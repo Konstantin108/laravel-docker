@@ -104,17 +104,17 @@ final class IndexEndpointTest extends TestCase
     public function it_sorts_products_by_id_desc(): void
     {
         Product::factory()->count(4)->create();
-        $lastUser = Product::query()->latest('id')->first();
+        $lastProduct = Product::query()->latest('id')->first();
 
         $response = $this->getJson(route(self::ROUTE))->assertOk();
 
-        $this->assertSame($lastUser->id, $response->json('data.0.id'));
+        $this->assertSame($lastProduct->id, $response->json('data.0.id'));
     }
 
     #[test]
     public function it_sorts_products_by_id_asc(): void
     {
-        $firstUserId = Product::factory()
+        $firstProduct = Product::factory()
             ->count(3)
             ->create()
             ->first()
@@ -125,6 +125,6 @@ final class IndexEndpointTest extends TestCase
         ]))
             ->assertOk();
 
-        $this->assertSame($firstUserId, $response->json('data.0.id'));
+        $this->assertSame($firstProduct, $response->json('data.0.id'));
     }
 }

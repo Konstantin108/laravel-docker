@@ -47,6 +47,7 @@ final class IndexEndpointTest extends TestCase
     #[Test]
     #[TestWith(data: ['page', '2s'])]
     #[TestWith(data: ['per_page', 's'])]
+    #[TestWith(data: ['sorted_by', 'abc'])]
     public function it_returns_error_when_invalid_params_are_provided(string $param, string $value): void
     {
         Product::factory()->count(3)->create();
@@ -56,6 +57,34 @@ final class IndexEndpointTest extends TestCase
         ]))
             ->assertInvalid([$param])
             ->assertUnprocessable();
+    }
+
+    #[test]
+    public function it_sorts_products_by_id_desc(): void
+    {
+        Product::factory()->count(5)->create();
+        $lastProduct = Product::query()->latest('id')->first();
+
+        $response = $this->getJson(route(self::ROUTE))->assertOk();
+
+        $this->assertSame($lastProduct->id, $response->json('data.0.id'));
+    }
+
+    #[test]
+    public function it_sorts_products_by_id_asc(): void
+    {
+        $firstProductId = Product::factory()
+            ->count(3)
+            ->create()
+            ->first()
+            ->id;
+
+        $response = $this->getJson(route(self::ROUTE, [
+            'sorted_by' => 'asc',
+        ]))
+            ->assertOk();
+
+        $this->assertSame($firstProductId, $response->json('data.0.id'));
     }
 
     #[Test]
