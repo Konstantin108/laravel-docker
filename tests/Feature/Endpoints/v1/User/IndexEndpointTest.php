@@ -172,18 +172,17 @@ final class IndexEndpointTest extends TestCase
     #[test]
     public function it_sorts_paginated_users_by_id_asc(): void
     {
-        $firstUserId = User::factory()
+        $firstUser = User::factory()
             ->count(3)
             ->hasContact()
             ->create()
-            ->first()
-            ->id;
+            ->first();
 
         $response = $this->getJson(route(self::ROUTE, [
             'sorted_by' => 'asc',
         ]))
             ->assertOk();
 
-        $this->assertSame($firstUserId, $response->json('data.0.id'));
+        $this->assertSame($firstUser->id, $response->json('data.0.id'));
     }
 }

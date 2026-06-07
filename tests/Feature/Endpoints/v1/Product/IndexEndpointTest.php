@@ -117,14 +117,13 @@ final class IndexEndpointTest extends TestCase
         $firstProduct = Product::factory()
             ->count(3)
             ->create()
-            ->first()
-            ->id;
+            ->first();
 
         $response = $this->getJson(route(self::ROUTE, [
             'sorted_by' => 'asc',
         ]))
             ->assertOk();
 
-        $this->assertSame($firstProduct, $response->json('data.0.id'));
+        $this->assertSame($firstProduct->id, $response->json('data.0.id'));
     }
 }
