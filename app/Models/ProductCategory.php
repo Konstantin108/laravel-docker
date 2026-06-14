@@ -29,7 +29,9 @@ use Illuminate\Support\Carbon;
  */
 class ProductCategory extends Model
 {
-    /** @use HasFactory<ProductCategoryFactory> */
+    /**
+     * @use HasFactory<ProductCategoryFactory>
+     */
     use HasFactory;
 
     /**
@@ -37,6 +39,6 @@ class ProductCategory extends Model
      */
     public function products(): HasMany
     {
-        return $this->hasMany(Product::class, 'category_id');
+        return $this->hasMany(Product::class);
     }
 }

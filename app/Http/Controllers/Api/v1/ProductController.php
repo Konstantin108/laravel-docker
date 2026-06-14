@@ -19,7 +19,7 @@ class ProductController extends Controller
         name: RouteGroupEnum::PRODUCT->value,
         description: RouteGroupEnum::DESCRIPTIONS[RouteGroupEnum::PRODUCT->value]
     )]
-    #[Endpoint(title: 'Получить список продуктов')]
+    #[Endpoint(title: 'api.v1.products.index')]
     public function index(IndexRequest $request, ProductService $productService): AnonymousResourceCollection
     {
         return IndexResource::collection(

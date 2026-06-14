@@ -92,10 +92,14 @@ class ElasticsearchClientStub implements ElasticsearchClientContract
         $model = $enum->getModel();
         $service = $this->container->make($enum->getModelService());
 
+        $orderBy = array_key_first($body['sort']);
+        $sortedByEnum = $body['sort'][$orderBy]['order'];
+
         $elements = $model::query()
             ->with($service->relations())
             ->where('id', '>', $body['from'])
             ->limit($body['size'])
+            ->orderBy($orderBy, $sortedByEnum->value)
             ->get()
             ->map(static function (SearchableContract $element) use ($service): SearchableSourceContract {
                 return $service->enrich($element);

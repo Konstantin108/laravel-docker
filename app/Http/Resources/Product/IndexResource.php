@@ -8,11 +8,16 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @property ProductEnriched $resource
+ * @mixin ProductEnriched
  */
 #[SchemaName(name: 'Product\IndexResource')]
 class IndexResource extends JsonResource
 {
+    /**
+     * @var ProductEnriched
+     */
+    public $resource;
+
     public function toArray(Request $request): array
     {
         return [

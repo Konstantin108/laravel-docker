@@ -1,5 +1,7 @@
 <?php
 
+// TODO kpstya где в проекте правильно хранить папку Moonshine
+
 declare(strict_types=1);
 
 namespace App\Jobs;

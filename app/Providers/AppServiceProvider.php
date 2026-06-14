@@ -13,11 +13,11 @@ use App\Repositories\Product\Contracts\ProductRepositoryContract;
 use App\Repositories\Product\ProductEloquentRepository;
 use App\Repositories\User\Contracts\UserRepositoryContract;
 use App\Repositories\User\UserEloquentRepository;
-use App\Services\Elasticsearch\Contracts\ElasticsearchServiceContract;
-use App\Services\Elasticsearch\Factories\ElasticsearchServiceFactory;
-use App\Services\Elasticsearch\ProductsIndexElasticsearchService;
+use App\Services\Elasticsearch\Factories\ElasticsearchRepositoryFactory;
+use App\Services\Elasticsearch\Repositories\Contracts\ElasticsearchRepositoryContract;
+use App\Services\Elasticsearch\Repositories\ProductElasticsearchRepository;
+use App\Services\Elasticsearch\Repositories\UserElasticsearchRepository;
 use App\Services\Elasticsearch\SourceDtoCollectionService;
-use App\Services\Elasticsearch\UsersIndexElasticsearchService;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Dedoc\Scramble\ScrambleServiceProvider;
 use Illuminate\Database\Eloquent\Model;
@@ -63,20 +63,20 @@ class AppServiceProvider extends ServiceProvider
             ));
         });
 
-        $this->app->singleton(ElasticsearchServiceFactory::class, static function (Application $app): ElasticsearchServiceFactory {
-            return new ElasticsearchServiceFactory(...array_map(
-                static fn (string $className): ElasticsearchServiceContract => $app->make($className),
-                config('elasticsearch.search_services')
+        $this->app->singleton(ElasticsearchRepositoryFactory::class, static function (Application $app): ElasticsearchRepositoryFactory {
+            return new ElasticsearchRepositoryFactory(...array_map(
+                static fn (string $className): ElasticsearchRepositoryContract => $app->make($className),
+                config('elasticsearch.repositories')
             ));
         });
 
         $this->app->when(UserController::class)
-            ->needs(ElasticsearchServiceContract::class)
-            ->give(UsersIndexElasticsearchService::class);
+            ->needs(ElasticsearchRepositoryContract::class)
+            ->give(UserElasticsearchRepository::class);
 
         $this->app->when(ProductController::class)
-            ->needs(ElasticsearchServiceContract::class)
-            ->give(ProductsIndexElasticsearchService::class);
+            ->needs(ElasticsearchRepositoryContract::class)
+            ->give(ProductElasticsearchRepository::class);
     }
 
     public function boot(): void

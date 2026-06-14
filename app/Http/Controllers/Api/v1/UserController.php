@@ -19,7 +19,7 @@ class UserController extends Controller
         name: RouteGroupEnum::USER->value,
         description: RouteGroupEnum::DESCRIPTIONS[RouteGroupEnum::USER->value]
     )]
-    #[Endpoint(title: 'Получить список пользователей с пагинацией')]
+    #[Endpoint(title: 'api.v1.users.index')]
     public function index(IndexRequest $request, UserService $userService): AnonymousResourceCollection
     {
         return IndexResource::collection(
@@ -27,7 +27,6 @@ class UserController extends Controller
                 sortedBy: SortedByEnum::from($request->validated('sorted_by', 'desc')),
                 search: $request->validated('search'),
                 perPage: $request->validated('per_page'),
-
             ))
                 ->withQueryString()
         );

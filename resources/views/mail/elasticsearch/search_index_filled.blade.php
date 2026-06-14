@@ -1,3 +1,7 @@
+@php
+    /** @var \Illuminate\Support\Collection<int, \App\Services\Contracts\SearchableSourceContract> $items */
+    /** @var int $itemsCount */
+@endphp
 <h3>Data rows count: {{ $itemsCount }}</h3>
 <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif;">
     <thead>

@@ -30,7 +30,9 @@ use Illuminate\Support\Carbon;
  */
 class Product extends Model implements SearchableContract
 {
-    /** @use HasFactory<ProductFactory> */
+    /**
+     * @use HasFactory<ProductFactory>
+     */
     use HasFactory;
 
     /**

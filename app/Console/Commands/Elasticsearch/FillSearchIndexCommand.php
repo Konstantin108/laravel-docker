@@ -9,7 +9,7 @@ use App\Console\Commands\Elasticsearch\Entities\SearchIndexResolver;
 use App\Services\Elasticsearch\Entities\BulkIndexItem;
 use App\Services\Elasticsearch\Entities\BulkIndexResult;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
-use App\Services\Elasticsearch\Factories\ElasticsearchServiceFactory;
+use App\Services\Elasticsearch\Factories\ElasticsearchRepositoryFactory;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
 use Psr\Log\LoggerInterface;
@@ -32,7 +32,7 @@ final class FillSearchIndexCommand extends Command implements PromptsForMissingI
      * @throws SearchIndexException
      */
     public function handle(
-        ElasticsearchServiceFactory $factory,
+        ElasticsearchRepositoryFactory $factory,
         SearchIndexResolver $resolver,
         LoggerInterface $logger
     ): int {

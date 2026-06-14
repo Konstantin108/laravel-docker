@@ -20,7 +20,7 @@ enum SearchIndexEnum: string
      */
     public function getModel(): string
     {
-        return config('elasticsearch.search_index_models.'.$this->value)
+        return config('elasticsearch.models.'.$this->value)
             ?? throw SearchIndexException::doesNotExist($this->value);
     }
 
