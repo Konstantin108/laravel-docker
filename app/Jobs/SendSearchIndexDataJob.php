@@ -1,8 +1,12 @@
 <?php
 
+// TODO kpstya где в проекте правильно храпнить папку Moonshine
+
 declare(strict_types=1);
 
 namespace App\Jobs;
+
+// TODO kpstya надо избавиться от dispatchIf() и обновить тесты
 
 use App\Mail\SearchIndexDataMail;
 use App\Services\Contracts\SearchableSourceContract;

@@ -1,5 +1,7 @@
 <?php
 
+// TODO kpstya создать ElasticsearchRepository класс и написать к нему тесты
+
 declare(strict_types=1);
 
 namespace App\Console\Commands\Elasticsearch;

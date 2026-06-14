@@ -21,7 +21,7 @@ class ProductController extends Controller
         name: RouteGroupEnum::PRODUCT->value,
         description: RouteGroupEnum::DESCRIPTIONS[RouteGroupEnum::PRODUCT->value]
     )]
-    #[Endpoint(title: 'Получить список продуктов с пагинацией [v2]')]
+    #[Endpoint(title: 'api.v2.products.index')]
     public function index(IndexRequest $request, PaginationRequestMapper $mapper): AnonymousResourceCollection
     {
         $data = $request->validated();

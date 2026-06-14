@@ -21,10 +21,12 @@ class UserController extends Controller
         name: RouteGroupEnum::USER->value,
         description: RouteGroupEnum::DESCRIPTIONS[RouteGroupEnum::USER->value]
     )]
-    #[Endpoint(title: 'Получить список пользователей с пагинацией [v2]')]
+    #[Endpoint(title: 'api.v2.users.index')]
     public function index(IndexRequest $request, PaginationRequestMapper $mapper): AnonymousResourceCollection
     {
         $data = $request->validated();
+
+        // TODO kpstya добавить исключения в сваггер
 
         $searchResult = $this->searchService->findInSearchIndex($mapper->map(
             Arr::get($data, 'search'),
