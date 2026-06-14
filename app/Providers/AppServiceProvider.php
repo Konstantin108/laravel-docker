@@ -66,7 +66,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ElasticsearchRepositoryFactory::class, static function (Application $app): ElasticsearchRepositoryFactory {
             return new ElasticsearchRepositoryFactory(...array_map(
                 static fn (string $className): ElasticsearchRepositoryContract => $app->make($className),
-                config('elasticsearch.search_repositories')
+                config('elasticsearch.repositories')
             ));
         });
 

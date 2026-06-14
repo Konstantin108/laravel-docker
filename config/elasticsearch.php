@@ -21,7 +21,7 @@ return [
         'products' => \App\Factories\ProductSourceDtoFactory::class,
     ],
 
-    'search_index_models' => [
+    'models' => [
         'users' => \App\Models\User::class,
         'products' => \App\Models\Product::class,
     ],
@@ -31,7 +31,7 @@ return [
         'products' => \App\Services\Product\ProductService::class,
     ],
 
-    'search_repositories' => [
+    'repositories' => [
         'users' => \App\Services\Elasticsearch\Repositories\UserElasticsearchRepository::class,
         'products' => \App\Services\Elasticsearch\Repositories\ProductElasticsearchRepository::class,
     ],
