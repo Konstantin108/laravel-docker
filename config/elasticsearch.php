@@ -31,8 +31,8 @@ return [
         'products' => \App\Services\Product\ProductService::class,
     ],
 
-    'search_services' => [
-        'users' => \App\Services\Elasticsearch\UsersIndexElasticsearchService::class,
-        'products' => \App\Services\Elasticsearch\ProductsIndexElasticsearchService::class,
+    'search_repositories' => [
+        'users' => \App\Services\Elasticsearch\Repositories\UserElasticsearchRepository::class,
+        'products' => \App\Services\Elasticsearch\Repositories\ProductElasticsearchRepository::class,
     ],
 ];

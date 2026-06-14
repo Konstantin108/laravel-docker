@@ -7,7 +7,7 @@ namespace App\Console\Commands\Elasticsearch;
 use App\Console\Commands\Elasticsearch\Concerns\PromptForSearchIndexTrait;
 use App\Console\Commands\Elasticsearch\Entities\SearchIndexResolver;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
-use App\Services\Elasticsearch\Factories\ElasticsearchServiceFactory;
+use App\Services\Elasticsearch\Factories\ElasticsearchRepositoryFactory;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
 
@@ -22,7 +22,7 @@ final class DeleteSearchIndexCommand extends Command implements PromptsForMissin
     /**
      * @throws SearchIndexException
      */
-    public function handle(ElasticsearchServiceFactory $factory, SearchIndexResolver $resolver): int
+    public function handle(ElasticsearchRepositoryFactory $factory, SearchIndexResolver $resolver): int
     {
         $searchIndexEnum = $resolver->fromString($this->argument('index_name'));
 

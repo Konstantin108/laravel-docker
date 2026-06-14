@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api\v2;
 use App\Enums\RouteGroupEnum;
 use App\Http\Requests\v2\User\IndexRequest;
 use App\Http\Resources\User\IndexResource;
-use App\Services\Elasticsearch\Contracts\ElasticsearchServiceContract;
 use App\Services\Elasticsearch\PaginationRequestMapper;
+use App\Services\Elasticsearch\Repositories\Contracts\ElasticsearchRepositoryContract;
 use Dedoc\Scramble\Attributes\Endpoint;
 use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -15,7 +15,7 @@ use Illuminate\Support\Arr;
 
 class UserController extends Controller
 {
-    public function __construct(private readonly ElasticsearchServiceContract $searchService) {}
+    public function __construct(private readonly ElasticsearchRepositoryContract $repository) {}
 
     #[Group(
         name: RouteGroupEnum::USER->value,
@@ -26,7 +26,7 @@ class UserController extends Controller
     {
         $inputData = $request->validated();
 
-        $searchResult = $this->searchService->findInSearchIndex($mapper->map(
+        $searchResult = $this->repository->findInSearchIndex($mapper->map(
             Arr::get($inputData, 'search'),
             Arr::get($inputData, 'per_page'),
             Arr::get($inputData, 'sorted_by'),

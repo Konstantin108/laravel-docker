@@ -2,27 +2,25 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Elasticsearch;
+namespace App\Services\Elasticsearch\Repositories;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
-use App\Enums\SortedByEnum;
 use App\Events\Elasticsearch\SearchIndexFilledEvent;
-use App\Services\Elasticsearch\Abstract\BaseElasticsearchService;
 use App\Services\Elasticsearch\Entities\BulkIndexResult;
 use App\Services\Elasticsearch\Factories\BulkIndexResultFactory;
 use App\Services\Elasticsearch\Factories\SearchResultFactory;
-use App\Services\Product\Dto\FilterDto;
-use App\Services\Product\Entities\ProductEnriched;
-use App\Services\Product\ProductService;
+use App\Services\Elasticsearch\Repositories\Abstract\BaseElasticsearchRepository;
+use App\Services\User\Entities\UserEnriched;
+use App\Services\User\UserService;
 use Illuminate\Contracts\Events\Dispatcher;
 
-class ProductsIndexElasticsearchService extends BaseElasticsearchService
+class UserElasticsearchRepository extends BaseElasticsearchRepository
 {
     public function __construct(
         protected ElasticsearchClientContract $client,
         protected SearchResultFactory $searchResultFactory,
         private readonly Dispatcher $dispatcher,
-        private readonly ProductService $productService,
+        private readonly UserService $userService,
         private readonly BulkIndexResultFactory $bulkIndexResultFactory,
     ) {
         parent::__construct($client, $searchResultFactory);
@@ -30,7 +28,7 @@ class ProductsIndexElasticsearchService extends BaseElasticsearchService
 
     protected function indexName(): string
     {
-        return 'products';
+        return 'users';
     }
 
     /**
@@ -66,7 +64,19 @@ class ProductsIndexElasticsearchService extends BaseElasticsearchService
                         'type' => 'text',
                         'analyzer' => 'my_ngram_analyzer',
                     ],
-                    'description' => [
+                    'email' => [
+                        'type' => 'text',
+                        'analyzer' => 'my_ngram_analyzer',
+                    ],
+                    'reserve_email' => [
+                        'type' => 'text',
+                        'analyzer' => 'my_ngram_analyzer',
+                    ],
+                    'phone' => [
+                        'type' => 'text',
+                        'analyzer' => 'my_ngram_analyzer',
+                    ],
+                    'telegram' => [
                         'type' => 'text',
                         'analyzer' => 'my_ngram_analyzer',
                     ],
@@ -81,23 +91,23 @@ class ProductsIndexElasticsearchService extends BaseElasticsearchService
     protected function multiMatchFieldsSettings(): array
     {
         return [
-            'name^2',
-            'description^1',
+            'name^5',
+            'email^4',
+            'reserve_email^3',
+            'telegram^2',
+            'phone^1',
         ];
     }
 
     public function fillSearchIndex(?int $limit = null): ?BulkIndexResult
     {
-        $products = $this->productService->getList(new FilterDto(
-            sortedBy: SortedByEnum::ASC,
-            limit: $limit
-        ));
-        if ($products->isEmpty()) {
+        $users = $this->userService->getList($limit);
+        if ($users->isEmpty()) {
             return null;
         }
 
-        $body = $products->map(fn (ProductEnriched $product): string => $this->makeDocElement(
-            $product->toArray(),
+        $body = $users->map(fn (UserEnriched $user): string => $this->makeDocElement(
+            $user->toArray(),
             $this->indexName()
         ))
             ->implode('');
@@ -106,7 +116,7 @@ class ProductsIndexElasticsearchService extends BaseElasticsearchService
 
         return tap(
             $this->bulkIndexResultFactory->make($result),
-            fn (): ?array => $this->dispatcher->dispatch(new SearchIndexFilledEvent($products, $this->indexName()))
+            fn (): ?array => $this->dispatcher->dispatch(new SearchIndexFilledEvent($users, $this->indexName()))
         );
     }
 }

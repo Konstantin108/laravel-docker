@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Elasticsearch\Contracts;
+namespace App\Services\Elasticsearch\Repositories\Contracts;
 
 use App\Services\Elasticsearch\Dto\PaginationRequestDto;
 use App\Services\Elasticsearch\Entities\SearchResult;
 
-interface ElasticsearchServiceContract
+interface ElasticsearchRepositoryContract
 {
     public function fillSearchIndex(?int $limit = null): mixed;
 

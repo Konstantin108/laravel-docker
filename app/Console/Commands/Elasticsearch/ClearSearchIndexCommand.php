@@ -1,7 +1,5 @@
 <?php
 
-// TODO kpstya создать ElasticsearchRepository класс и написать к нему тесты
-
 declare(strict_types=1);
 
 namespace App\Console\Commands\Elasticsearch;
@@ -9,7 +7,7 @@ namespace App\Console\Commands\Elasticsearch;
 use App\Console\Commands\Elasticsearch\Concerns\PromptForSearchIndexTrait;
 use App\Console\Commands\Elasticsearch\Entities\SearchIndexResolver;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
-use App\Services\Elasticsearch\Factories\ElasticsearchServiceFactory;
+use App\Services\Elasticsearch\Factories\ElasticsearchRepositoryFactory;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
 
@@ -24,7 +22,7 @@ final class ClearSearchIndexCommand extends Command implements PromptsForMissing
     /**
      * @throws SearchIndexException
      */
-    public function handle(ElasticsearchServiceFactory $factory, SearchIndexResolver $resolver): int
+    public function handle(ElasticsearchRepositoryFactory $factory, SearchIndexResolver $resolver): int
     {
         $searchIndexEnum = $resolver->fromString($this->argument('index_name'));
 

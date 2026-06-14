@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Services\Elasticsearch\Abstract;
+namespace App\Services\Elasticsearch\Repositories\Abstract;
 
 use App\Clients\Elasticsearch\Contracts\ElasticsearchClientContract;
 use App\Conditions\SearchCondition;
-use App\Services\Elasticsearch\Contracts\ElasticsearchServiceContract;
 use App\Services\Elasticsearch\Dto\PaginationRequestDto;
 use App\Services\Elasticsearch\Entities\SearchResult;
 use App\Services\Elasticsearch\Factories\SearchResultFactory;
+use App\Services\Elasticsearch\Repositories\Contracts\ElasticsearchRepositoryContract;
 use stdClass;
 
-abstract class BaseElasticsearchService implements ElasticsearchServiceContract
+abstract class BaseElasticsearchRepository implements ElasticsearchRepositoryContract
 {
     public function __construct(
         protected ElasticsearchClientContract $client,
