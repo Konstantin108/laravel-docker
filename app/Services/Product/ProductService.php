@@ -27,8 +27,6 @@ class ProductService
             ->map(fn (Product $product): ProductEnriched => $this->enrich($product));
     }
 
-    // TODO kpstya для сидов продуктов нужен json с валидными данными (как в OrderService)
-
     public function enrich(Product $product): ProductEnriched
     {
         return new ProductEnriched(
