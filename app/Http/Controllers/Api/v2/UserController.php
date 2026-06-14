@@ -24,15 +24,13 @@ class UserController extends Controller
     #[Endpoint(title: 'api.v2.users.index')]
     public function index(IndexRequest $request, PaginationRequestMapper $mapper): AnonymousResourceCollection
     {
-        $data = $request->validated();
-
-        // TODO kpstya добавить исключения в сваггер
+        $inputData = $request->validated();
 
         $searchResult = $this->searchService->findInSearchIndex($mapper->map(
-            Arr::get($data, 'search'),
-            Arr::get($data, 'per_page'),
-            Arr::get($data, 'sorted_by'),
-            Arr::get($data, 'page'),
+            Arr::get($inputData, 'search'),
+            Arr::get($inputData, 'per_page'),
+            Arr::get($inputData, 'sorted_by'),
+            Arr::get($inputData, 'page'),
         ));
 
         return IndexResource::collection($searchResult->hits);
