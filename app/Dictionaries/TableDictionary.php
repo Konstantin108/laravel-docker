@@ -27,4 +27,10 @@ final class TableDictionary
     public const PRODUCT_CATEGORIES = 'product_categories';
 
     public const PRODUCTS = 'products';
+
+    public const MOONSHINE_USER_ROLES = 'moonshine_user_roles';
+
+    public const MOONSHINE_USERS = 'moonshine_users';
+
+    public const NOTIFICATIONS = 'notifications';
 }

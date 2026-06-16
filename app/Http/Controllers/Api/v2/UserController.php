@@ -1,5 +1,7 @@
 <?php
 
+// TODO kpstya moonshine как делать документацию и как тестировать
+
 namespace App\Http\Controllers\Api\v2;
 
 use App\Enums\RouteGroupEnum;
