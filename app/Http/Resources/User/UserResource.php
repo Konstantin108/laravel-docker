@@ -3,14 +3,12 @@
 namespace App\Http\Resources\User;
 
 use App\Services\User\Entities\UserEnriched;
-use Dedoc\Scramble\Attributes\SchemaName;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @mixin UserEnriched
  */
-#[SchemaName(name: 'User\UserResource')]
 class UserResource extends JsonResource
 {
     /**
