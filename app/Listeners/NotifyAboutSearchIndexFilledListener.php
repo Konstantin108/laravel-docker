@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Listeners;
 
+// TODO kpstya в кастомных правилах для stan надо добавить типизацию
+
 use App\Events\Elasticsearch\SearchIndexFilledEvent;
 use App\Jobs\SendSearchIndexDataJob;
 

@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Http\Resources\Product;
+namespace App\Http\Resources\User;
 
-use App\Services\Product\Entities\ProductEnriched;
+use App\Services\User\Entities\UserEnriched;
 use Dedoc\Scramble\Attributes\SchemaName;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin ProductEnriched
+ * @mixin UserEnriched
  */
-#[SchemaName(name: 'Product\IndexResource')]
-class IndexResource extends JsonResource
+#[SchemaName(name: 'User\UserResource')]
+class UserResource extends JsonResource
 {
     /**
-     * @var ProductEnriched
+     * @var UserEnriched
      */
     public $resource;
 
@@ -24,23 +24,29 @@ class IndexResource extends JsonResource
             /** @example 1 */
             'id' => $this->resource->id,
 
-            /** @example 57" Monitor Samsung Odyssey Neo G9 G95NC S57CG952NI */
+            /** @example Ivan */
             'name' => $this->resource->name,
 
-            /** @example Monitors */
-            'category_name' => $this->resource->categoryName,
+            /** @example ivan@mail.ru */
+            'email' => $this->resource->email,
 
-            /** @example 9000000 */
-            'price' => $this->resource->price,
+            /** @example ivan@gmail.com */
+            'reserve_email' => $this->resource->reserveEmail,
 
-            /** @example 1 */
-            'category_id' => $this->resource->categoryId,
+            /** @example 79091234567 */
+            'phone' => $this->resource->phone,
 
-            /** @example Great monitor */
-            'description' => $this->resource->description,
+            /** @example '@ivan' */
+            'telegram' => $this->resource->telegram,
 
-            /** @example Visual information output devices */
-            'category_description' => $this->resource->categoryDescription,
+            /**
+             * @var string|null $email_verified_at
+             *
+             * @format Y-m-d
+             *
+             * @example 1970-01-01
+             */
+            'email_verified_at' => $this->resource->emailVerifiedAt?->format('Y-m-d'),
 
             /**
              * @var string|null $created_at

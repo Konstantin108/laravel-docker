@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\v2;
 
 use App\Enums\RouteGroupEnum;
 use App\Http\Requests\v2\User\IndexRequest;
-use App\Http\Resources\User\IndexResource;
+use App\Http\Resources\User\UserResource;
 use App\Services\Elasticsearch\PaginationRequestMapper;
 use App\Services\Elasticsearch\Repositories\Contracts\ElasticsearchRepositoryContract;
 use Dedoc\Scramble\Attributes\Endpoint;
@@ -33,6 +33,6 @@ class UserController extends Controller
             Arr::get($inputData, 'page'),
         ));
 
-        return IndexResource::collection($searchResult->hits);
+        return UserResource::collection($searchResult->hits);
     }
 }

@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Http\Resources\User;
+namespace App\Http\Resources\Product;
 
-use App\Services\User\Entities\UserEnriched;
+use App\Services\Product\Entities\ProductEnriched;
 use Dedoc\Scramble\Attributes\SchemaName;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin UserEnriched
+ * @mixin ProductEnriched
  */
-#[SchemaName(name: 'User\IndexResource')]
-class IndexResource extends JsonResource
+#[SchemaName(name: 'Product\ProductResource')]
+class ProductResource extends JsonResource
 {
     /**
-     * @var UserEnriched
+     * @var ProductEnriched
      */
     public $resource;
 
@@ -24,29 +24,23 @@ class IndexResource extends JsonResource
             /** @example 1 */
             'id' => $this->resource->id,
 
-            /** @example Ivan */
+            /** @example 57" Monitor Samsung Odyssey Neo G9 G95NC S57CG952NI */
             'name' => $this->resource->name,
 
-            /** @example ivan@mail.ru */
-            'email' => $this->resource->email,
+            /** @example Monitors */
+            'category_name' => $this->resource->categoryName,
 
-            /** @example ivan@gmail.com */
-            'reserve_email' => $this->resource->reserveEmail,
+            /** @example 9000000 */
+            'price' => $this->resource->price,
 
-            /** @example 79091234567 */
-            'phone' => $this->resource->phone,
+            /** @example 1 */
+            'category_id' => $this->resource->categoryId,
 
-            /** @example '@ivan' */
-            'telegram' => $this->resource->telegram,
+            /** @example Great monitor */
+            'description' => $this->resource->description,
 
-            /**
-             * @var string|null $email_verified_at
-             *
-             * @format Y-m-d
-             *
-             * @example 1970-01-01
-             */
-            'email_verified_at' => $this->resource->emailVerifiedAt?->format('Y-m-d'),
+            /** @example Visual information output devices */
+            'category_description' => $this->resource->categoryDescription,
 
             /**
              * @var string|null $created_at
