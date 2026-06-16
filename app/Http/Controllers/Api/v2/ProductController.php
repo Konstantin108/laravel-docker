@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\v2;
 
 use App\Enums\RouteGroupEnum;
 use App\Http\Requests\v2\Product\IndexRequest;
-use App\Http\Resources\Product\IndexResource;
+use App\Http\Resources\Product\ProductResource;
 use App\Services\Elasticsearch\PaginationRequestMapper;
 use App\Services\Elasticsearch\Repositories\Contracts\ElasticsearchRepositoryContract;
 use Dedoc\Scramble\Attributes\Endpoint;
@@ -33,6 +33,6 @@ class ProductController extends Controller
             Arr::get($inputData, 'page'),
         ));
 
-        return IndexResource::collection($searchResult->hits);
+        return ProductResource::collection($searchResult->hits);
     }
 }

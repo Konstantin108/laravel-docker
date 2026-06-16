@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Enums\RouteGroupEnum;
 use App\Enums\SortedByEnum;
 use App\Http\Requests\v1\Product\IndexRequest;
-use App\Http\Resources\Product\IndexResource;
+use App\Http\Resources\Product\ProductResource;
 use App\Services\Product\Dto\FilterDto;
 use App\Services\Product\ProductService;
 use Dedoc\Scramble\Attributes\Endpoint;
@@ -22,7 +22,7 @@ class ProductController extends Controller
     #[Endpoint(title: 'api.v1.products.index')]
     public function index(IndexRequest $request, ProductService $productService): AnonymousResourceCollection
     {
-        return IndexResource::collection(
+        return ProductResource::collection(
             $productService->getList(new FilterDto(
                 sortedBy: SortedByEnum::from($request->validated('sorted_by', 'desc')),
                 search: $request->validated('search'),

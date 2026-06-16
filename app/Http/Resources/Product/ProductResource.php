@@ -3,15 +3,13 @@
 namespace App\Http\Resources\Product;
 
 use App\Services\Product\Entities\ProductEnriched;
-use Dedoc\Scramble\Attributes\SchemaName;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @mixin ProductEnriched
  */
-#[SchemaName(name: 'Product\IndexResource')]
-class IndexResource extends JsonResource
+class ProductResource extends JsonResource
 {
     /**
      * @var ProductEnriched
