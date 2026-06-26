@@ -10,8 +10,6 @@ use Illuminate\Support\ServiceProvider;
 use MoonShine\Contracts\Core\DependencyInjection\CoreContract;
 use MoonShine\Laravel\DependencyInjection\MoonShineConfigurator;
 
-// TODO kpstya изучить
-
 final class MoonShineServiceProvider extends ServiceProvider
 {
     /**

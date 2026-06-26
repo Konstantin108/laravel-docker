@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Factories;
 
-// TODO kpstya нужен ли строгий тип в классах laravel и moonshine
-
 use App\Factories\Contracts\SourceDtoFactoryContract;
 use App\Services\Contracts\SearchableSourceContract;
 use App\Services\Product\Entities\ProductEnriched;

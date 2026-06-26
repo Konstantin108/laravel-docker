@@ -17,8 +17,6 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
 
-// TODO kpstya нужен ли final модификатор для контроллеров
-
 final class UserController extends Controller
 {
     public function __construct(private readonly ElasticsearchRepositoryContract $repository) {}

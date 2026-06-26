@@ -18,5 +18,3 @@ final class ProductCategorySeeder extends Seeder
             ->create();
     }
 }
-
-// TODO kpstya нужен ли строгий тип для моделей и реквестов
