@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\v1\Product;
 
 use App\Enums\SortedByEnum;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api\v1;
 
 use App\Enums\RouteGroupEnum;
@@ -26,7 +28,9 @@ final class ProductController extends Controller
             $productService->getList(new FilterDto(
                 sortedBy: SortedByEnum::from($request->validated('sorted_by', 'desc')),
                 search: $request->validated('search'),
-                limit: $request->validated('limit'),
+                limit: $request->filled('limit')
+                    ? (int) $request->validated('limit')
+                    : null,
             ))
         );
     }

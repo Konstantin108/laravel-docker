@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api\v1;
 
 use App\Enums\RouteGroupEnum;
@@ -26,7 +28,9 @@ final class UserController extends Controller
             $userService->getPagination(new FilterDto(
                 sortedBy: SortedByEnum::from($request->validated('sorted_by', 'desc')),
                 search: $request->validated('search'),
-                perPage: $request->validated('per_page'),
+                perPage: $request->filled('per_page')
+                    ? (int) $request->validated('per_page')
+                    : null,
             ))
                 ->withQueryString()
         );
