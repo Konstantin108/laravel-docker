@@ -7,7 +7,7 @@ namespace App\Services\Elasticsearch;
 use App\Enums\SortedByEnum;
 use App\Services\Elasticsearch\Dto\PaginationRequestDto;
 
-class PaginationRequestMapper
+final class PaginationRequestMapper
 {
     private const FIRST_PAGE = 1;
 

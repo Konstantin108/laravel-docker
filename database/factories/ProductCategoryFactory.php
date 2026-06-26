@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends Factory<ProductCategory>
  */
-class ProductCategoryFactory extends Factory
+final class ProductCategoryFactory extends Factory
 {
     protected $model = ProductCategory::class;
 

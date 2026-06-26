@@ -12,7 +12,7 @@ use MoonShine\Laravel\DependencyInjection\MoonShineConfigurator;
 
 // TODO kpstya изучить
 
-class MoonShineServiceProvider extends ServiceProvider
+final class MoonShineServiceProvider extends ServiceProvider
 {
     /**
      * @param  CoreContract<MoonShineConfigurator>  $core
@@ -29,3 +29,8 @@ class MoonShineServiceProvider extends ServiceProvider
             ]);
     }
 }
+
+/* TODO kpstya
+    - добавить аватарку
+    - добавить возможность редактирования из админки User, Contact, Product, ProductCategory
+    - добавить возможность запуска команд из админки */

@@ -13,7 +13,7 @@ use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Throwable;
 
-class ElasticsearchClient implements ElasticsearchClientContract
+final class ElasticsearchClient implements ElasticsearchClientContract
 {
     private readonly string $url;
 

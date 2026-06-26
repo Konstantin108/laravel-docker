@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use RuntimeException;
 
-class AppServiceProvider extends ServiceProvider
+final class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {

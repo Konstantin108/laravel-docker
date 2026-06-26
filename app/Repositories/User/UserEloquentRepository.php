@@ -12,7 +12,7 @@ use App\Repositories\User\Scopes\SearchScope;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
-class UserEloquentRepository implements UserRepositoryContract
+final class UserEloquentRepository implements UserRepositoryContract
 {
     public function getPagination(
         SortedByEnum $sortedByEnum = SortedByEnum::DESC,

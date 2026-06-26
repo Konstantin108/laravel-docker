@@ -10,7 +10,7 @@ use App\Services\Product\Dto\FilterDto;
 use App\Services\Product\Entities\ProductEnriched;
 use Illuminate\Support\Collection;
 
-class ProductService
+final class ProductService
 {
     public function __construct(private readonly ProductRepositoryContract $repository) {}
 

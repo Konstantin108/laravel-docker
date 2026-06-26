@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;

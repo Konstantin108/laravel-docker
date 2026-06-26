@@ -13,7 +13,7 @@ use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
 
-class UserController extends Controller
+final class UserController extends Controller
 {
     #[Group(
         name: RouteGroupEnum::USER->value,

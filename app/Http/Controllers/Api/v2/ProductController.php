@@ -13,7 +13,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
 
-class ProductController extends Controller
+final class ProductController extends Controller
 {
     public function __construct(private readonly ElasticsearchRepositoryContract $repository) {}
 

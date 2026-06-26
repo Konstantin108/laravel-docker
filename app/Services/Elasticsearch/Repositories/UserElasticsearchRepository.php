@@ -14,7 +14,7 @@ use App\Services\User\Entities\UserEnriched;
 use App\Services\User\UserService;
 use Illuminate\Contracts\Events\Dispatcher;
 
-class UserElasticsearchRepository extends BaseElasticsearchRepository
+final class UserElasticsearchRepository extends BaseElasticsearchRepository
 {
     public function __construct(
         protected ElasticsearchClientContract $client,

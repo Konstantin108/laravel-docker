@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends Factory<Contact>
  */
-class ContactFactory extends Factory
+final class ContactFactory extends Factory
 {
     protected $model = Contact::class;
 

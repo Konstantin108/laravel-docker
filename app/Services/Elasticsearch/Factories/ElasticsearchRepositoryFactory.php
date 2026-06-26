@@ -8,7 +8,7 @@ use App\Services\Elasticsearch\Enums\SearchIndexEnum;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use App\Services\Elasticsearch\Repositories\Contracts\ElasticsearchRepositoryContract;
 
-class ElasticsearchRepositoryFactory
+final class ElasticsearchRepositoryFactory
 {
     /**
      * @var array<string, ElasticsearchRepositoryContract>

@@ -10,6 +10,8 @@ use Spatie\LaravelData\Attributes\MapOutputName;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Mappers\SnakeCaseMapper;
 
+// TODO kpstya фабрики надо сделать final и наверное readonly (если есть состояние)
+
 #[MapOutputName(output: SnakeCaseMapper::class)]
 final class ProductEnriched extends Data implements SearchableSourceContract
 {

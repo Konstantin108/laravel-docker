@@ -9,7 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @mixin ProductEnriched
  */
-class ProductResource extends JsonResource
+final class ProductResource extends JsonResource
 {
     /**
      * @var ProductEnriched

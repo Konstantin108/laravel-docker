@@ -11,7 +11,7 @@ use App\Repositories\Product\Scopes\SearchScope;
 use App\Repositories\Scopes\LimitScope;
 use Illuminate\Database\Eloquent\Collection;
 
-class ProductEloquentRepository implements ProductRepositoryContract
+final class ProductEloquentRepository implements ProductRepositoryContract
 {
     /**
      * @return Collection<int, Product>

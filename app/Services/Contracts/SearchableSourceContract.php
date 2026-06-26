@@ -13,3 +13,7 @@ interface SearchableSourceContract
      */
     public function toArray(): array;
 }
+
+/* TODO kpstya
+    - для чего нужна таблица notifications
+    - надо перевести админку на русский язык */
