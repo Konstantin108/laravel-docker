@@ -39,8 +39,6 @@ class MoonShineUserResource extends ModelResource
         return __('moonshine::ui.resource.admins_title');
     }
 
-    // TODO kpstya надо проверить правильность имен переменных в .env и в других местах
-
     protected function activeActions(): ListOf
     {
         return parent::activeActions()->except(Action::VIEW);
