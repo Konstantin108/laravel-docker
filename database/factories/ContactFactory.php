@@ -35,11 +35,15 @@ final class ContactFactory extends Factory
 
     public function withPhone(string $phone): self
     {
-        return $this->state(fn (): array => ['phone' => $phone]);
+        return $this->state(fn (): array => [
+            'phone' => $phone,
+        ]);
     }
 
     public function withTelegram(string $telegram): self
     {
-        return $this->state(fn (): array => ['telegram' => $telegram]);
+        return $this->state(fn (): array => [
+            'telegram' => $telegram,
+        ]);
     }
 }

@@ -33,4 +33,5 @@ return Application::configure(dirname(__DIR__))
                 ],
             ], 500);
         });
-    })->create();
+    })
+    ->create();

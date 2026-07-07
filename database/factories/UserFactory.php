@@ -35,12 +35,16 @@ final class UserFactory extends Factory
 
     public function withName(string $name): self
     {
-        return $this->state(fn (): array => ['name' => $name]);
+        return $this->state(fn (): array => [
+            'name' => $name,
+        ]);
     }
 
     public function withEmail(string $email): self
     {
-        return $this->state(fn (): array => ['email' => $email]);
+        return $this->state(fn (): array => [
+            'email' => $email,
+        ]);
     }
 
     public function hasContact(Contact|ContactFactory|null $contact = null): self
