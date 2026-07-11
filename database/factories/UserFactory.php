@@ -8,7 +8,6 @@ use App\Models\Contact;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 /**
  * @extends Factory<User>
@@ -27,24 +26,18 @@ final class UserFactory extends Factory
         return [
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
-            'email_verified_at' => now(),
             'password' => self::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
         ];
     }
 
     public function withName(string $name): self
     {
-        return $this->state(fn (): array => [
-            'name' => $name,
-        ]);
+        return $this->state(fn (): array => ['name' => $name]);
     }
 
     public function withEmail(string $email): self
     {
-        return $this->state(fn (): array => [
-            'email' => $email,
-        ]);
+        return $this->state(fn (): array => ['email' => $email]);
     }
 
     public function hasContact(Contact|ContactFactory|null $contact = null): self

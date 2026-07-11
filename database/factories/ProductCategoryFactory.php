@@ -21,7 +21,6 @@ final class ProductCategoryFactory extends Factory
     {
         return [
             'name' => $this->faker->unique()->bothify('????????##'),
-            'description' => $this->faker->optional()->sentence(),
         ];
     }
 }

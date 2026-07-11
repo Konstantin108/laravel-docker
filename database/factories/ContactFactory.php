@@ -24,7 +24,6 @@ final class ContactFactory extends Factory
             'user_id' => User::factory(),
             'email' => $this->faker->unique()->safeEmail(),
             'phone' => $this->faker->unique()->phoneNumber(),
-            'telegram' => '@'.$this->faker->userName(),
         ];
     }
 
@@ -35,15 +34,11 @@ final class ContactFactory extends Factory
 
     public function withPhone(string $phone): self
     {
-        return $this->state(fn (): array => [
-            'phone' => $phone,
-        ]);
+        return $this->state(fn (): array => ['phone' => $phone]);
     }
 
     public function withTelegram(string $telegram): self
     {
-        return $this->state(fn (): array => [
-            'telegram' => $telegram,
-        ]);
+        return $this->state(fn (): array => ['telegram' => $telegram]);
     }
 }

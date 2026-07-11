@@ -23,29 +23,22 @@ final class ProductFactory extends Factory
         return [
             'category_id' => ProductCategory::factory(),
             'name' => $this->faker->unique()->bothify('????????##'),
-            'description' => $this->faker->optional()->sentence(),
             'price' => $this->faker->numberBetween(100000, 1500000),
         ];
     }
 
     public function withName(string $name): self
     {
-        return $this->state(fn (): array => [
-            'name' => $name,
-        ]);
+        return $this->state(fn (): array => ['name' => $name]);
     }
 
     public function withDescription(string $description): self
     {
-        return $this->state(fn (): array => [
-            'description' => $description,
-        ]);
+        return $this->state(fn (): array => ['description' => $description]);
     }
 
     public function withPrice(int $price): self
     {
-        return $this->state(fn (): array => [
-            'price' => $price,
-        ]);
+        return $this->state(fn (): array => ['price' => $price]);
     }
 }
