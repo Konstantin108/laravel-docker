@@ -10,7 +10,7 @@ use MoonShine\MenuManager\Attributes\SkipMenu;
 
 #[SkipMenu]
 
-class Dashboard extends Page
+final class Dashboard extends Page
 {
     /**
      * @return array<string, string>

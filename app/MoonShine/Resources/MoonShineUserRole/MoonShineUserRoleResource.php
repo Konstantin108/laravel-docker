@@ -24,7 +24,7 @@ use MoonShine\Support\ListOf;
     translatable: true
 )]
 #[Order(value: 1)]
-class MoonShineUserRoleResource extends ModelResource
+final class MoonShineUserRoleResource extends ModelResource
 {
     protected string $model = MoonshineUserRole::class;
 
