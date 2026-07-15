@@ -7,8 +7,6 @@ namespace App\Listeners;
 use App\Events\Elasticsearch\SearchIndexFilledEvent;
 use App\Jobs\SendSearchIndexDataJob;
 
-// TODO kpstya избавиться от dispatchIf()
-
 final class NotifyAboutSearchIndexFilledListener
 {
     public function handle(SearchIndexFilledEvent $event): void
