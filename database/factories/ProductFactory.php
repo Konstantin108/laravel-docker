@@ -29,16 +29,18 @@ final class ProductFactory extends Factory
 
     public function withName(string $name): self
     {
-        return $this->state(fn (): array => ['name' => $name]);
-    }
-
-    public function withDescription(string $description): self
-    {
-        return $this->state(fn (): array => ['description' => $description]);
+        return $this->state(['name' => $name]);
     }
 
     public function withPrice(int $price): self
     {
-        return $this->state(fn (): array => ['price' => $price]);
+        return $this->state(['price' => $price]);
+    }
+
+    public function withDescription(?string $description = null): self
+    {
+        return $this->state([
+            'description' => $description ?? $this->faker->text(),
+        ]);
     }
 }
