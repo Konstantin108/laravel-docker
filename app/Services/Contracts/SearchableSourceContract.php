@@ -13,5 +13,3 @@ interface SearchableSourceContract
      */
     public function toArray(): array;
 }
-
-// TODO kpstya надо перевести админку на русский язык
