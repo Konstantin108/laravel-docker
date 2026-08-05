@@ -100,7 +100,7 @@ final class IndexEndpointTest extends TestCase
         $this->assertCount($resultCount, $response->json('data'));
     }
 
-    #[test]
+    #[Test]
     public function it_sorts_products_by_id_desc(): void
     {
         Product::factory()->count(4)->create();
@@ -111,7 +111,7 @@ final class IndexEndpointTest extends TestCase
         $this->assertSame($lastProduct->id, $response->json('data.0.id'));
     }
 
-    #[test]
+    #[Test]
     public function it_sorts_products_by_id_asc(): void
     {
         $firstProduct = Product::factory()

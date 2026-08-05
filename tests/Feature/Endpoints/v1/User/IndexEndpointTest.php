@@ -158,7 +158,7 @@ final class IndexEndpointTest extends TestCase
         $this->assertCount($resultCount, $response->json('data'));
     }
 
-    #[test]
+    #[Test]
     public function it_sorts_paginated_users_by_id_desc(): void
     {
         User::factory()->count(3)->hasContact()->create();
@@ -169,7 +169,7 @@ final class IndexEndpointTest extends TestCase
         $this->assertSame($lastUser->id, $response->json('data.0.id'));
     }
 
-    #[test]
+    #[Test]
     public function it_sorts_paginated_users_by_id_asc(): void
     {
         $firstUser = User::factory()

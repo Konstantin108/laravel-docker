@@ -49,7 +49,7 @@ final class ProductEloquentRepositoryTest extends TestCase
         $this->assertCount($limit, $result);
     }
 
-    #[test]
+    #[Test]
     public function it_returns_paginated_users_sorted_by_id_asc(): void
     {
         Product::factory()->count(5)->create();
@@ -65,7 +65,7 @@ final class ProductEloquentRepositoryTest extends TestCase
         $this->assertSame($expected, $ids);
     }
 
-    #[test]
+    #[Test]
     public function it_returns_paginated_users_sorted_by_id_desc(): void
     {
         Product::factory()->count(5)->create();
