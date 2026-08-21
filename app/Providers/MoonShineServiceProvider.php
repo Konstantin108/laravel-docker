@@ -29,6 +29,5 @@ final class MoonShineServiceProvider extends ServiceProvider
 }
 
 /* TODO kpstya
-    - добавить аватарку
     - добавить возможность редактирования из админки User, Contact, Product, ProductCategory
     - добавить возможность запуска команд из админки */
