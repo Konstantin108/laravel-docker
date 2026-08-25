@@ -29,5 +29,6 @@ final class MoonShineServiceProvider extends ServiceProvider
 }
 
 /* TODO kpstya
+    - moonshine - как делать документацию и как тестировать
     - добавить возможность редактирования из админки User, Contact, Product, ProductCategory
     - добавить возможность запуска команд из админки */
