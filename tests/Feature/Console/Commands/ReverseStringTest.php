@@ -9,6 +9,9 @@ use Tests\TestCase;
 
 final class ReverseStringTest extends TestCase
 {
+    /**
+     * @var non-empty-string
+     */
     private const COMMAND = 'app:reverse-string';
 
     #[Test]

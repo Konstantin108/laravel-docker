@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api\v1;
 
 use App\Enums\RouteGroupEnum;
@@ -13,7 +15,7 @@ use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
 
-class UserController extends Controller
+final class UserController extends Controller
 {
     #[Group(
         name: RouteGroupEnum::USER->value,
@@ -26,7 +28,9 @@ class UserController extends Controller
             $userService->getPagination(new FilterDto(
                 sortedBy: SortedByEnum::from($request->validated('sorted_by', 'desc')),
                 search: $request->validated('search'),
-                perPage: $request->validated('per_page'),
+                perPage: $request->filled('per_page')
+                    ? (int) $request->validated('per_page')
+                    : null,
             ))
                 ->withQueryString()
         );

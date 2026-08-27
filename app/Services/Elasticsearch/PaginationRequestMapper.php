@@ -7,12 +7,15 @@ namespace App\Services\Elasticsearch;
 use App\Enums\SortedByEnum;
 use App\Services\Elasticsearch\Dto\PaginationRequestDto;
 
-class PaginationRequestMapper
+final class PaginationRequestMapper
 {
     private const FIRST_PAGE = 1;
 
     private const DEFAULT_PER_PAGE = 15;
 
+    /**
+     * @var non-empty-string
+     */
     private const DEFAULT_SORTED_BY = 'desc';
 
     public function map(

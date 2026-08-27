@@ -8,7 +8,7 @@ use App\Services\Elasticsearch\Entities\BulkIndexItem;
 use App\Services\Elasticsearch\Entities\BulkIndexResult;
 use Illuminate\Support\Collection;
 
-class BulkIndexResultFactory
+final class BulkIndexResultFactory
 {
     /**
      * @param  array<string, mixed>  $data

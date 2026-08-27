@@ -71,7 +71,7 @@ final class UserEloquentRepositoryTest extends TestCase
         $this->assertCount($limit, $result);
     }
 
-    #[test]
+    #[Test]
     public function it_returns_paginated_users_sorted_by_id_asc(): void
     {
         User::factory()->count(5)->create();
@@ -88,7 +88,7 @@ final class UserEloquentRepositoryTest extends TestCase
         $this->assertSame($expected, $ids);
     }
 
-    #[test]
+    #[Test]
     public function it_returns_paginated_users_sorted_by_id_desc(): void
     {
         User::factory()->count(5)->create();

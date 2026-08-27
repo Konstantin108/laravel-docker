@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -31,4 +33,5 @@ return Application::configure(dirname(__DIR__))
                 ],
             ], 500);
         });
-    })->create();
+    })
+    ->create();

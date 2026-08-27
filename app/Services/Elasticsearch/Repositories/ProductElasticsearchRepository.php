@@ -16,7 +16,7 @@ use App\Services\Product\Entities\ProductEnriched;
 use App\Services\Product\ProductService;
 use Illuminate\Contracts\Events\Dispatcher;
 
-class ProductElasticsearchRepository extends BaseElasticsearchRepository
+final class ProductElasticsearchRepository extends BaseElasticsearchRepository
 {
     public function __construct(
         protected ElasticsearchClientContract $client,

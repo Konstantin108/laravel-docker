@@ -14,7 +14,7 @@ use Illuminate\Container\Container;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use JsonException;
 
-class ElasticsearchClientStub implements ElasticsearchClientContract
+final class ElasticsearchClientStub implements ElasticsearchClientContract
 {
     public function __construct(private readonly Container $container) {}
 

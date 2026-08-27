@@ -11,7 +11,7 @@ use App\Services\User\Entities\UserEnriched;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
-class UserService
+final class UserService
 {
     public function __construct(private readonly UserRepositoryContract $repository) {}
 

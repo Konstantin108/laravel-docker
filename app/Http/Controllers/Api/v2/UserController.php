@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api\v2;
 
 use App\Enums\RouteGroupEnum;
@@ -13,7 +15,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Arr;
 
-class UserController extends Controller
+final class UserController extends Controller
 {
     public function __construct(private readonly ElasticsearchRepositoryContract $repository) {}
 
@@ -26,11 +28,21 @@ class UserController extends Controller
     {
         $inputData = $request->validated();
 
+        $perPage = Arr::get($inputData, 'per_page');
+        if ($perPage !== null) {
+            $perPage = (int) $perPage;
+        }
+
+        $page = Arr::get($inputData, 'page');
+        if ($page !== null) {
+            $page = (int) $page;
+        }
+
         $searchResult = $this->repository->findInSearchIndex($mapper->map(
             Arr::get($inputData, 'search'),
-            Arr::get($inputData, 'per_page'),
+            $perPage,
             Arr::get($inputData, 'sorted_by'),
-            Arr::get($inputData, 'page'),
+            $page
         ));
 
         return UserResource::collection($searchResult->hits);

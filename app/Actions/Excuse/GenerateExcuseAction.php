@@ -10,6 +10,9 @@ use JsonException;
 
 final readonly class GenerateExcuseAction
 {
+    /**
+     * @var non-empty-string
+     */
     private const PATH = '/data/phrases.json';
 
     public function __construct(private Filesystem $filesystem) {}

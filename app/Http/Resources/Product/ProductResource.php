@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Resources\Product;
 
 use App\Services\Product\Entities\ProductEnriched;
@@ -9,7 +11,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * @mixin ProductEnriched
  */
-class ProductResource extends JsonResource
+final class ProductResource extends JsonResource
 {
     /**
      * @var ProductEnriched

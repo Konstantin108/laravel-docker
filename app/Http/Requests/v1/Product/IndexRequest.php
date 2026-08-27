@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\v1\Product;
 
 use App\Enums\SortedByEnum;
@@ -7,7 +9,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 
-class IndexRequest extends FormRequest
+final class IndexRequest extends FormRequest
 {
     public function authorize(): bool
     {

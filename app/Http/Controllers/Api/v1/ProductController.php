@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api\v1;
 
 use App\Enums\RouteGroupEnum;
@@ -13,7 +15,7 @@ use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
 
-class ProductController extends Controller
+final class ProductController extends Controller
 {
     #[Group(
         name: RouteGroupEnum::PRODUCT->value,
@@ -26,7 +28,9 @@ class ProductController extends Controller
             $productService->getList(new FilterDto(
                 sortedBy: SortedByEnum::from($request->validated('sorted_by', 'desc')),
                 search: $request->validated('search'),
-                limit: $request->validated('limit'),
+                limit: $request->filled('limit')
+                    ? (int) $request->validated('limit')
+                    : null,
             ))
         );
     }

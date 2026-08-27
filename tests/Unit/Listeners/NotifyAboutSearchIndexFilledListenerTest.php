@@ -13,6 +13,9 @@ use Tests\TestCase;
 
 final class NotifyAboutSearchIndexFilledListenerTest extends TestCase
 {
+    /**
+     * @var non-empty-string
+     */
     private const INDEX_NAME = 'any_index_name';
 
     protected function setUp(): void

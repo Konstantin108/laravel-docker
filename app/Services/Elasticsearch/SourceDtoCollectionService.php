@@ -9,7 +9,7 @@ use App\Services\Contracts\SearchableSourceContract;
 use App\Services\Elasticsearch\Exceptions\SearchIndexException;
 use Illuminate\Support\Collection;
 
-class SourceDtoCollectionService
+final class SourceDtoCollectionService
 {
     /**
      * @var array<string, SourceDtoFactoryContract>

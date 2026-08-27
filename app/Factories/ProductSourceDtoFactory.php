@@ -9,7 +9,7 @@ use App\Services\Contracts\SearchableSourceContract;
 use App\Services\Product\Entities\ProductEnriched;
 use Illuminate\Support\Carbon;
 
-class ProductSourceDtoFactory implements SourceDtoFactoryContract
+final class ProductSourceDtoFactory implements SourceDtoFactoryContract
 {
     /**
      * @param array{

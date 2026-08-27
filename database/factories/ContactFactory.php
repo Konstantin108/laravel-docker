@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Models\Contact;
@@ -9,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends Factory<Contact>
  */
-class ContactFactory extends Factory
+final class ContactFactory extends Factory
 {
     protected $model = Contact::class;
 
@@ -22,22 +24,23 @@ class ContactFactory extends Factory
             'user_id' => User::factory(),
             'email' => $this->faker->unique()->safeEmail(),
             'phone' => $this->faker->unique()->phoneNumber(),
-            'telegram' => '@'.$this->faker->userName(),
         ];
     }
 
     public function withEmail(string $email): self
     {
-        return $this->state(fn (): array => ['email' => $email]);
+        return $this->state(['email' => $email]);
     }
 
     public function withPhone(string $phone): self
     {
-        return $this->state(fn (): array => ['phone' => $phone]);
+        return $this->state(['phone' => $phone]);
     }
 
-    public function withTelegram(string $telegram): self
+    public function withTelegram(?string $telegram = null): self
     {
-        return $this->state(fn (): array => ['telegram' => $telegram]);
+        return $this->state([
+            'telegram' => $telegram ?? '@'.$this->faker->userName(),
+        ]);
     }
 }
