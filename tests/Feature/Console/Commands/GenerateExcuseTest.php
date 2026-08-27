@@ -10,8 +10,14 @@ use Tests\TestCase;
 
 final class GenerateExcuseTest extends TestCase
 {
+    /**
+     * @var non-empty-string
+     */
     private const COMMAND = 'app:generate-excuse';
 
+    /**
+     * @var non-empty-string
+     */
     private const PATH = '/data/phrases.json';
 
     private Filesystem $filesystem;

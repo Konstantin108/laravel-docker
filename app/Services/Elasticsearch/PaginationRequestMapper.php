@@ -13,6 +13,9 @@ final class PaginationRequestMapper
 
     private const DEFAULT_PER_PAGE = 15;
 
+    /**
+     * @var non-empty-string
+     */
     private const DEFAULT_SORTED_BY = 'desc';
 
     public function map(

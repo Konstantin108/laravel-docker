@@ -12,6 +12,9 @@ use Tests\TestCase;
 
 final class SendSearchIndexDataJobTest extends TestCase
 {
+    /**
+     * @var non-empty-string
+     */
     private const INDEX_NAME = 'any_index_name';
 
     #[Test]

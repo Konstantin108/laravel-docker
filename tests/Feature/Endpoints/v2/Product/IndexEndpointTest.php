@@ -15,6 +15,9 @@ final class IndexEndpointTest extends TestCase
 {
     use RefreshDatabase;
 
+    /**
+     * @var non-empty-string
+     */
     private const ROUTE = 'api.v2.products.index';
 
     #[Test]

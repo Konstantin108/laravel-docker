@@ -9,6 +9,9 @@ enum RouteGroupEnum: string
     case USER = 'user';
     case PRODUCT = 'product';
 
+    /**
+     * @var string[]
+     */
     public const DESCRIPTIONS = [
         self::USER->value => 'Эндпоинты для работы с пользователями',
         self::PRODUCT->value => 'Эндпоинты для работы с продуктами',
