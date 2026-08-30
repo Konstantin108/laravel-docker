@@ -9,7 +9,6 @@ use MoonShine\Laravel\Pages\Page;
 use MoonShine\MenuManager\Attributes\SkipMenu;
 
 #[SkipMenu]
-
 final class Dashboard extends Page
 {
     /**

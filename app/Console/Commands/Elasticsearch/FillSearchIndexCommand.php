@@ -98,4 +98,6 @@ final class FillSearchIndexCommand extends Command implements PromptsForMissingI
 
         $this->table($columnNames, $rows);
     }
+
+    // TODO kpstya надо отрефакторить команды
 }

@@ -45,6 +45,7 @@ final class MoonShineUserFormPage extends FormPage
                     Tab::make(__('moonshine::ui.resource.main_information'), [
                         ID::make(),
 
+                        // TODO kpstya внести правки и проверить возвращаемые типы во всех файлах moonshine
                         BelongsTo::make(
                             __('moonshine::ui.resource.role'),
                             'moonshineUserRole',
