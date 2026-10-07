@@ -26,6 +26,8 @@ final class UserEloquentRepository implements UserRepositoryContract
             ->paginate($perPage);
     }
 
+    // TODO kpstya можно ли использовать load() если у меня clickhouse
+
     /**
      * @return Collection<int, User>
      */

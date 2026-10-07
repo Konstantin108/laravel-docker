@@ -8,6 +8,8 @@ use App\Services\Product\Entities\ProductEnriched;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+// TODO kpstya надо избавиться от $resource
+
 /**
  * @mixin ProductEnriched
  */
@@ -17,6 +19,10 @@ final class ProductResource extends JsonResource
      * @var ProductEnriched
      */
     public $resource;
+
+    /* TODO kpstya
+        - надо использовать в типах iterable
+        - возможно стоит тестировать возвращаемые в эндпоинтах типы */
 
     public function toArray(Request $request): array
     {

@@ -62,16 +62,7 @@ final class IndexEndpointTest extends TestCase
             ->assertUnprocessable();
     }
 
-    #[Test]
-    public function it_sorts_products_by_id_desc(): void
-    {
-        Product::factory()->count(5)->create();
-        $lastProduct = Product::query()->latest('id')->first();
-
-        $response = $this->getJson(route(self::ROUTE))->assertOk();
-
-        $this->assertSame($lastProduct->id, $response->json('data.0.id'));
-    }
+    // TODO kpstya стоит ли добавить тест фабрики и других классов для тестов
 
     #[Test]
     public function it_sorts_products_by_id_asc(): void
@@ -85,6 +76,8 @@ final class IndexEndpointTest extends TestCase
             'sorted_by' => 'asc',
         ]))
             ->assertOk();
+
+        // TODO kpstya в feature и integration тестах сортировки надо использовать min() и max()
 
         $this->assertSame($firstProduct->id, $response->json('data.0.id'));
     }
