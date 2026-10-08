@@ -24,8 +24,6 @@ final class UserController extends Controller
     #[Endpoint(title: 'api.v1.users.index')]
     public function index(IndexRequest $request, UserService $userService): AnonymousResourceCollection
     {
-        // TODO kpstya возможно стоит использовать load() вместо with()
-
         return UserResource::collection(
             $userService->getPagination(new FilterDto(
                 sortedBy: SortedByEnum::from($request->validated('sorted_by', 'desc')),

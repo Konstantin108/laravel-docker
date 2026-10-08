@@ -6,8 +6,6 @@ namespace App\Factories\Contracts;
 
 use App\Services\Contracts\SearchableSourceContract;
 
-// TODO kpstya что за правки мне внес ИИ
-
 interface SourceDtoFactoryContract
 {
     /**

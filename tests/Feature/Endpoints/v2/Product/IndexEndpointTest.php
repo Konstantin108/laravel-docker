@@ -62,8 +62,6 @@ final class IndexEndpointTest extends TestCase
             ->assertUnprocessable();
     }
 
-    // TODO kpstya стоит ли добавить тест фабрики и других классов для тестов
-
     #[Test]
     public function it_sorts_products_by_id_asc(): void
     {

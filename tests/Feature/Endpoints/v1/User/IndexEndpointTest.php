@@ -5,6 +5,7 @@ namespace Tests\Feature\Endpoints\v1\User;
 use App\Models\Contact;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Testing\Fluent\AssertableJson;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
 use Tests\TestCase;
@@ -187,5 +188,34 @@ final class IndexEndpointTest extends TestCase
             ->assertOk();
 
         $this->assertSame($firstUser->id, $response->json('data.0.id'));
+    }
+
+    #[Test]
+    public function it_returns_paginated_users_with_valid_structure(): void
+    {
+        User::factory()->count(4)->hasContact()->create();
+
+        // TODO kpstya везде добавить такой тест
+
+        $this->getJson(route(self::ROUTE))
+            ->assertJson(static function (AssertableJson $json): AssertableJson {
+                return $json->has('data', static function (AssertableJson $data): void {
+                    $data->each(static function (AssertableJson $item): void {
+                        $item->whereAllType([
+                            'id' => ['integer'],
+                            'name' => ['string'],
+                            'email' => ['string'],
+                            'reserve_email' => ['string', 'null'],
+                            'phone' => ['string', 'null'],
+                            'telegram' => ['string', 'null'],
+                            'email_verified_at' => ['string', 'null'],
+                            'created_at' => ['string', 'null'],
+                            'updated_at' => ['string', 'null'],
+                        ]);
+                    });
+                })
+                    ->etc();
+            })
+            ->assertOk();
     }
 }
