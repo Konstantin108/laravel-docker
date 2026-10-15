@@ -1,5 +1,7 @@
 <?php
 
+// TODO kpstya assertJsonCount() - надо использовать это в тестах
+
 declare(strict_types=1);
 
 namespace App\Factories\Contracts;
