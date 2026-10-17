@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Resources\Product;
 
-// TODO kpstya добавить fake запросы в api
-
 use App\Services\Product\Entities\ProductEnriched;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
